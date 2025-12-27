@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "bun --bun vite dev --port 3000",
     "build": "bun --bun vite build",
-    "preview": "bun --bun vite preview",
+    "preview": "bun .output/server/index.mjs",
     "test": "vitest run"
   },
   "dependencies": {
