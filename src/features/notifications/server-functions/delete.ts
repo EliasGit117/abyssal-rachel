@@ -1,6 +1,6 @@
 import { createServerFn } from '@tanstack/react-start';
 import { useMutation, UseMutationOptions, useQueryClient } from '@tanstack/react-query';
-import { z } from 'zod';
+import * as z from "zod";
 import { prisma } from '@/lib/prisma.ts';
 
 export const deleteNotificationByIdSchema = z.object({ id: z.number() });

@@ -1,15 +1,39 @@
 {
   "$schema": "https://inlang.com/schema/inlang-message-format",
   "example_message": "Привет, {username}",
+  "common": {
+    "submit": "Отправить",
+    "create": "Создать",
+    "delete": "Удалить",
+    "pending": "В процессе",
+    "loading": "Загрузка",
+    "error": "Ошибка",
+    "success": "Успех"
+  },
   "components": {
     "locale_dropdown": {
-      "title": "Выбор языка"
+      "title": "Выберите язык"
     },
     "theme_dropdown": {
-      "title": "Выбор темы",
+      "title": "Выберите тему",
       "system": "Системная",
       "light": "Светлая",
-      "dark": "Темная"
+      "dark": "Тёмная"
+    }
+  },
+  "pages": {
+    "notifications": {
+      "title": "Уведомления",
+      "create_form": {
+        "title": "",
+        "description": "",
+        "name": "Название",
+        "text": "Текст"
+      },
+      "empty": {
+        "title": "Нет уведомлений",
+        "description": "У вас пока нет уведомлений. Создайте первое, чтобы начать."
+      }
     }
   }
 }

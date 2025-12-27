@@ -10,7 +10,7 @@ import {
   createNotificationSchema,
   useCreateNotificationMutation
 } from '@/features/notifications/server-functions/create.ts';
-import { z } from 'zod';
+import * as z from 'zod';
 import { Controller, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Field, FieldError, FieldGroup, FieldLabel } from '@/components/ui/field.tsx';
@@ -22,6 +22,7 @@ import { useDeleteNotificationByIdMutation } from '@/features/notifications/serv
 import { Textarea } from '@/components/ui/textarea.tsx';
 import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from '@/components/ui/empty.tsx';
 import { Button } from '@/components/ui/button.tsx';
+import { m } from '@/paraglide/messages';
 
 
 export const Route = createFileRoute('/_public/notifications')({
@@ -37,7 +38,9 @@ function RouteComponent() {
   return (
     <main className="container mx-auto p-4 space-y-4 min-h-safe-screen">
       <header>
-        <h1 className="text-2xl font-bold">Notifications</h1>
+        <h1 className="text-2xl font-bold">
+          {m['pages.notifications.title']()}
+        </h1>
       </header>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
@@ -61,26 +64,28 @@ const CreateNotificationCard: FC<ComponentProps<typeof Card>> = ({ ...props }) =
 
   const { mutate: create, isPending: isPendingCreation } = useCreateNotificationMutation({
     onError: (e) => {
-      toast.error('Error', { description: e.message ?? 'An unexpected error occurred' });
+      toast.error(m['common.error'](), { description: e.message });
     },
     onSuccess: () => {
       form.reset();
-      toast.success('Success', { description: 'Notification created successfully' });
+      toast.success(m['common.success']());
     }
   });
 
-  function onSubmit(data: z.infer<typeof createNotificationSchema>) {
-    create(data);
-  }
+  const onSubmit = (data: z.infer<typeof createNotificationSchema>) => create(data);
+
 
   return (
     <Card {...props}>
       <CardHeader>
-        <CardTitle>Create notification</CardTitle>
+        <CardTitle>
+          {m['pages.notifications.create_form.title']()}
+        </CardTitle>
         <CardDescription>
-          Fill in the details of your notification to create a new one
+          {m['pages.notifications.create_form.description']()}
         </CardDescription>
       </CardHeader>
+
       <CardContent>
         <form onSubmit={form.handleSubmit(onSubmit)} id="create-notifictaion-form">
           <fieldset disabled={isPendingCreation}>
@@ -90,8 +95,10 @@ const CreateNotificationCard: FC<ComponentProps<typeof Card>> = ({ ...props }) =
                 control={form.control}
                 render={({ field, fieldState }) => (
                   <Field data-invalid={fieldState.invalid}>
-                    <FieldLabel htmlFor="name-ro-input">Name RO</FieldLabel>
-                    <Input {...field} id='name-ro-input' aria-invalid={fieldState.invalid}/>
+                    <FieldLabel htmlFor="name-ro-input">
+                      {m['pages.notifications.create_form.name']()} RO
+                    </FieldLabel>
+                    <Input {...field} id="name-ro-input" aria-invalid={fieldState.invalid}/>
                     {fieldState.invalid && <FieldError errors={[fieldState.error]}/>}
                   </Field>
                 )}
@@ -102,9 +109,10 @@ const CreateNotificationCard: FC<ComponentProps<typeof Card>> = ({ ...props }) =
                 control={form.control}
                 render={({ field, fieldState }) => (
                   <Field data-invalid={fieldState.invalid}>
-                    <FieldLabel>Name RU</FieldLabel>
-                    <Input{...field} aria-invalid={fieldState.invalid}
-                    />
+                    <FieldLabel>
+                      {m['pages.notifications.create_form.name']()} RU
+                    </FieldLabel>
+                    <Input{...field} aria-invalid={fieldState.invalid}/>
                     {fieldState.invalid && <FieldError errors={[fieldState.error]}/>}
                   </Field>
                 )}
@@ -115,7 +123,9 @@ const CreateNotificationCard: FC<ComponentProps<typeof Card>> = ({ ...props }) =
                 control={form.control}
                 render={({ field, fieldState }) => (
                   <Field data-invalid={fieldState.invalid} className="col-span-full">
-                    <FieldLabel>Text RO</FieldLabel>
+                    <FieldLabel>
+                      {m['pages.notifications.create_form.text']()} RO
+                    </FieldLabel>
                     <Textarea {...field} aria-invalid={fieldState.invalid}/>
                     {fieldState.invalid && <FieldError errors={[fieldState.error]}/>}
                   </Field>
@@ -127,7 +137,9 @@ const CreateNotificationCard: FC<ComponentProps<typeof Card>> = ({ ...props }) =
                 control={form.control}
                 render={({ field, fieldState }) => (
                   <Field data-invalid={fieldState.invalid} className="col-span-full">
-                    <FieldLabel>Text RU</FieldLabel>
+                    <FieldLabel>
+                      {m['pages.notifications.create_form.text']()} RU
+                    </FieldLabel>
                     <Textarea {...field} aria-invalid={fieldState.invalid}/>
                     {fieldState.invalid && <FieldError errors={[fieldState.error]}/>}
                   </Field>
@@ -141,7 +153,7 @@ const CreateNotificationCard: FC<ComponentProps<typeof Card>> = ({ ...props }) =
       <CardFooter className="sm:justify-end">
         <LoadingButton loading={isPendingCreation} className="w-full sm:w-fit" form="create-notifictaion-form">
           <IconSend/>
-          <span>Submit</span>
+          <span>{m['common.submit']()}</span>
         </LoadingButton>
       </CardFooter>
     </Card>
@@ -206,12 +218,11 @@ const NotificationListSection: FC<ComponentProps<'section'>> = ({ className, ...
               <ItemActions>
                 <LoadingButton
                   variant="outline"
-                  loadingText="Deleting..."
                   loading={deletion[notification.id]}
                   onClick={() => handleDelete(notification.id)}
                 >
                   <IconTrash/>
-                  <span>Delete</span>
+                  <span>{m['common.delete']()}</span>
                 </LoadingButton>
               </ItemActions>
             </Item>
@@ -222,9 +233,11 @@ const NotificationListSection: FC<ComponentProps<'section'>> = ({ className, ...
                 <EmptyMedia variant="icon">
                   <IconProgressAlert/>
                 </EmptyMedia>
-                <EmptyTitle>No notifications</EmptyTitle>
+                <EmptyTitle>
+                  {m['pages.notifications.empty.title']()}
+                </EmptyTitle>
                 <EmptyDescription>
-                  You haven&apos;t created any notifications yet. Get started by creating your first notification.
+                  {m['pages.notifications.empty.description']()}
                 </EmptyDescription>
               </EmptyHeader>
               <EmptyContent>
@@ -237,7 +250,7 @@ const NotificationListSection: FC<ComponentProps<'section'>> = ({ className, ...
                     }}
                   >
                     <IconPlus/>
-                    <span>Create notification</span>
+                    <span>{m['common.create']()}</span>
                   </Button>
                 </div>
               </EmptyContent>

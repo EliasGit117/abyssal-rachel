@@ -6,10 +6,12 @@ import {
 import type { QueryClient } from '@tanstack/react-query';
 import { ThemeProvider } from '@/components/theme';
 import appCss from '../styles.css?url';
-import { ReactNode } from 'react';
+import { ReactNode, useEffect } from 'react';
 import { getLocale } from '@/paraglide/runtime';
 import { envConfig } from '@/lib/env-config.ts';
 import { Toaster } from '@/components/ui/sonner.tsx';
+import z from 'zod';
+import { getZodErrorMap } from '@/lib/get-zod-error-map.ts';
 
 
 interface MyRouterContext {
@@ -27,14 +29,19 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
     links: [
       { rel: 'stylesheet', href: appCss }
     ]
-  }),
+  })
 });
 
 function RootDocument({ children }: { children: ReactNode }) {
   const locale = getLocale();
 
+  useEffect(() => {
+    getZodErrorMap(locale)
+      .then((res) => z.config(res));
+  }, []);
+
   return (
-    <html lang={locale}>
+    <html lang={locale} suppressHydrationWarning>
       <head title={envConfig.appName}>
         <HeadContent/>
       </head>

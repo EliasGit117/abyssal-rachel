@@ -1,6 +1,14 @@
 {
   "$schema": "https://inlang.com/schema/inlang-message-format",
-  "example_message": "Salut, {username}",
+  "common": {
+    "submit": "Trimiteți",
+    "create": "Creează",
+    "delete": "Șterge",
+    "pending": "În așteptare",
+    "loading": "Încărcare",
+    "error": "Eroare",
+    "success": "Succes"
+  },
   "components": {
     "locale_dropdown": {
       "title": "Select limba"
@@ -10,6 +18,21 @@
       "system": "Sistem",
       "light": "Luminoasă",
       "dark": "Obscură"
+    }
+  },
+  "pages": {
+    "notifications": {
+      "title": "Notificări",
+      "create_form": {
+        "title": "",
+        "description": "",
+        "name": "Nume",
+        "text": "Text"
+      },
+      "empty": {
+        "title": "Nu există notificări",
+        "description": "Nu ați creat încă nicio notificare. Creați prima pentru a începe."
+      }
     }
   }
 }
