@@ -2,7 +2,8 @@ import { ComponentProps, FC } from 'react';
 import { Link } from '@tanstack/react-router';
 import { Button } from '@/components/ui/button.tsx';
 import { ThemeDropdown } from '@/components/theme';
-import LocaleDropdown from '@/routes/_public/-components/locale-dropdown.tsx';
+import { LocaleDropdown } from '@/components/locale';
+import { envConfig } from '@/lib/env-config.ts';
 
 interface IHeaderProps extends ComponentProps<'header'> {}
 
@@ -13,7 +14,13 @@ export const Header: FC<IHeaderProps> = ({ ...props }) => {
       <div className="h-14 bg-background flex items-center container mx-auto px-4">
         <Button variant="link" className="-ml-3" asChild>
           <Link to="/">
-            Home
+            {envConfig.appName}
+          </Link>
+        </Button>
+
+        <Button variant="link" asChild>
+          <Link to="/notifications">
+            Notifications
           </Link>
         </Button>
 

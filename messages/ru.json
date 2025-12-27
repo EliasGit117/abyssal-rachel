@@ -1,4 +1,15 @@
 {
   "$schema": "https://inlang.com/schema/inlang-message-format",
-  "example_message": "Привет, {username}"
+  "example_message": "Привет, {username}",
+  "components": {
+    "locale_dropdown": {
+      "title": "Выбор языка"
+    },
+    "theme_dropdown": {
+      "title": "Выбор темы",
+      "system": "Системная",
+      "light": "Светлая",
+      "dark": "Темная"
+    }
+  }
 }

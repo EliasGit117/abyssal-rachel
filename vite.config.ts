@@ -13,7 +13,7 @@ const config = defineConfig({
       project: './project.inlang',
       outdir: './src/paraglide',
       strategy: ['cookie', 'preferredLanguage', 'url'],
-      cookieName: 'lang'
+      cookieName: 'lang',
     }),
     devtools(),
     nitro({ preset: 'bun' }),

@@ -11,6 +11,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { TTheme, useTheme } from './provider';
 import { Icon, IconDeviceImac, IconMoon, IconSun, IconSunMoon } from '@tabler/icons-react';
+import { m } from '@/paraglide/messages';
 
 
 interface IThemeDropdownProps extends ComponentProps<typeof Button> {
@@ -18,9 +19,9 @@ interface IThemeDropdownProps extends ComponentProps<typeof Button> {
 }
 
 const themeOptions: { label: string; value: TTheme; icon: Icon; }[] = [
-  { value: 'light', icon: IconSun, label: 'Light' },
-  { value: 'dark', icon: IconMoon, label: 'Dark' },
-  { value: 'system', icon: IconDeviceImac, label: 'System' }
+  { label: m['components.theme_dropdown.light'](), value: 'light', icon: IconSun },
+  { label: m['components.theme_dropdown.dark'](), value: 'dark', icon: IconMoon },
+  { label: m['components.theme_dropdown.system'](), value: 'system', icon: IconDeviceImac }
 ];
 
 export const ThemeDropdown: FC<IThemeDropdownProps> = ({ align, ...props }) => {
@@ -33,7 +34,7 @@ export const ThemeDropdown: FC<IThemeDropdownProps> = ({ align, ...props }) => {
           <IconSun className="dark:hidden"/>
           <IconMoon className="hidden dark:block"/>
           <span className="sr-only">
-            Toggle theme dropdown
+            {m['components.theme_dropdown.title']()}
           </span>
         </Button>
       </DropdownMenuTrigger>
@@ -42,7 +43,9 @@ export const ThemeDropdown: FC<IThemeDropdownProps> = ({ align, ...props }) => {
         <DropdownMenuRadioGroup value={theme}>
           <DropdownMenuLabel className="flex gap-2 items-center">
             <IconSunMoon className="size-4"/>
-            <span>Theme</span>
+            <span>
+              {m['components.theme_dropdown.title']()}
+            </span>
           </DropdownMenuLabel>
 
           <DropdownMenuSeparator/>

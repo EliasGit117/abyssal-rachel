@@ -1,4 +1,4 @@
-import { ComponentProps, FC, useState } from 'react';
+import { ComponentProps, FC } from 'react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -7,10 +7,12 @@ import {
   DropdownMenuRadioItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger
-} from '@/components/ui/dropdown-menu';
-import { Button, buttonVariants } from '@/components/ui/button';
+} from '@/components/ui/dropdown-menu.tsx';
+import { Button, buttonVariants } from '@/components/ui/button.tsx';
 import type { VariantProps } from 'class-variance-authority';
 import { IconLanguage, IconSelector } from '@tabler/icons-react';
+import { getLocale, setLocale, Locale } from '@/paraglide/runtime';
+import { m } from '@/paraglide/messages';
 
 
 interface IProps extends ComponentProps<typeof DropdownMenuTrigger> {
@@ -18,55 +20,53 @@ interface IProps extends ComponentProps<typeof DropdownMenuTrigger> {
   align?: 'start' | 'center' | 'end';
 }
 
-const locales = [{ value: 'ro', title: 'Romana' }, { value: 'ru', title: 'Русский' }] as const;
-type TLocaleValue = typeof locales[number]['value'];
+const localeOptions: { value: Locale; title: string; }[] = [
+  { value: 'ro', title: 'Romana' },
+  { value: 'ru', title: 'Русский' }
+];
 
-const LanguageDropdown: FC<IProps> = ({ variant, align, ...props }) => {
-  const [lang, setLang] = useState<TLocaleValue>('ro');
-
-  const handleChange = (value: string) => {
-    if (!locales.some(l => l.value === value))
-      return;
-
-    setLang(value as TLocaleValue);
-  };
+export const LocaleDropdown: FC<IProps> = ({ variant, align, ...props }) => {
+  const locale = getLocale();
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant={variant} size='sm' {...props}>
-          <span className='uppercase sm:hidden'>{lang}</span>
+          <span className='uppercase sm:hidden'>{locale}</span>
 
           <IconLanguage className='hidden sm:block opacity-65'/>
           <span className='hidden sm:block'>
-            {locales.find(item => item.value === lang)?.title}
+            {localeOptions.find(item => item.value === locale)?.title}
           </span>
           <IconSelector className='hidden sm:block opacity-65'/>
 
-          <span className="sr-only">Language dropdown</span>
+          <span className="sr-only">
+            {m['components.locale_dropdown.title']()}
+          </span>
         </Button>
       </DropdownMenuTrigger>
 
       <DropdownMenuContent className="min-w-36" align={align}>
         <DropdownMenuLabel className="flex items-center gap-2">
           <IconLanguage className="size-4"/>
-          <span>Language</span>
+          <span>
+            {m['components.locale_dropdown.title']()}
+          </span>
         </DropdownMenuLabel>
 
         <DropdownMenuSeparator/>
 
-        <DropdownMenuRadioGroup value={lang} onValueChange={handleChange}>
-          {locales.map(({ value, title }) =>
+        <DropdownMenuRadioGroup value={locale}>
+          {localeOptions.map(({ value, title }) =>
             <DropdownMenuRadioItem
               key={value}
               value={value}
-              className="justify-between gap-4"
-              onClick={() => setLang(value)}
+              onClick={() => setLocale(value)}
             >
-              <span>{title}</span>
               <span className="text-xs uppercase text-muted-foreground">
                 {value}
               </span>
+              <span>{title}</span>
             </DropdownMenuRadioItem>
           )}
         </DropdownMenuRadioGroup>
@@ -75,4 +75,3 @@ const LanguageDropdown: FC<IProps> = ({ variant, align, ...props }) => {
   );
 };
 
-export default LanguageDropdown;
