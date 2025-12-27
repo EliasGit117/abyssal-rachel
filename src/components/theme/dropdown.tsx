@@ -9,18 +9,18 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu';
-import { type LucideIcon, MonitorIcon, MoonIcon, SunIcon, SunMoonIcon } from 'lucide-react';
 import { TTheme, useTheme } from './provider';
+import { Icon, IconDeviceImac, IconMoon, IconSun, IconSunMoon } from '@tabler/icons-react';
 
 
 interface IThemeDropdownProps extends ComponentProps<typeof Button> {
   align?: 'start' | 'center' | 'end';
 }
 
-const themeOptions: { label: string; value: TTheme; icon: LucideIcon; }[] = [
-  { value: 'light', icon: SunIcon, label: 'Light' },
-  { value: 'dark', icon: MoonIcon, label: 'Dark' },
-  { value: 'system', icon: MonitorIcon, label: 'System' }
+const themeOptions: { label: string; value: TTheme; icon: Icon; }[] = [
+  { value: 'light', icon: IconSun, label: 'Light' },
+  { value: 'dark', icon: IconMoon, label: 'Dark' },
+  { value: 'system', icon: IconDeviceImac, label: 'System' }
 ];
 
 export const ThemeDropdown: FC<IThemeDropdownProps> = ({ align, ...props }) => {
@@ -30,8 +30,8 @@ export const ThemeDropdown: FC<IThemeDropdownProps> = ({ align, ...props }) => {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="outline" size="icon" {...props}>
-          <SunIcon className="dark:hidden"/>
-          <MoonIcon className="hidden dark:block"/>
+          <IconSun className="dark:hidden"/>
+          <IconMoon className="hidden dark:block"/>
           <span className="sr-only">
             Toggle theme dropdown
           </span>
@@ -41,7 +41,7 @@ export const ThemeDropdown: FC<IThemeDropdownProps> = ({ align, ...props }) => {
       <DropdownMenuContent className='min-w-36' align={align}>
         <DropdownMenuRadioGroup value={theme}>
           <DropdownMenuLabel className="flex gap-2 items-center">
-            <SunMoonIcon className="size-4"/>
+            <IconSunMoon className="size-4"/>
             <span>Theme</span>
           </DropdownMenuLabel>
 
@@ -49,9 +49,8 @@ export const ThemeDropdown: FC<IThemeDropdownProps> = ({ align, ...props }) => {
 
           {themeOptions.map(({ icon: Icon, label, value }) =>
             <DropdownMenuRadioItem value={value} onClick={() => setTheme(value)} key={value}>
-              <span>{label}</span>
-              <div className="min-w-1 flex-1"/>
               <Icon className="text-muted-foreground"/>
+              <span>{label}</span>
             </DropdownMenuRadioItem>
           )}
         </DropdownMenuRadioGroup>

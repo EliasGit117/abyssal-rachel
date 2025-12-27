@@ -8,7 +8,7 @@ export const Route = createFileRoute('/_public/')({
 
 function RouteComponent() {
   return (
-    <main className='container mx-auto p-4 space-y-4 min-h-svh'>
+    <main className='container mx-auto p-4 space-y-4 min-h-safe-screen'>
       <h1 className='text-2xl font-bold'>Public Route</h1>
       <Button>
         <IconSend/>

@@ -126,4 +126,8 @@
   html {
     @apply font-sans;
   }
+
+  .min-h-safe-screen {
+    @apply min-h-[calc(100svh-(--spacing(14)))];
+  }
 }
