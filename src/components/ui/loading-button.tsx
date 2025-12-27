@@ -2,6 +2,7 @@ import * as React from 'react';
 import { Button } from './button';
 import { Spinner } from '@/components/ui/spinner';
 import { cn } from '@/lib/utils';
+import { m } from '@/paraglide/messages';
 
 
 interface IProps extends React.ComponentProps<typeof Button> {
@@ -19,7 +20,9 @@ function LoadingButton(props: IProps) {
       <Button {...restOfProps} asChild={false} disabled={disabled ?? true}>
         <Spinner/>
         {!hideText && (
-          <span className={cn(hideTextOnMobile && 'hidden sm:block')}>{ loadingText ?? 'Loading' }</span>
+          <span className={cn(hideTextOnMobile && 'hidden sm:block')}>
+            {loadingText ?? m['common.loading']()}
+          </span>
         )}
       </Button>
     );

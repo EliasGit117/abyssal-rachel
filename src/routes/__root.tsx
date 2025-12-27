@@ -4,14 +4,13 @@ import {
   createRootRouteWithContext
 } from '@tanstack/react-router';
 import type { QueryClient } from '@tanstack/react-query';
-import { ThemeProvider } from '@/components/theme';
 import appCss from '../styles.css?url';
 import { ReactNode, useEffect } from 'react';
 import { getLocale } from '@/paraglide/runtime';
 import { envConfig } from '@/lib/env-config.ts';
-import { Toaster } from '@/components/ui/sonner.tsx';
 import z from 'zod';
 import { getZodErrorMap } from '@/lib/get-zod-error-map.ts';
+import Providers from '@/providers.tsx';
 
 
 interface MyRouterContext {
@@ -41,17 +40,17 @@ function RootDocument({ children }: { children: ReactNode }) {
   }, []);
 
   return (
-    <html lang={locale} suppressHydrationWarning>
-      <head title={envConfig.appName}>
-        <HeadContent/>
-      </head>
-      <body className="min-h-svh flex flex-col">
-        <ThemeProvider defaultTheme="system">
+    <Providers>
+      <html lang={locale} suppressHydrationWarning>
+        <head>
+          <title/>
+          <HeadContent/>
+        </head>
+        <body className="min-h-svh flex flex-col">
           {children}
-          <Toaster richColors/>
-        </ThemeProvider>
-        <Scripts/>
-      </body>
-    </html>
+          <Scripts/>
+        </body>
+      </html>
+    </Providers>
   );
 }

@@ -24,8 +24,8 @@
     "notifications": {
       "title": "Notificări",
       "create_form": {
-        "title": "",
-        "description": "",
+        "title": "Creează notificare",
+        "description": "Completează câmpurile de mai jos pentru a crea o notificare nouă",
         "name": "Nume",
         "text": "Text"
       },

@@ -1,6 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { getAllNotificationsQueryOptions } from '@/features/notifications/server-functions/get-all.ts';
-import { useQuery } from '@tanstack/react-query';
+import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import { Item, ItemActions, ItemContent, ItemDescription, ItemTitle } from '@/components/ui/item.tsx';
 import { Skeleton } from '@/components/ui/skeleton.tsx';
 import { ComponentProps, FC, useState } from 'react';
@@ -23,6 +23,7 @@ import { Textarea } from '@/components/ui/textarea.tsx';
 import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from '@/components/ui/empty.tsx';
 import { Button } from '@/components/ui/button.tsx';
 import { m } from '@/paraglide/messages';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip.tsx';
 
 
 export const Route = createFileRoute('/_public/notifications')({
@@ -122,11 +123,11 @@ const CreateNotificationCard: FC<ComponentProps<typeof Card>> = ({ ...props }) =
                 name="textRo"
                 control={form.control}
                 render={({ field, fieldState }) => (
-                  <Field data-invalid={fieldState.invalid} className="col-span-full">
+                  <Field data-invalid={fieldState.invalid} className="col-span-full sm:col-span-1">
                     <FieldLabel>
                       {m['pages.notifications.create_form.text']()} RO
                     </FieldLabel>
-                    <Textarea {...field} aria-invalid={fieldState.invalid}/>
+                    <Textarea {...field} className='min-h-36' aria-invalid={fieldState.invalid}/>
                     {fieldState.invalid && <FieldError errors={[fieldState.error]}/>}
                   </Field>
                 )}
@@ -136,11 +137,11 @@ const CreateNotificationCard: FC<ComponentProps<typeof Card>> = ({ ...props }) =
                 name="textRu"
                 control={form.control}
                 render={({ field, fieldState }) => (
-                  <Field data-invalid={fieldState.invalid} className="col-span-full">
+                  <Field data-invalid={fieldState.invalid} className="col-span-full sm:col-span-1">
                     <FieldLabel>
                       {m['pages.notifications.create_form.text']()} RU
                     </FieldLabel>
-                    <Textarea {...field} aria-invalid={fieldState.invalid}/>
+                    <Textarea {...field} className='min-h-36' aria-invalid={fieldState.invalid}/>
                     {fieldState.invalid && <FieldError errors={[fieldState.error]}/>}
                   </Field>
                 )}
@@ -161,20 +162,19 @@ const CreateNotificationCard: FC<ComponentProps<typeof Card>> = ({ ...props }) =
 };
 
 const NotificationListSection: FC<ComponentProps<'section'>> = ({ className, ...props }) => {
-  const { isPending: isPendingNotifications, data: notifications } = useQuery({ ...getAllNotificationsQueryOptions() });
+  const { isPending: isPendingNotifications, data: notifications } = useQuery({
+    ...getAllNotificationsQueryOptions(),
+    placeholderData: keepPreviousData
+  });
   const [deletion, setDeletion] = useState<Record<number, boolean>>({});
 
   const { mutateAsync: deleteNotification } = useDeleteNotificationByIdMutation({
+    onSuccess: () => toast.success(m['common.success']()),
     onError: (e) => {
       toast.error('Error', {
         description: e.message ?? 'Failed to delete notification'
       });
     },
-    onSuccess: () => {
-      toast.success('Success', {
-        description: 'Notification deleted successfully'
-      });
-    }
   });
 
   const handleDelete = (id: number) => {
@@ -216,14 +216,25 @@ const NotificationListSection: FC<ComponentProps<'section'>> = ({ className, ...
                 <ItemDescription>{notification.description}</ItemDescription>
               </ItemContent>
               <ItemActions>
-                <LoadingButton
-                  variant="outline"
-                  loading={deletion[notification.id]}
-                  onClick={() => handleDelete(notification.id)}
-                >
-                  <IconTrash/>
-                  <span>{m['common.delete']()}</span>
-                </LoadingButton>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <LoadingButton
+                      hideText
+                      size='icon-sm'
+                      variant="outline"
+                      loading={deletion[notification.id]}
+                      onClick={() => handleDelete(notification.id)}
+                    >
+                      <IconTrash/>
+                      <span className='sr-only'>
+                        {m['common.delete']()}
+                      </span>
+                    </LoadingButton>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    {m['common.delete']()}
+                  </TooltipContent>
+                </Tooltip>
               </ItemActions>
             </Item>
           ))) : (
