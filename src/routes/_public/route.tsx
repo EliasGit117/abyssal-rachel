@@ -10,7 +10,7 @@ function RouteComponent() {
   return (
     <>
       <Progress>
-        <Bar className="h-0.5 bg-primary absolute top-0"/>
+        <Bar className="h-0.5 bg-primary fixed top-0 z-20"/>
       </Progress>
 
       <Header/>
