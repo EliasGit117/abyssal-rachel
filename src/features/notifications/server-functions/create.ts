@@ -1,16 +1,10 @@
 import { createServerFn } from '@tanstack/react-start';
 import { useMutation, UseMutationOptions, useQueryClient } from '@tanstack/react-query';
-import * as z from "zod";
 import { prisma } from '@/lib/prisma.ts';
 import { getLocale } from '@/paraglide/runtime';
-import { INotificationDto } from '@/features/notifications/dtos/notification-dto.ts';
+import { INotificationBriefDto, NotificationBriefDtoMapper } from '@/features/notifications/dtos/notification-dto.ts';
+import { createNotificationSchema } from '@/features/notifications/schemas/create-notification.ts';
 
-export const createNotificationSchema = z.object({
-  nameRo: z.string().min(1),
-  nameRu: z.string().min(1),
-  textRo: z.string().min(1),
-  textRu: z.string().min(1)
-});
 
 export const createNotificationServerFn = createServerFn({ method: 'POST' })
   .inputValidator(createNotificationSchema)
@@ -25,16 +19,12 @@ export const createNotificationServerFn = createServerFn({ method: 'POST' })
       }
     });
 
-    return {
-      id: createdEntity.id,
-      name: locale === 'ro' ? createdEntity.nameRo : createdEntity.nameRu,
-      text: locale === 'ro' ? createdEntity.textRo : createdEntity.textRu
-    } satisfies INotificationDto;
+    return NotificationBriefDtoMapper.fromEntity(createdEntity, locale);
   });
 
 // React hook
 type TParams = Parameters<typeof createNotificationServerFn>[0]['data'];
-type TOptions = Omit<UseMutationOptions<INotificationDto, Error, TParams>, 'mutationFn' | 'onMutate'>;
+type TOptions = Omit<UseMutationOptions<INotificationBriefDto, Error, TParams>, 'mutationFn' | 'onMutate'>;
 
 export const useCreateNotificationMutation = (options?: TOptions) => {
   const queryClient = useQueryClient();

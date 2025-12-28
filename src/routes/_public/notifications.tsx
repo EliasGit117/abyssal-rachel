@@ -6,10 +6,7 @@ import { Skeleton } from '@/components/ui/skeleton.tsx';
 import { ComponentProps, FC, useState } from 'react';
 import { cn } from '@/lib/utils.ts';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card.tsx';
-import {
-  createNotificationSchema,
-  useCreateNotificationMutation
-} from '@/features/notifications/server-functions/create.ts';
+import { useCreateNotificationMutation } from '@/features/notifications/server-functions/create.ts';
 import * as z from 'zod';
 import { Controller, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -18,12 +15,14 @@ import { Input } from '@/components/ui/input';
 import { LoadingButton } from '@/components/ui/loading-button.tsx';
 import { IconPlus, IconProgressAlert, IconSend, IconTrash } from '@tabler/icons-react';
 import { toast } from 'sonner';
-import { useDeleteNotificationByIdMutation } from '@/features/notifications/server-functions/delete.ts';
+import { useDeleteNotificationByIdMutation } from '@/features/notifications/server-functions/delete-by-id.ts';
 import { Textarea } from '@/components/ui/textarea.tsx';
 import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from '@/components/ui/empty.tsx';
 import { Button } from '@/components/ui/button.tsx';
 import { m } from '@/paraglide/messages';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip.tsx';
+import { createNotificationSchema, TCreateNotificationSchema } from '@/features/notifications/schemas/create-notification.ts';
+
 
 
 export const Route = createFileRoute('/_public/notifications')({
@@ -53,7 +52,7 @@ function RouteComponent() {
 }
 
 const CreateNotificationCard: FC<ComponentProps<typeof Card>> = ({ ...props }) => {
-  const form = useForm<z.infer<typeof createNotificationSchema>>({
+  const form = useForm<TCreateNotificationSchema>({
     resolver: zodResolver(createNotificationSchema),
     defaultValues: {
       nameRo: '',
@@ -73,7 +72,10 @@ const CreateNotificationCard: FC<ComponentProps<typeof Card>> = ({ ...props }) =
     }
   });
 
-  const onSubmit = (data: z.infer<typeof createNotificationSchema>) => create(data);
+  const onSubmit = (data: z.infer<typeof createNotificationSchema>) => {
+    console.log(data)
+    create(data);
+  }
 
 
   return (
@@ -88,7 +90,7 @@ const CreateNotificationCard: FC<ComponentProps<typeof Card>> = ({ ...props }) =
       </CardHeader>
 
       <CardContent>
-        <form onSubmit={form.handleSubmit(onSubmit)} id="create-notifictaion-form">
+        <form onSubmit={form.handleSubmit(onSubmit)} id="create-notification-form">
           <fieldset disabled={isPendingCreation}>
             <FieldGroup className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <Controller
@@ -152,7 +154,7 @@ const CreateNotificationCard: FC<ComponentProps<typeof Card>> = ({ ...props }) =
       </CardContent>
 
       <CardFooter className="sm:justify-end">
-        <LoadingButton loading={isPendingCreation} className="w-full sm:w-fit" form="create-notifictaion-form">
+        <LoadingButton loading={isPendingCreation} className="w-full sm:w-fit" form="create-notification-form">
           <IconSend/>
           <span>{m['common.submit']()}</span>
         </LoadingButton>
@@ -162,17 +164,14 @@ const CreateNotificationCard: FC<ComponentProps<typeof Card>> = ({ ...props }) =
 };
 
 const NotificationListSection: FC<ComponentProps<'section'>> = ({ className, ...props }) => {
+  const [deletion, setDeletion] = useState<Record<number, boolean>>({});
   const { isPending: isPendingNotifications, data: notifications } = useQuery({
     ...getAllNotificationsQueryOptions(),
     placeholderData: keepPreviousData
   });
-  const [deletion, setDeletion] = useState<Record<number, boolean>>({});
 
   const { mutateAsync: deleteNotification } = useDeleteNotificationByIdMutation({
-    onSuccess: () => toast.success(m['common.success']()),
-    onError: (e) => {
-      toast.error('Error', { description: e.message ?? 'Failed to delete notification' });
-    },
+    onError: (e) => toast.error('Error', { description: e.message })
   });
 
   const handleDelete = (id: number) => {
