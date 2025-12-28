@@ -5,12 +5,14 @@ import {
 } from '@tanstack/react-router';
 import type { QueryClient } from '@tanstack/react-query';
 import appCss from '../styles.css?url';
+import leafletDrawCss from 'leaflet-draw/dist/leaflet.draw.css?url';
+import leafletCss from 'leaflet/dist/leaflet.css?url';
 import { ReactNode, useEffect } from 'react';
 import { getLocale } from '@/paraglide/runtime';
 import { envConfig } from '@/lib/env-config.ts';
-import z from 'zod';
 import { getZodErrorMap } from '@/lib/get-zod-error-map.ts';
 import Providers from '@/providers.tsx';
+import z from 'zod';
 
 
 interface MyRouterContext {
@@ -26,7 +28,9 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
       { title: envConfig.appName }
     ],
     links: [
-      { rel: 'stylesheet', href: appCss }
+      { rel: 'stylesheet', href: appCss },
+      { rel: 'stylesheet', href: leafletDrawCss },
+      { rel: 'stylesheet', href: leafletCss }
     ]
   })
 });

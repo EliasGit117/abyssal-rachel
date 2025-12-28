@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as PublicRouteRouteImport } from './routes/_public/route'
 import { Route as PublicIndexRouteImport } from './routes/_public/index'
 import { Route as PublicNotificationsRouteImport } from './routes/_public/notifications'
+import { Route as PublicContactRouteImport } from './routes/_public/contact'
 
 const PublicRouteRoute = PublicRouteRouteImport.update({
   id: '/_public',
@@ -27,27 +28,40 @@ const PublicNotificationsRoute = PublicNotificationsRouteImport.update({
   path: '/notifications',
   getParentRoute: () => PublicRouteRoute,
 } as any)
+const PublicContactRoute = PublicContactRouteImport.update({
+  id: '/contact',
+  path: '/contact',
+  getParentRoute: () => PublicRouteRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
+  '/contact': typeof PublicContactRoute
   '/notifications': typeof PublicNotificationsRoute
   '/': typeof PublicIndexRoute
 }
 export interface FileRoutesByTo {
+  '/contact': typeof PublicContactRoute
   '/notifications': typeof PublicNotificationsRoute
   '/': typeof PublicIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_public': typeof PublicRouteRouteWithChildren
+  '/_public/contact': typeof PublicContactRoute
   '/_public/notifications': typeof PublicNotificationsRoute
   '/_public/': typeof PublicIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/notifications' | '/'
+  fullPaths: '/contact' | '/notifications' | '/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/notifications' | '/'
-  id: '__root__' | '/_public' | '/_public/notifications' | '/_public/'
+  to: '/contact' | '/notifications' | '/'
+  id:
+    | '__root__'
+    | '/_public'
+    | '/_public/contact'
+    | '/_public/notifications'
+    | '/_public/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -77,15 +91,24 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PublicNotificationsRouteImport
       parentRoute: typeof PublicRouteRoute
     }
+    '/_public/contact': {
+      id: '/_public/contact'
+      path: '/contact'
+      fullPath: '/contact'
+      preLoaderRoute: typeof PublicContactRouteImport
+      parentRoute: typeof PublicRouteRoute
+    }
   }
 }
 
 interface PublicRouteRouteChildren {
+  PublicContactRoute: typeof PublicContactRoute
   PublicNotificationsRoute: typeof PublicNotificationsRoute
   PublicIndexRoute: typeof PublicIndexRoute
 }
 
 const PublicRouteRouteChildren: PublicRouteRouteChildren = {
+  PublicContactRoute: PublicContactRoute,
   PublicNotificationsRoute: PublicNotificationsRoute,
   PublicIndexRoute: PublicIndexRoute,
 }

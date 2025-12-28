@@ -27,6 +27,9 @@ import { createNotificationSchema, TCreateNotificationSchema } from '@/features/
 
 export const Route = createFileRoute('/_public/notifications')({
   component: RouteComponent,
+  staticData: {
+    breadcrumbs: { title: m['pages.notifications.title']() }
+  },
   loader: async ({ context: { queryClient } }) => {
     return queryClient.prefetchQuery(getAllNotificationsQueryOptions());
   }
@@ -37,12 +40,6 @@ function RouteComponent() {
 
   return (
     <main className="container mx-auto p-4 space-y-4 min-h-safe-screen">
-      <header>
-        <h1 className="text-2xl font-bold">
-          {m['pages.notifications.title']()}
-        </h1>
-      </header>
-
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         <NotificationListSection className="order-2 lg:order-1"/>
         <CreateNotificationCard className="order-1 lg:order-2"/>

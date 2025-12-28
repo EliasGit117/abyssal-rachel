@@ -1,10 +1,10 @@
+import * as TanstackQuery from './integrations/tanstack-query/root-provider';
 import { createRouter } from '@tanstack/react-router';
 import { setupRouterSsrQueryIntegration } from '@tanstack/react-router-ssr-query';
-import * as TanstackQuery from './integrations/tanstack-query/root-provider';
-
-// Import the generated route tree
 import { routeTree } from './routeTree.gen';
 import { deLocalizeUrl, localizeUrl } from '@/paraglide/runtime';
+import { TBreadcrumbData } from '@/components/layout';
+
 
 // Create a new router instance
 export const getRouter = () => {
@@ -27,3 +27,20 @@ export const getRouter = () => {
 
   return router;
 };
+
+
+
+declare module '@tanstack/react-router' {
+  interface Register {
+    router: ReturnType<typeof getRouter>;
+  }
+
+  interface StaticDataRouteOption {
+    hideBreadcrumbs?: boolean;
+    breadcrumbs?: TBreadcrumbData | TBreadcrumbData[];
+    headerOptions?: {
+      type?: 'fixed' | 'sticky';
+    };
+
+  }
+}

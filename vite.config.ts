@@ -6,17 +6,22 @@ import viteReact from '@vitejs/plugin-react';
 import viteTsConfigPaths from 'vite-tsconfig-paths';
 import tailwindcss from '@tailwindcss/vite';
 import { nitro } from 'nitro/vite';
+import svgr from 'vite-plugin-svgr';
 
 
 const config = defineConfig({
+  build: {
+    cssCodeSplit: true,
+  },
   plugins: [
     paraglideVitePlugin({
       project: './project.inlang',
       outdir: './src/paraglide',
       strategy: ['cookie', 'preferredLanguage', 'url'],
-      cookieName: 'lang',
+      cookieName: 'lang'
     }),
     devtools(),
+    svgr(),
     nitro({ preset: 'bun' }),
     // this is the plugin that enables path aliases
     viteTsConfigPaths({
