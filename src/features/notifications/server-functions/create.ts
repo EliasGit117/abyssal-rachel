@@ -12,7 +12,7 @@ export const createNotificationSchema = z.object({
   textRu: z.string().min(1)
 });
 
-export const createNotification = createServerFn({ method: 'POST' })
+export const createNotificationServerFn = createServerFn({ method: 'POST' })
   .inputValidator(createNotificationSchema)
   .handler(async ({ data }) => {
     const locale = getLocale();
@@ -33,14 +33,14 @@ export const createNotification = createServerFn({ method: 'POST' })
   });
 
 // React hook
-type TParams = Parameters<typeof createNotification>[0]['data'];
+type TParams = Parameters<typeof createNotificationServerFn>[0]['data'];
 type TOptions = Omit<UseMutationOptions<INotificationDto, Error, TParams>, 'mutationFn' | 'onMutate'>;
 
 export const useCreateNotificationMutation = (options?: TOptions) => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (values) => createNotification({ data: values }),
+    mutationFn: (values) => createNotificationServerFn({ data: values }),
     ...options,
     onSuccess: (data, variables, onMutateResult, context) => {
       void queryClient.invalidateQueries({ predicate: (query) => query.queryKey[0] === 'notifications' });

@@ -3,7 +3,7 @@ import { prisma } from '@/lib/prisma.ts';
 import { getLocale } from '@/paraglide/runtime';
 import { queryOptions } from '@tanstack/react-query';
 
-export const getAllNotifications = createServerFn({ method: 'GET' })
+export const getAllNotificationsServerFn = createServerFn({ method: 'GET' })
   .handler(async () => {
     const locale = getLocale();
     const notifications = await prisma.notification.findMany();
@@ -11,7 +11,7 @@ export const getAllNotifications = createServerFn({ method: 'GET' })
     return notifications.map(notification => ({
       id: notification.id,
       name: locale === 'ro' ? notification.nameRo : notification.nameRu,
-      description:  locale === 'ro' ? notification.textRo : notification.textRu,
+      text:  locale === 'ro' ? notification.textRo : notification.textRu,
     }))
   });
 
@@ -19,6 +19,6 @@ export const getAllNotifications = createServerFn({ method: 'GET' })
 export function getAllNotificationsQueryOptions() {
   return queryOptions({
     queryKey: ['notifications'],
-    queryFn: getAllNotifications
+    queryFn: getAllNotificationsServerFn
   });
 }

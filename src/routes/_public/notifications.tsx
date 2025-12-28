@@ -171,9 +171,7 @@ const NotificationListSection: FC<ComponentProps<'section'>> = ({ className, ...
   const { mutateAsync: deleteNotification } = useDeleteNotificationByIdMutation({
     onSuccess: () => toast.success(m['common.success']()),
     onError: (e) => {
-      toast.error('Error', {
-        description: e.message ?? 'Failed to delete notification'
-      });
+      toast.error('Error', { description: e.message ?? 'Failed to delete notification' });
     },
   });
 
@@ -213,7 +211,7 @@ const NotificationListSection: FC<ComponentProps<'section'>> = ({ className, ...
             <Item variant="outline" key={notification.id}>
               <ItemContent>
                 <ItemTitle>{notification.name}</ItemTitle>
-                <ItemDescription>{notification.description}</ItemDescription>
+                <ItemDescription>{notification.text}</ItemDescription>
               </ItemContent>
               <ItemActions>
                 <Tooltip>

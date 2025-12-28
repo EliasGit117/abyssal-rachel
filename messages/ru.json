@@ -12,10 +12,10 @@
   },
   "components": {
     "locale_dropdown": {
-      "title": "Выберите язык"
+      "title": "Выбор языка"
     },
     "theme_dropdown": {
-      "title": "Выберите тему",
+      "title": "Выбор темы",
       "system": "Системная",
       "light": "Светлая",
       "dark": "Тёмная"
