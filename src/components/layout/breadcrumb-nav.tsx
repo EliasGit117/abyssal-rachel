@@ -120,7 +120,7 @@ export const BreadcrumbsNavigation: FC<IProps> = ({ className, ...props }) => {
               return (
                 <BreadcrumbItem
                   key={`${index}-${item.label}`}
-                  className="ml-1 md:ml-0"
+                  className="ml-2 md:ml-0"
                 >
                   <BreadcrumbPage>{item.label}</BreadcrumbPage>
                 </BreadcrumbItem>

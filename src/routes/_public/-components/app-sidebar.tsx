@@ -17,18 +17,23 @@ import { useAppSidebar } from './app-sidebar-provider';
 import { ComponentProps, FC } from 'react';
 import { cn } from '@/lib/utils';
 import { baseLinks, ILinkItem, MenuItemType } from '@/routes/_public/-consts';
-import { IconLayoutSidebarRight } from '@tabler/icons-react';
+import { IconLayoutSidebar } from '@tabler/icons-react';
+import { useSession } from '@/hooks/use-session.ts';
 
 
 export const AppSidebar = () => {
   const isOpen = useAppSidebar((s) => s.isOpen);
   const setOpen = useAppSidebar((s) => s.setOpen);
+  const session = useSession();
+  let links = baseLinks;
+  if (!session)
+    links = baseLinks.filter(link => !link.protected);
 
   const handleClick = () => setOpen(false);
 
   return (
     <Sheet open={isOpen} onOpenChange={setOpen}>
-      <SheetContent side="right">
+      <SheetContent side="left">
         <SheetHeader>
           <SheetTitle>
             Navigation Links
@@ -41,7 +46,7 @@ export const AppSidebar = () => {
 
         <div className="flex flex-col gap-4 px-5 overflow-y-auto">
           <Accordion type="single" className="w-full" collapsible>
-            {baseLinks.map((link, index) => {
+            {links.map((link, index) => {
               if (link.type === MenuItemType.Group) {
                 return (
                   <AccordionItem
@@ -132,9 +137,10 @@ const SidebarLink: FC<ISidebarLinkProps> = (props) => {
 };
 
 interface IAppSidebarTrigger extends ComponentProps<typeof Button> {
+  iconProps?: ComponentProps<typeof IconLayoutSidebar>;
 }
 
-export const AppSidebarTrigger: FC<IAppSidebarTrigger> = ({ className, onClick, ...props }) => {
+export const AppSidebarTrigger: FC<IAppSidebarTrigger> = ({ className, onClick, iconProps, ...props }) => {
   const open = useAppSidebar(s => s.open);
 
   return (
@@ -150,7 +156,7 @@ export const AppSidebarTrigger: FC<IAppSidebarTrigger> = ({ className, onClick, 
       }}
       {...props}
     >
-      <IconLayoutSidebarRight/>
+      <IconLayoutSidebar {...iconProps}/>
       <span className="sr-only">Toggle Sidebar</span>
     </Button>
   );

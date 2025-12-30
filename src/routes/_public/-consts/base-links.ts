@@ -4,6 +4,7 @@ export interface ILinkItem {
   label: string;
   description?: string;
   linkOpt: LinkOptions;
+  protected?: boolean;
 }
 
 export enum MenuItemType {
@@ -11,8 +12,8 @@ export enum MenuItemType {
   Group = 'group',
 }
 
-export type TSingleLinkItem = { type: MenuItemType.Single; item: ILinkItem };
-export type TLinkGroupItem = { type: MenuItemType.Group; title: string; items: ILinkItem[] };
+export type TSingleLinkItem = { type: MenuItemType.Single; item: ILinkItem, protected?: boolean };
+export type TLinkGroupItem = { type: MenuItemType.Group; title: string; items: ILinkItem[], protected?: boolean };
 
 export type TLinkItem = TSingleLinkItem | TLinkGroupItem;
 
@@ -65,10 +66,12 @@ export const baseLinks: TLinkItem[] = [
   },
   {
     type: MenuItemType.Single,
-    item: { label: 'Notifications', linkOpt: { to: '/notifications' } }
+    item: { label: 'Notifications', linkOpt: { to: '/notifications' } },
+    protected: true
   },
   {
     type: MenuItemType.Single,
-    item: { label: 'Admin', linkOpt: { to: '/' } }
+    item: { label: 'Admin', linkOpt: { to: '/admin' } },
+    protected: true
   }
 ];

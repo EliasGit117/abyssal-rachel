@@ -8,7 +8,11 @@
     "pending": "В процессе",
     "loading": "Загрузка",
     "error": "Ошибка",
-    "success": "Успех"
+    "success": "Успех",
+    "email": "Эл. почта",
+    "password": "Пароль",
+    "full_name": "Полное имя",
+    "invalid": "Неверно"
   },
   "components": {
     "locale_dropdown": {
@@ -19,9 +23,33 @@
       "system": "Системная",
       "light": "Светлая",
       "dark": "Тёмная"
+    },
+    "auth_dropdown": {
+      "title": "Авторизация",
+      "sign_in": "Войти",
+      "sign_up": "Регистрация"
+    },
+    "user_dropdown": {
+      "sign_out": "Выйти",
+      "signing_out": "Выходим"
     }
   },
   "pages": {
+    "sign_in": {
+      "form_title": "С возвращением!",
+      "form_description": "Введите свои данные для входа",
+      "dont_have_account": "Нет аккаунта?",
+      "create": "Создать"
+    },
+    "sign_up": {
+      "form_title": "Создать ваш аккаунт",
+      "form_description": "Заполните поля ниже чтобы создать новый аккаунт",
+      "confirm_password": "Подтвердите пароль",
+      "passwords_do_not_match": "Пароли не совпадают",
+      "already_have_account": "Уже есть аккаунт?",
+      "show_passwords": "Показать пароли",
+      "sign_in": "Войти"
+    },
     "notifications": {
       "title": "Уведомления",
       "create_form": {

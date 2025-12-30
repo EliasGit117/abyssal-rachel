@@ -12,13 +12,3 @@ generator client {
 datasource db {
   provider = "postgresql"
 }
-
-model Notification {
-  id        Int      @id @default(autoincrement())
-  nameRo    String   @map("name_ro")
-  nameRu    String   @map("name_ru")
-  textRo    String   @map("text_ro")
-  textRu    String   @map("text_ru")
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
-}

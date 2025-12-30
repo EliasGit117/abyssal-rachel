@@ -1,4 +1,4 @@
-import { createFileRoute } from '@tanstack/react-router';
+import { createFileRoute, redirect } from '@tanstack/react-router';
 import { getAllNotificationsQueryOptions } from '@/features/notifications/server-functions/get-all.ts';
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import { Item, ItemActions, ItemContent, ItemDescription, ItemTitle } from '@/components/ui/item.tsx';
@@ -29,6 +29,10 @@ export const Route = createFileRoute('/_public/notifications')({
   component: RouteComponent,
   staticData: {
     breadcrumbs: { title: m['pages.notifications.title']() }
+  },
+  beforeLoad: ({ context: { session } }) => {
+    if (!session)
+      throw redirect({ to: '/' });
   },
   loader: async ({ context: { queryClient } }) => {
     return queryClient.prefetchQuery(getAllNotificationsQueryOptions());

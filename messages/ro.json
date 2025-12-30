@@ -7,7 +7,11 @@
     "pending": "În așteptare",
     "loading": "Încărcare",
     "error": "Eroare",
-    "success": "Succes"
+    "success": "Succes",
+    "email": "Email",
+    "password": "Parolă",
+    "full_name": "Nume complet",
+    "invalid": "Incorect"
   },
   "components": {
     "locale_dropdown": {
@@ -18,9 +22,33 @@
       "system": "Sistem",
       "light": "Luminoasă",
       "dark": "Obscură"
+    },
+    "auth_dropdown": {
+      "title": "Autorizare",
+      "sign_in": "Autentificare",
+      "sign_up": "Înregistrare"
+    },
+    "user_dropdown": {
+      "sign_out": "Deconectare",
+      "signing_out": "Deconectǎm"
     }
   },
   "pages": {
+    "sign_in": {
+      "form_title": "Bine ai revenit!",
+      "form_description": "Introdu datele tale pentru autentificare",
+      "dont_have_account": "Nu ai un cont?",
+      "create": "Creează"
+    },
+    "sign_up": {
+      "form_title": "Creează-ți contul",
+      "form_description": "Completează câmpurile de mai jos pentru a crea un cont nou",
+      "confirm_password": "Confirmă parola",
+      "passwords_do_not_match": "Parolele nu coincid",
+      "already_have_account": "Ai deja un cont?",
+      "show_passwords": "Afișează parolele",
+      "sign_in": "Autentifică-te"
+    },
     "notifications": {
       "title": "Notificări",
       "create_form": {

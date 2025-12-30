@@ -1,25 +1,33 @@
 import {
   HeadContent,
   Scripts,
-  createRootRouteWithContext
+  createRootRouteWithContext, useRouter
 } from '@tanstack/react-router';
 import type { QueryClient } from '@tanstack/react-query';
 import appCss from '../styles.css?url';
 import leafletDrawCss from 'leaflet-draw/dist/leaflet.draw.css?url';
 import leafletCss from 'leaflet/dist/leaflet.css?url';
-import { ReactNode, useEffect } from 'react';
+import { ReactNode, useEffect, useRef } from 'react';
 import { getLocale } from '@/paraglide/runtime';
 import { envConfig } from '@/lib/env-config.ts';
 import { getZodErrorMap } from '@/lib/get-zod-error-map.ts';
 import Providers from '@/providers.tsx';
 import z from 'zod';
+import { getSessionQueryOptions } from '@/features/auth/server-functions/get-session.ts';
+import { useSession } from '@/hooks/use-session.ts';
+import { Session } from '@better-auth/core/db';
 
 
-interface MyRouterContext {
+interface IRouterContext {
   queryClient: QueryClient;
+  session?: Session;
 }
 
-export const Route = createRootRouteWithContext<MyRouterContext>()({
+export const Route = createRootRouteWithContext<IRouterContext>()({
+  beforeLoad: async ({ context: { queryClient } }) => {
+    const session = await queryClient.ensureQueryData(getSessionQueryOptions());
+    return { session };
+  },
   shellComponent: RootDocument,
   head: () => ({
     meta: [
@@ -36,7 +44,18 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
 });
 
 function RootDocument({ children }: { children: ReactNode }) {
+  const router = useRouter();
   const locale = getLocale();
+  const session = useSession();
+  const prevSession = useRef(session);
+
+  useEffect(() => {
+    if (prevSession.current === session)
+      return;
+
+    router.invalidate();
+    prevSession.current = session;
+  }, [session]);
 
   useEffect(() => {
     getZodErrorMap(locale)

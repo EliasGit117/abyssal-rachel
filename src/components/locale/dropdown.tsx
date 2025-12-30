@@ -13,11 +13,13 @@ import type { VariantProps } from 'class-variance-authority';
 import { IconLanguage, IconSelector } from '@tabler/icons-react';
 import { getLocale, setLocale, Locale } from '@/paraglide/runtime';
 import { m } from '@/paraglide/messages';
+import { cn } from '@/lib/utils.ts';
 
 
 interface IProps extends ComponentProps<typeof DropdownMenuTrigger> {
   variant?: VariantProps<typeof buttonVariants>['variant'];
   align?: 'start' | 'center' | 'end';
+  mode?: 'adaptive' | 'icon';
 }
 
 const localeOptions: { value: Locale; title: string; }[] = [
@@ -25,20 +27,30 @@ const localeOptions: { value: Locale; title: string; }[] = [
   { value: 'ru', title: 'Русский' }
 ];
 
-export const LocaleDropdown: FC<IProps> = ({ variant, align, ...props }) => {
+export const LocaleDropdown: FC<IProps> = ({ mode = 'adaptive', variant, align, className, ...props }) => {
   const locale = getLocale();
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant={variant} size='sm' {...props}>
-          <span className='uppercase sm:hidden'>{locale}</span>
-
-          <IconLanguage className='hidden sm:block opacity-65'/>
-          <span className='hidden sm:block'>
-            {localeOptions.find(item => item.value === locale)?.title}
+        <Button
+          variant={variant}
+          className={cn(mode === 'icon' ? 'w-9' : 'w-9 sm:w-fit')}
+          {...props}
+        >
+          <span className={cn('uppercase', mode === 'adaptive' && 'sm:hidden')}>
+            {locale}
           </span>
-          <IconSelector className='hidden sm:block opacity-65'/>
+
+          {mode === 'adaptive' && (
+            <>
+              <IconLanguage className="hidden sm:block opacity-65"/>
+              <span className="hidden sm:block">
+                {localeOptions.find(item => item.value === locale)?.title}
+              </span>
+              <IconSelector className="hidden sm:block opacity-65"/>
+            </>
+          )}
 
           <span className="sr-only">
             {m['components.locale_dropdown.title']()}
@@ -58,11 +70,7 @@ export const LocaleDropdown: FC<IProps> = ({ variant, align, ...props }) => {
 
         <DropdownMenuRadioGroup value={locale}>
           {localeOptions.map(({ value, title }) =>
-            <DropdownMenuRadioItem
-              key={value}
-              value={value}
-              onClick={() => setLocale(value)}
-            >
+            <DropdownMenuRadioItem key={value} value={value} onClick={() => setLocale(value)}>
               <span className="text-xs uppercase text-muted-foreground">
                 {value}
               </span>
