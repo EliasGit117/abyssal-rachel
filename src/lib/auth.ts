@@ -1,7 +1,6 @@
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { prisma } from '@/lib/prisma.ts';
-import { tanstackStartCookies } from "better-auth/tanstack-start";
 import { localization } from "better-auth-localization";
 import { getLocale } from '@/paraglide/runtime';
 
@@ -14,7 +13,8 @@ export const auth = betterAuth({
     enabled: true,
   },
   plugins: [
-    tanstackStartCookies(),
+    // Removed coz breaks the production app build
+    // tanstackStartCookies(),
     localization({
       defaultLocale: "ro-RO",
       fallbackLocale: "ro-RO",
