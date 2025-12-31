@@ -3,7 +3,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { FieldDescription } from '@/components/ui/field.tsx';
 import { cn } from '@/lib/utils.ts';
 import { IconSend } from '@tabler/icons-react';
-import { Link, useRouter } from '@tanstack/react-router';
+import { Link } from '@tanstack/react-router';
 import { SignInForm, signInSchema, TSignInSchema } from '@/routes/auth/sign-in/-components/sign-in-form.tsx';
 import { useForm } from 'react-hook-form';
 import { LoadingButton } from '@/components/ui/loading-button.tsx';
@@ -12,6 +12,7 @@ import { authClient } from '@/lib/auth-client.ts';
 import { toast } from 'sonner';
 import { m } from '@/paraglide/messages';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { getSessionQueryOptions } from '@/features/auth/server-functions/get-session.ts';
 
 
 interface ISignInCard extends ComponentProps<typeof Card> {
@@ -19,7 +20,6 @@ interface ISignInCard extends ComponentProps<typeof Card> {
 
 export const SignInCard: FC<ISignInCard> = ({ className, ...props }) => {
   const queryClient = useQueryClient();
-  const router = useRouter();
   const form = useForm<TSignInSchema>({
     resolver: zodResolver(signInSchema),
     defaultValues: { email: '', password: '' }
@@ -29,15 +29,14 @@ export const SignInCard: FC<ISignInCard> = ({ className, ...props }) => {
     mutationFn: ({ email, password }: TSignInSchema) => authClient.signIn.email({ email, password }),
     onSuccess: (res) => {
       if (!res.error) {
-        queryClient.setQueryData(['session'], res.data ?? null);
-        router.invalidate();
+        void queryClient.invalidateQueries({ queryKey: getSessionQueryOptions().queryKey });
         return;
       }
 
       throw new Error(res.error.message);
     },
-    onError: (error) => {
-      toast.error(m['common.error'](), { description: error.message })
+    onError: (e) => {
+      toast.error(m['common.error'](), { description: e.message })
     }
   });
 

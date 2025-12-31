@@ -79,11 +79,7 @@ export const AppHeader: FC<IAppHeader> = ({ className, ...props }) => {
 
         <Button variant="link" size="dense" asChild>
           <Link to="/">
-            <Logo
-              className={cn(
-                'h-4 lg:h-5! w-fit!',
-                isAtTop && type === 'fixed' ? 'text-white' : 'text-foreground'
-              )}/>
+            <Logo className={cn('h-4 lg:h-5! w-fit!', isAtTop && type === 'fixed' ? 'text-white' : 'text-foreground')}/>
           </Link>
         </Button>
 
@@ -157,12 +153,12 @@ interface IUserDropdown extends ComponentProps<typeof Button> {
 const UserDropdown: FC<IUserDropdown> = ({ align, className, ...props }) => {
   const router = useRouter();
   const queryClient = useQueryClient();
-  const session = useSession();
+  const { user } = useSession();
   const { mutate: signOut, isPending } = useMutation({
     mutationFn: () => authClient.signOut(),
     onSuccess: (res) => {
       if (!res.error) {
-        queryClient.setQueryData(['session'], null);
+        queryClient.clear();
         router.invalidate();
         return;
       }
@@ -174,25 +170,25 @@ const UserDropdown: FC<IUserDropdown> = ({ align, className, ...props }) => {
     }
   });
 
-  const initials = getInitials(session?.user.name);
+  const initials = getInitials(user?.name);
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button size="icon" className={cn('rounded-full', className)} variant="ghost"{...props}>
           <Avatar className="size-7">
-            <AvatarImage src={session?.user.image ?? ''} alt="@shadcn"/>
+            <AvatarImage src={user?.image ?? ''} alt="@shadcn"/>
             <AvatarFallback className="text-xs!">{initials}</AvatarFallback>
           </Avatar>
         </Button>
       </DropdownMenuTrigger>
 
-      <DropdownMenuContent className="min-w-42" align={align}>
+      <DropdownMenuContent className="min-w-52" align={align}>
         <DropdownMenuLabel className="flex flex-col gap-1">
           <span className="text-foreground text-sm">
-            {session?.user.name}
+            {user?.name}
           </span>
-          <span>{session?.user.email}</span>
+          <span>{user?.email}</span>
         </DropdownMenuLabel>
 
         <DropdownMenuSeparator/>
@@ -202,12 +198,12 @@ const UserDropdown: FC<IUserDropdown> = ({ align, className, ...props }) => {
             {!isPending ? (
               <>
                 <IconLogin2/>
-                <span>{m['components.user_dropdown.sign_out']()}</span>
+                <span>{m['common.sign_out']()}</span>
               </>
             ) : (
               <>
                 <Spinner/>
-                <span>{m['components.user_dropdown.signing_out']()}</span>
+                <span>{m['common.loading']()}</span>
               </>
             )}
           </DropdownMenuItem>

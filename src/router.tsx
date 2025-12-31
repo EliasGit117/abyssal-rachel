@@ -1,14 +1,23 @@
-import * as TanstackQuery from './integrations/tanstack-query/root-provider';
 import { createRouter } from '@tanstack/react-router';
 import { setupRouterSsrQueryIntegration } from '@tanstack/react-router-ssr-query';
 import { routeTree } from './routeTree.gen';
 import { deLocalizeUrl, localizeUrl } from '@/paraglide/runtime';
 import { TBreadcrumbData } from '@/components/layout';
+import { QueryClient } from '@tanstack/react-query';
 
 
 // Create a new router instance
 export const getRouter = () => {
-  const rqContext = TanstackQuery.getContext();
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: {
+        refetchOnWindowFocus: false,
+        // With SSR, we usually want to set some default staleTime
+        // above 0 to avoid refetching immediately on the client
+        staleTime: 60 * 1000,
+      }
+    }
+  });
 
   const router = createRouter({
     routeTree,
@@ -17,13 +26,12 @@ export const getRouter = () => {
       output: ({ url }) => localizeUrl(url)
     },
     context: {
-      ...rqContext
+      queryClient: queryClient
     },
-
-    defaultPreload: 'intent'
+    defaultPreload: 'intent',
   });
 
-  setupRouterSsrQueryIntegration({ router, queryClient: rqContext.queryClient });
+  setupRouterSsrQueryIntegration({ router, queryClient: queryClient });
 
   return router;
 };

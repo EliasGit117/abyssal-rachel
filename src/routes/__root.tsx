@@ -3,7 +3,7 @@ import {
   Scripts,
   createRootRouteWithContext, useRouter
 } from '@tanstack/react-router';
-import type { QueryClient } from '@tanstack/react-query';
+import { QueryClient, useQuery } from '@tanstack/react-query';
 import appCss from '../styles.css?url';
 import leafletDrawCss from 'leaflet-draw/dist/leaflet.draw.css?url';
 import leafletCss from 'leaflet/dist/leaflet.css?url';
@@ -14,19 +14,24 @@ import { getZodErrorMap } from '@/lib/get-zod-error-map.ts';
 import Providers from '@/providers.tsx';
 import z from 'zod';
 import { getSessionQueryOptions } from '@/features/auth/server-functions/get-session.ts';
-import { useSession } from '@/hooks/use-session.ts';
-import { Session } from '@better-auth/core/db';
+import type { User, Session } from 'better-auth';
+
 
 
 interface IRouterContext {
   queryClient: QueryClient;
-  session?: Session;
+  session?: Session | null;
+  user?: User | null;
 }
 
 export const Route = createRootRouteWithContext<IRouterContext>()({
   beforeLoad: async ({ context: { queryClient } }) => {
-    const session = await queryClient.ensureQueryData(getSessionQueryOptions());
-    return { session };
+    const res = await queryClient.ensureQueryData(getSessionQueryOptions());
+
+    return {
+      session: res?.session,
+      user: res?.user,
+    };
   },
   shellComponent: RootDocument,
   head: () => ({
@@ -44,18 +49,18 @@ export const Route = createRootRouteWithContext<IRouterContext>()({
 });
 
 function RootDocument({ children }: { children: ReactNode }) {
-  const router = useRouter();
   const locale = getLocale();
-  const session = useSession();
-  const prevSession = useRef(session);
+  const router = useRouter();
+  const { data: authRes } = useQuery(getSessionQueryOptions());
+  const prevSession = useRef<Session | null>(authRes?.session);
 
   useEffect(() => {
-    if (prevSession.current === session)
+    if (authRes?.session === prevSession.current)
       return;
 
+    prevSession.current = authRes?.session;
     router.invalidate();
-    prevSession.current = session;
-  }, [session]);
+  }, [authRes]);
 
   useEffect(() => {
     getZodErrorMap(locale)

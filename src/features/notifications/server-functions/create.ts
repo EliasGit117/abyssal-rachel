@@ -4,10 +4,14 @@ import { prisma } from '@/lib/prisma.ts';
 import { getLocale } from '@/paraglide/runtime';
 import { INotificationBriefDto, NotificationBriefDtoMapper } from '@/features/notifications/dtos/notification-dto.ts';
 import { createNotificationSchema } from '@/features/notifications/schemas/create-notification.ts';
+import { requireAuth } from '@/middleware/require-auth.ts';
+import { serverZodValidator } from '@/features/shared/utils/server-zod-validator.ts';
+
 
 
 export const createNotificationServerFn = createServerFn({ method: 'POST' })
-  .inputValidator(createNotificationSchema)
+  .inputValidator(serverZodValidator(createNotificationSchema))
+  .middleware([requireAuth()])
   .handler(async ({ data }) => {
     const locale = getLocale();
     const createdEntity = await prisma.notification.create({

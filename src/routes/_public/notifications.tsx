@@ -1,4 +1,4 @@
-import { createFileRoute, redirect } from '@tanstack/react-router';
+import { createFileRoute } from '@tanstack/react-router';
 import { getAllNotificationsQueryOptions } from '@/features/notifications/server-functions/get-all.ts';
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import { Item, ItemActions, ItemContent, ItemDescription, ItemTitle } from '@/components/ui/item.tsx';
@@ -29,10 +29,6 @@ export const Route = createFileRoute('/_public/notifications')({
   component: RouteComponent,
   staticData: {
     breadcrumbs: { title: m['pages.notifications.title']() }
-  },
-  beforeLoad: ({ context: { session } }) => {
-    if (!session)
-      throw redirect({ to: '/' });
   },
   loader: async ({ context: { queryClient } }) => {
     return queryClient.prefetchQuery(getAllNotificationsQueryOptions());
@@ -65,7 +61,7 @@ const CreateNotificationCard: FC<ComponentProps<typeof Card>> = ({ ...props }) =
 
   const { mutate: create, isPending: isPendingCreation } = useCreateNotificationMutation({
     onError: (e) => {
-      toast.error(m['common.error'](), { description: e.message });
+      toast.error(e.name, { description: e.message });
     },
     onSuccess: () => {
       form.reset();
@@ -74,10 +70,8 @@ const CreateNotificationCard: FC<ComponentProps<typeof Card>> = ({ ...props }) =
   });
 
   const onSubmit = (data: z.infer<typeof createNotificationSchema>) => {
-    console.log(data)
     create(data);
   }
-
 
   return (
     <Card {...props}>
@@ -91,7 +85,7 @@ const CreateNotificationCard: FC<ComponentProps<typeof Card>> = ({ ...props }) =
       </CardHeader>
 
       <CardContent>
-        <form onSubmit={form.handleSubmit(onSubmit)} id="create-notification-form">
+        <form onSubmit={form.handleSubmit(onSubmit)} id="create-notification-form" method='post'>
           <fieldset disabled={isPendingCreation}>
             <FieldGroup className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <Controller
@@ -172,7 +166,7 @@ const NotificationListSection: FC<ComponentProps<'section'>> = ({ className, ...
   });
 
   const { mutateAsync: deleteNotification } = useDeleteNotificationByIdMutation({
-    onError: (e) => toast.error('Error', { description: e.message })
+    onError: (e) => toast.error(e.name, { description: e.message })
   });
 
   const handleDelete = (id: number) => {

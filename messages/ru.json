@@ -12,7 +12,8 @@
     "email": "Эл. почта",
     "password": "Пароль",
     "full_name": "Полное имя",
-    "invalid": "Неверно"
+    "invalid": "Неверно",
+    "sign_out": "Выйти"
   },
   "components": {
     "locale_dropdown": {
@@ -29,9 +30,11 @@
       "sign_in": "Войти",
       "sign_up": "Регистрация"
     },
-    "user_dropdown": {
-      "sign_out": "Выйти",
-      "signing_out": "Выходим"
+    "sessions_card": {
+      "title": "Сессии",
+      "description": "Список ваших активных сессий",
+      "revoke": "Отозвать",
+      "current_session": "Текущая сессия"
     }
   },
   "pages": {
@@ -48,7 +51,8 @@
       "passwords_do_not_match": "Пароли не совпадают",
       "already_have_account": "Уже есть аккаунт?",
       "show_passwords": "Показать пароли",
-      "sign_in": "Войти"
+      "sign_in": "Войти",
+      "success_message": "Проверьте свою почту для подтверждения регистрации"
     },
     "notifications": {
       "title": "Уведомления",

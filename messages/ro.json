@@ -11,7 +11,8 @@
     "email": "Email",
     "password": "Parolă",
     "full_name": "Nume complet",
-    "invalid": "Incorect"
+    "invalid": "Incorect",
+    "sign_out": "Deconectare"
   },
   "components": {
     "locale_dropdown": {
@@ -28,9 +29,11 @@
       "sign_in": "Autentificare",
       "sign_up": "Înregistrare"
     },
-    "user_dropdown": {
-      "sign_out": "Deconectare",
-      "signing_out": "Deconectǎm"
+    "sessions_card": {
+      "title": "Sesiuni",
+      "description": "Lista sesiunilor active",
+      "revoke": "Revocă",
+      "current_session": "Sesiune curentă"
     }
   },
   "pages": {
@@ -47,7 +50,8 @@
       "passwords_do_not_match": "Parolele nu coincid",
       "already_have_account": "Ai deja un cont?",
       "show_passwords": "Afișează parolele",
-      "sign_in": "Autentifică-te"
+      "sign_in": "Autentifică-te",
+      "success_message": "Verifică e-mailul pentru confirmarea înregistrării"
     },
     "notifications": {
       "title": "Notificări",

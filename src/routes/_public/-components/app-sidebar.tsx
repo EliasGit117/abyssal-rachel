@@ -21,10 +21,11 @@ import { IconLayoutSidebar } from '@tabler/icons-react';
 import { useSession } from '@/hooks/use-session.ts';
 
 
+
 export const AppSidebar = () => {
   const isOpen = useAppSidebar((s) => s.isOpen);
   const setOpen = useAppSidebar((s) => s.setOpen);
-  const session = useSession();
+  const { session } = useSession();
   let links = baseLinks;
   if (!session)
     links = baseLinks.filter(link => !link.protected);

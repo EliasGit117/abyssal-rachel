@@ -4,6 +4,6 @@ import { useSession } from '@/hooks/use-session.ts';
 interface IProps extends PropsWithChildren {}
 
 export const SignedOut = ({ children }: IProps) => {
-  const session = useSession();
+  const { session } = useSession();
   return !session ? children : null
 }

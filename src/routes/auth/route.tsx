@@ -9,9 +9,9 @@ import { Bar, Progress } from '@bprogress/react';
 export const Route = createFileRoute('/auth')({
   component: RouteComponent,
   beforeLoad: ({ context: { session } }) => {
-    if (!!session)
+    if (session)
       throw redirect({ to: '/' });
-  }
+  },
 });
 
 function RouteComponent() {

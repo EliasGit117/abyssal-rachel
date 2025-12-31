@@ -1,7 +1,7 @@
 import { createFileRoute, Outlet } from '@tanstack/react-router';
 import { Bar, Progress } from '@bprogress/react';
-import { BreadcrumbsNavigation } from '@/components/layout';
 import { AppHeader, AppSidebar, AppSidebarProvider, AppFooter } from '@/routes/_public/-components';
+import { BreadcrumbsNavigation } from '@/components/layout';
 
 export const Route = createFileRoute('/_public')({
   component: RouteComponent

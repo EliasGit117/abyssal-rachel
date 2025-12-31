@@ -4,6 +4,7 @@ import { getLocale } from '@/paraglide/runtime';
 import z from 'zod';
 import { getZodErrorMap } from '@/lib/get-zod-error-map.ts';
 
+
 export default {
   async fetch(req: Request): Promise<Response> {
     return paraglideMiddleware(req, async () => {
