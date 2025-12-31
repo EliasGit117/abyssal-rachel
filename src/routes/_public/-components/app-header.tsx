@@ -62,7 +62,7 @@ export const AppHeader: FC<IAppHeader> = ({ className, ...props }) => {
     <header
       className={cn(
         !mounted && 'sr-only',
-        'sticky top-0 flex h-16 shrink-0 items-center gap-2 z-50',
+        'sticky top-0 flex h-16 shrink-0 items-center gap-2 z-20',
         'bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/90',
         'dark:supports-backdrop-filter:bg-background/75 border-b',
         'transition-opacity duration-100 ease-out',
