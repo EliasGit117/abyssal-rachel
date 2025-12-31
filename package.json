@@ -2,6 +2,9 @@
   "name": "abyssal-rachel",
   "private": true,
   "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
   "prisma": {
     "schema": "prisma/schema"
   },
