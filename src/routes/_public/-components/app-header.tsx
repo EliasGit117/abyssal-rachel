@@ -79,7 +79,7 @@ export const AppHeader: FC<IAppHeader> = ({ className, ...props }) => {
 
         <Button variant="link" size="dense" asChild>
           <Link to="/">
-            <Logo className={cn('h-4 lg:h-5! w-fit!', isAtTop && type === 'fixed' ? 'text-white' : 'text-foreground')}/>
+            <Logo className={cn('h-4 lg:h-5! w-full! max-w-20!', isAtTop && type === 'fixed' ? 'text-white' : 'text-foreground')}/>
           </Link>
         </Button>
 

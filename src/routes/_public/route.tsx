@@ -16,7 +16,7 @@ function RouteComponent() {
 
       <AppHeader/>
       <AppSidebar/>
-      <BreadcrumbsNavigation className='container mx-auto px-2'/>
+      <BreadcrumbsNavigation className='container mx-auto px-2 lg:px-3'/>
 
       <Outlet/>
       <AppFooter className='mt-auto'/>

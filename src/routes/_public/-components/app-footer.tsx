@@ -34,7 +34,7 @@ export const AppFooter: FC<IProps> = ({ className, ...props }) => {
         </div>
 
         <div className="flex flex-col gap-6 items-center md:items-end order-first md:order-last">
-          <Logo className="h-8 w-fit text-muted-foreground"/>
+          <Logo className="h-8 max-w-30 text-muted-foreground"/>
 
           <div className="flex gap-2 items-center">
             {socialLinks.map(({ icon: Icon, href }) => (

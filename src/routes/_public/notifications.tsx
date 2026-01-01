@@ -21,22 +21,27 @@ import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTi
 import { Button } from '@/components/ui/button.tsx';
 import { m } from '@/paraglide/messages';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip.tsx';
-import { createNotificationSchema, TCreateNotificationSchema } from '@/features/notifications/schemas/create-notification.ts';
-
+import {
+  createNotificationSchema,
+  TCreateNotificationSchema
+} from '@/features/notifications/schemas/create-notification.ts';
+import { TBreadcrumbData } from '@/components/layout';
 
 
 export const Route = createFileRoute('/_public/notifications')({
   component: RouteComponent,
-  staticData: {
-    breadcrumbs: { title: m['pages.notifications.title']() }
-  },
   loader: async ({ context: { queryClient } }) => {
-    return queryClient.prefetchQuery(getAllNotificationsQueryOptions());
+    if (typeof window !== 'undefined')
+      void queryClient.prefetchQuery({ ...getAllNotificationsQueryOptions() });
+    else
+      await queryClient.prefetchQuery({ ...getAllNotificationsQueryOptions() });
+
+    const breadcrumbs: TBreadcrumbData = { title: m['pages.notifications.title']() };
+    return { breadcrumbs: breadcrumbs };
   }
 });
 
 function RouteComponent() {
-
 
   return (
     <main className="container mx-auto p-4 space-y-4 min-h-safe-screen">
@@ -71,7 +76,7 @@ const CreateNotificationCard: FC<ComponentProps<typeof Card>> = ({ ...props }) =
 
   const onSubmit = (data: z.infer<typeof createNotificationSchema>) => {
     create(data);
-  }
+  };
 
   return (
     <Card {...props}>
@@ -85,7 +90,7 @@ const CreateNotificationCard: FC<ComponentProps<typeof Card>> = ({ ...props }) =
       </CardHeader>
 
       <CardContent>
-        <form onSubmit={form.handleSubmit(onSubmit)} id="create-notification-form" method='post'>
+        <form onSubmit={form.handleSubmit(onSubmit)} id="create-notification-form" method="post">
           <fieldset disabled={isPendingCreation}>
             <FieldGroup className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <Controller
@@ -124,7 +129,7 @@ const CreateNotificationCard: FC<ComponentProps<typeof Card>> = ({ ...props }) =
                     <FieldLabel>
                       {m['pages.notifications.create_form.text']()} RO
                     </FieldLabel>
-                    <Textarea {...field} className='min-h-36' aria-invalid={fieldState.invalid}/>
+                    <Textarea {...field} className="min-h-36" aria-invalid={fieldState.invalid}/>
                     {fieldState.invalid && <FieldError errors={[fieldState.error]}/>}
                   </Field>
                 )}
@@ -138,7 +143,7 @@ const CreateNotificationCard: FC<ComponentProps<typeof Card>> = ({ ...props }) =
                     <FieldLabel>
                       {m['pages.notifications.create_form.text']()} RU
                     </FieldLabel>
-                    <Textarea {...field} className='min-h-36' aria-invalid={fieldState.invalid}/>
+                    <Textarea {...field} className="min-h-36" aria-invalid={fieldState.invalid}/>
                     {fieldState.invalid && <FieldError errors={[fieldState.error]}/>}
                   </Field>
                 )}
@@ -160,7 +165,7 @@ const CreateNotificationCard: FC<ComponentProps<typeof Card>> = ({ ...props }) =
 
 const NotificationListSection: FC<ComponentProps<'section'>> = ({ className, ...props }) => {
   const [deletion, setDeletion] = useState<Record<number, boolean>>({});
-  const { isPending: isPendingNotifications, data: notifications } = useQuery({
+  const { isLoading: isPendingNotifications, data: notifications } = useQuery({
     ...getAllNotificationsQueryOptions(),
     placeholderData: keepPreviousData
   });
@@ -187,16 +192,15 @@ const NotificationListSection: FC<ComponentProps<'section'>> = ({ className, ...
         Array.from([1, 2, 3, 4, 5]).map((_, i) => (
           <Item variant="outline" key={i}>
             <ItemContent>
-              <ItemTitle className="w-full">
-                <Skeleton className="h-4 w-full max-w-32"/>
-              </ItemTitle>
-              <ItemDescription className="flex flex-col gap-1">
-                <Skeleton className="h-4 w-full max-w-64"/>
-                <Skeleton className="h-4 w-full max-w-64"/>
-              </ItemDescription>
+              <div className="w-full">
+                <Skeleton className="h-3.5 w-full max-w-32"/>
+              </div>
+              <div className="flex flex-col gap-1">
+                <Skeleton className="h-3.5 w-full max-w-64"/>
+              </div>
             </ItemContent>
             <ItemActions>
-              <Skeleton className="h-8 w-16"/>
+              <Skeleton className="size-9"/>
             </ItemActions>
           </Item>
         ))
@@ -204,21 +208,25 @@ const NotificationListSection: FC<ComponentProps<'section'>> = ({ className, ...
           notifications?.map((notification) => (
             <Item variant="outline" key={notification.id}>
               <ItemContent>
-                <ItemTitle>{notification.name}</ItemTitle>
-                <ItemDescription>{notification.text}</ItemDescription>
+                <ItemTitle>
+                  {notification.name}
+                </ItemTitle>
+                <ItemDescription>
+                  {notification.text}
+                </ItemDescription>
               </ItemContent>
               <ItemActions>
                 <Tooltip>
                   <TooltipTrigger asChild>
                     <LoadingButton
                       hideText
-                      size='icon-sm'
+                      size="icon"
                       variant="outline"
                       loading={deletion[notification.id]}
                       onClick={() => handleDelete(notification.id)}
                     >
                       <IconTrash/>
-                      <span className='sr-only'>
+                      <span className="sr-only">
                         {m['common.delete']()}
                       </span>
                     </LoadingButton>
