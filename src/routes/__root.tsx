@@ -74,7 +74,7 @@ function RootDocument({ children }: { children: ReactNode }) {
           <title/>
           <HeadContent/>
         </head>
-        <body className="min-h-svh flex flex-col">
+        <body className="flex flex-col">
           {children}
           <Scripts/>
         </body>

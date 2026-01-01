@@ -26,15 +26,13 @@ import {
   TCreateNotificationSchema
 } from '@/features/notifications/schemas/create-notification.ts';
 import { TBreadcrumbData } from '@/components/layout';
+import { awaitIfServer } from '@/lib/await-if-server.ts';
 
 
 export const Route = createFileRoute('/_public/notifications')({
   component: RouteComponent,
   loader: async ({ context: { queryClient } }) => {
-    if (typeof window !== 'undefined')
-      void queryClient.prefetchQuery({ ...getAllNotificationsQueryOptions() });
-    else
-      await queryClient.prefetchQuery({ ...getAllNotificationsQueryOptions() });
+    await awaitIfServer(queryClient.prefetchQuery({ ...getAllNotificationsQueryOptions() }));
 
     const breadcrumbs: TBreadcrumbData = { title: m['pages.notifications.title']() };
     return { breadcrumbs: breadcrumbs };

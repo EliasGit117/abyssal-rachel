@@ -131,6 +131,10 @@
     @apply min-h-[calc(100svh-(--spacing(14)))];
   }
 
+  .min-h-screen-admin {
+    @apply min-h-[calc(100svh-(--spacing(12)))];
+  }
+
   .leaflet-container {
     @apply bg-card! font-[inherit]!;
   }

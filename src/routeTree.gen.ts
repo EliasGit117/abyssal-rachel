@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as AuthRouteRouteImport } from './routes/auth/route'
 import { Route as AdminRouteRouteImport } from './routes/admin/route'
 import { Route as PublicRouteRouteImport } from './routes/_public/route'
+import { Route as AdminIndexRouteImport } from './routes/admin/index'
 import { Route as PublicIndexRouteImport } from './routes/_public/index'
 import { Route as PublicNotificationsRouteImport } from './routes/_public/notifications'
 import { Route as PublicContactRouteImport } from './routes/_public/contact'
@@ -32,6 +33,11 @@ const AdminRouteRoute = AdminRouteRouteImport.update({
 const PublicRouteRoute = PublicRouteRouteImport.update({
   id: '/_public',
   getParentRoute: () => rootRouteImport,
+} as any)
+const AdminIndexRoute = AdminIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AdminRouteRoute,
 } as any)
 const PublicIndexRoute = PublicIndexRouteImport.update({
   id: '/',
@@ -65,21 +71,22 @@ const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
 } as any)
 
 export interface FileRoutesByFullPath {
-  '/admin': typeof AdminRouteRoute
+  '/admin': typeof AdminRouteRouteWithChildren
   '/auth': typeof AuthRouteRouteWithChildren
   '/contact': typeof PublicContactRoute
   '/notifications': typeof PublicNotificationsRoute
   '/': typeof PublicIndexRoute
+  '/admin/': typeof AdminIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/auth/sign-in': typeof AuthSignInIndexRoute
   '/auth/sign-up': typeof AuthSignUpIndexRoute
 }
 export interface FileRoutesByTo {
-  '/admin': typeof AdminRouteRoute
   '/auth': typeof AuthRouteRouteWithChildren
   '/contact': typeof PublicContactRoute
   '/notifications': typeof PublicNotificationsRoute
   '/': typeof PublicIndexRoute
+  '/admin': typeof AdminIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/auth/sign-in': typeof AuthSignInIndexRoute
   '/auth/sign-up': typeof AuthSignUpIndexRoute
@@ -87,11 +94,12 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_public': typeof PublicRouteRouteWithChildren
-  '/admin': typeof AdminRouteRoute
+  '/admin': typeof AdminRouteRouteWithChildren
   '/auth': typeof AuthRouteRouteWithChildren
   '/_public/contact': typeof PublicContactRoute
   '/_public/notifications': typeof PublicNotificationsRoute
   '/_public/': typeof PublicIndexRoute
+  '/admin/': typeof AdminIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/auth/sign-in/': typeof AuthSignInIndexRoute
   '/auth/sign-up/': typeof AuthSignUpIndexRoute
@@ -104,16 +112,17 @@ export interface FileRouteTypes {
     | '/contact'
     | '/notifications'
     | '/'
+    | '/admin/'
     | '/api/auth/$'
     | '/auth/sign-in'
     | '/auth/sign-up'
   fileRoutesByTo: FileRoutesByTo
   to:
-    | '/admin'
     | '/auth'
     | '/contact'
     | '/notifications'
     | '/'
+    | '/admin'
     | '/api/auth/$'
     | '/auth/sign-in'
     | '/auth/sign-up'
@@ -125,6 +134,7 @@ export interface FileRouteTypes {
     | '/_public/contact'
     | '/_public/notifications'
     | '/_public/'
+    | '/admin/'
     | '/api/auth/$'
     | '/auth/sign-in/'
     | '/auth/sign-up/'
@@ -132,7 +142,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   PublicRouteRoute: typeof PublicRouteRouteWithChildren
-  AdminRouteRoute: typeof AdminRouteRoute
+  AdminRouteRoute: typeof AdminRouteRouteWithChildren
   AuthRouteRoute: typeof AuthRouteRouteWithChildren
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
 }
@@ -159,6 +169,13 @@ declare module '@tanstack/react-router' {
       fullPath: ''
       preLoaderRoute: typeof PublicRouteRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/admin/': {
+      id: '/admin/'
+      path: '/'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AdminIndexRouteImport
+      parentRoute: typeof AdminRouteRoute
     }
     '/_public/': {
       id: '/_public/'
@@ -221,6 +238,18 @@ const PublicRouteRouteWithChildren = PublicRouteRoute._addFileChildren(
   PublicRouteRouteChildren,
 )
 
+interface AdminRouteRouteChildren {
+  AdminIndexRoute: typeof AdminIndexRoute
+}
+
+const AdminRouteRouteChildren: AdminRouteRouteChildren = {
+  AdminIndexRoute: AdminIndexRoute,
+}
+
+const AdminRouteRouteWithChildren = AdminRouteRoute._addFileChildren(
+  AdminRouteRouteChildren,
+)
+
 interface AuthRouteRouteChildren {
   AuthSignInIndexRoute: typeof AuthSignInIndexRoute
   AuthSignUpIndexRoute: typeof AuthSignUpIndexRoute
@@ -237,7 +266,7 @@ const AuthRouteRouteWithChildren = AuthRouteRoute._addFileChildren(
 
 const rootRouteChildren: RootRouteChildren = {
   PublicRouteRoute: PublicRouteRouteWithChildren,
-  AdminRouteRoute: AdminRouteRoute,
+  AdminRouteRoute: AdminRouteRouteWithChildren,
   AuthRouteRoute: AuthRouteRouteWithChildren,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
 }

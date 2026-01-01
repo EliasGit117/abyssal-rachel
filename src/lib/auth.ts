@@ -40,7 +40,6 @@ export const auth = betterAuth({
   },
   plugins: [
     // Removed coz breaks the production app build
-    // tanstackStartCookies(),
     localization({
       defaultLocale: 'ro-RO',
       fallbackLocale: 'ro-RO',

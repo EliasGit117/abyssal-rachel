@@ -16,11 +16,7 @@ export const getAllNotificationsServerFn = createServerFn({ method: 'GET' })
 export function getAllNotificationsQueryOptions() {
   return queryOptions({
     queryKey: ['notifications'],
-    queryFn: () => getAllNotificationsServerFn().then(async (res) => {
-      return res;
-    }),
-    staleTime: 0,
-    gcTime: 0
-
+    queryFn: () => getAllNotificationsServerFn()
   });
 }
+
