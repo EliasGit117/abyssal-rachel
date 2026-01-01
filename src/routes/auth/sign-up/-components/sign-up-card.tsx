@@ -34,7 +34,6 @@ export const SignUpCard: FC<ISignUpCard> = ({ className, ...props }) => {
       email: data.email,
       password: data.password,
       name: data.name,
-      callbackURL: '/auth/sign-in?alert=email_confirmed'
     }),
     onSuccess: (res) => {
       if (!res.error) {

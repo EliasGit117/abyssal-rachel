@@ -177,7 +177,7 @@ const UserDropdown: FC<IUserDropdown> = ({ align, className, ...props }) => {
       <DropdownMenuTrigger asChild>
         <Button size="icon" className={cn('rounded-full', className)} variant="ghost"{...props}>
           <Avatar className="size-7">
-            <AvatarImage src={user?.image ?? ''} alt="@shadcn"/>
+            <AvatarImage src={user?.image ?? ''} alt={initials}/>
             <AvatarFallback className="text-xs!">{initials}</AvatarFallback>
           </Avatar>
         </Button>

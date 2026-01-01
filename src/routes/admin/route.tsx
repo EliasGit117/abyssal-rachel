@@ -1,7 +1,7 @@
 import { createFileRoute, Outlet, redirect } from '@tanstack/react-router';
 import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar.tsx';
-import { AdminSidebar } from '@/routes/admin/-components/admin-sidebar.tsx';
-import { AdminHeader } from '@/routes/admin/-components/admin-header.tsx';
+import { AdminHeader } from '@/routes/admin/-components/header';
+import { AdminSidebar } from '@/routes/admin/-components/sidebar';
 
 export const Route = createFileRoute('/admin')({
   component: RouteComponent,

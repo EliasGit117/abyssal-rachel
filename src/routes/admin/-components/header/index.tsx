@@ -1,15 +1,13 @@
-import { ComponentProps, useEffect, useRef } from 'react';
-import * as React from 'react';
-import { Separator } from '@/components/ui/separator';
-import { SidebarTrigger, } from '@/components/ui/sidebar';
-import { cn } from '@/lib/utils';
+import { ComponentProps, FC, useEffect, useRef } from 'react';
+import { Separator } from '@/components/ui/separator.tsx';
+import { SidebarTrigger, } from '@/components/ui/sidebar.tsx';
+import { cn } from '@/lib/utils.ts';
 import { BreadcrumbsNavigation } from '@/components/layout';
 
 
-interface IAdminHeaderProps extends ComponentProps<'header'> {
-}
+interface IAdminHeaderProps extends ComponentProps<'header'> {}
 
-export const AdminHeader: React.FC<IAdminHeaderProps> = ({ className, ...props }) => {
+export const AdminHeader: FC<IAdminHeaderProps> = ({ className, ...props }) => {
   const headerRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
@@ -48,7 +46,10 @@ export const AdminHeader: React.FC<IAdminHeaderProps> = ({ className, ...props }
     >
       <div className="container mx-auto px-4 sm:py-0 flex gap-2 items-center h-12">
         <SidebarTrigger className="-ml-1"/>
-        <Separator orientation="vertical" className="h-4 my-auto"/>
+        <Separator
+          orientation="vertical"
+          className="data-[orientation=vertical]:h-4 my-auto"
+        />
         <BreadcrumbsNavigation/>
       </div>
     </header>
