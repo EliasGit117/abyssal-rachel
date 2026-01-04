@@ -1,6 +1,5 @@
 import { ComponentProps, FC } from 'react';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card.tsx';
-import { FieldDescription } from '@/components/ui/field.tsx';
 import { cn } from '@/lib/utils.ts';
 import { IconSend } from '@tabler/icons-react';
 import { Link, useRouter } from '@tanstack/react-router';
@@ -38,7 +37,7 @@ export const SignUpCard: FC<ISignUpCard> = ({ className, ...props }) => {
     onSuccess: (res) => {
       if (!res.error) {
         toast.success(m['common.success'](), {
-          description: m['pages.sign_up.success_message'](),
+          description: m['pages.auth.sign_up.success_message'](),
           duration: 5000
         });
         router.navigate({ to: '/auth/sign-in' });
@@ -56,10 +55,10 @@ export const SignUpCard: FC<ISignUpCard> = ({ className, ...props }) => {
     <Card className={cn('w-full max-w-sm', className)} {...props}>
       <CardHeader className="text-center">
         <CardTitle className="text-xl">
-          {m['pages.sign_up.form_title']()}
+          {m['pages.auth.sign_up.form_title']()}
         </CardTitle>
         <CardDescription>
-          {m['pages.sign_up.form_description']()}
+          {m['pages.auth.sign_up.form_description']()}
         </CardDescription>
       </CardHeader>
 
@@ -67,15 +66,19 @@ export const SignUpCard: FC<ISignUpCard> = ({ className, ...props }) => {
         <SignUpForm form={form} onSubmit={signIn} disabled={isPending} id="sign-in-form"/>
       </CardContent>
 
-      <CardFooter className='flex-col gap-2'>
+      <CardFooter className='flex-col gap-4'>
         <LoadingButton className='w-full' loading={isPending} form="sign-in-form">
           <IconSend/>
           <span>{m['common.submit']()}</span>
         </LoadingButton>
 
-        <FieldDescription className="text-center">
-          {m['pages.sign_up.already_have_account']()} <Link to="/auth/sign-in">{m['pages.sign_up.sign_in']()}</Link>
-        </FieldDescription>
+        <p className="text-center text-muted-foreground">
+          {m['pages.auth.sign_up.already_have_account']()}
+          {' '}
+          <Link to="/auth/sign-in" className='underline underline-offset-4'>
+            {m['pages.auth.sign_up.sign_in']()}
+          </Link>
+        </p>
       </CardFooter>
     </Card>
   );

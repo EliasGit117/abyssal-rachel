@@ -9,7 +9,7 @@
     "schema": "prisma/schema"
   },
   "scripts": {
-    "dev": "bun --bun vite dev --port 3000",
+    "dev": "bun --bun vite dev --force --port 3000",
     "build": "bun --bun vite build",
     "preview": "bun .output/server/index.mjs",
     "test": "vitest run",

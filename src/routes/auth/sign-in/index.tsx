@@ -1,4 +1,4 @@
-import { createFileRoute } from '@tanstack/react-router';
+import { createFileRoute, redirect } from '@tanstack/react-router';
 import { SignInCard } from '@/routes/auth/sign-in/-components';
 import * as z from 'zod';
 import { useEffect } from 'react';
@@ -12,7 +12,11 @@ const signInSearchParamsSchema = z.object({
 export const Route = createFileRoute('/auth/sign-in/')({
   component: RouteComponent,
   validateSearch: signInSearchParamsSchema,
-  loaderDeps: (deps) => (deps)
+  loaderDeps: (deps) => (deps),
+  beforeLoad: ({ context: { session } }) => {
+    if (session)
+      throw redirect({ to: '/' })
+  },
 });
 
 function RouteComponent() {

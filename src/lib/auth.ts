@@ -4,6 +4,7 @@ import { prisma } from '@/lib/prisma.ts';
 import { localization } from 'better-auth-localization';
 import { getLocale } from '@/paraglide/runtime';
 import { resend } from './resend';
+import { magicLink } from 'better-auth/plugins';
 
 
 export const auth = betterAuth({
@@ -18,10 +19,12 @@ export const auth = betterAuth({
   emailVerification: {
     autoSignInAfterVerification: true,
     sendVerificationEmail: async ({ user, url }) => {
-      resend.emails.send({
+      const locale = getLocale();
+
+      return resend.emails.send({
         from: process.env.AUTH_EMAIL_FROM!,
         to: user.email,
-        subject: 'Hello World',
+        subject: locale === 'ro' ? 'Verificare email' : 'Потверждение эл. почты',
         html: `
           <p>Welcome 👋</p>
           <p>Click below to verify your email:</p>
@@ -37,10 +40,36 @@ export const auth = betterAuth({
       }).catch(e => (
         console.error('Failed to send email verification', e)
       ));
-    }
+    },
   },
   plugins: [
     // Removed coz breaks the production app build
+    // tanstackStartCookies(),
+    magicLink({
+      sendMagicLink: async ({ email, url }) => {
+        const locale = getLocale();
+
+        return resend.emails.send({
+          from: process.env.AUTH_EMAIL_FROM!,
+          to: email,
+          subject: locale === 'ro' ? 'Autorizare cu Magic Link' : 'Авторизация с помощью Magic Link',
+          html: `
+          <p>Welcome 👋</p>
+          <p>Click below to verify your email:</p>
+          <a href="${url}">Sign in</a>
+        `
+        }).then((res) => {
+          if (res.error) {
+            console.error('Failed to send magic link email', res.error);
+            return;
+          }
+
+          console.info('Magic link email sent', res.data);
+        }).catch(e => (
+          console.error('Failed to send magic link email', e)
+        ));
+      }
+    }),
     localization({
       defaultLocale: 'ro-RO',
       fallbackLocale: 'ro-RO',

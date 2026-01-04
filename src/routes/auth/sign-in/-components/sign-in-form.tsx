@@ -6,6 +6,7 @@ import { Input } from '@/components/ui/input.tsx';
 import { m } from '@/paraglide/messages';
 import { InputGroup, InputGroupAddon, InputGroupButton, InputGroupInput } from '@/components/ui/input-group.tsx';
 import { IconEye, IconEyeOff } from '@tabler/icons-react';
+import { Link } from '@tanstack/react-router';
 
 
 export const signInSchema = z.object({
@@ -59,9 +60,15 @@ export const SignInForm: FC<IProps> = ({ form, id, onSubmit, disabled, ...props 
             control={form.control}
             render={({ field, fieldState }) => (
               <Field data-invalid={fieldState.invalid}>
-                <FieldLabel htmlFor="password-input">
-                  {m['common.password']()}
-                </FieldLabel>
+                <div className="flex items-center justify-between gap-2">
+                  <FieldLabel htmlFor="password-input">
+                    {m['common.password']()}
+                  </FieldLabel>
+
+                  <Link to="/auth/forgot-password" className='text-muted-foreground'>
+                    {m['pages.auth.sign_in.forgot_password']()}
+                  </Link>
+                </div>
 
                 <InputGroup>
                   <InputGroupInput
@@ -74,8 +81,8 @@ export const SignInForm: FC<IProps> = ({ form, id, onSubmit, disabled, ...props 
                   <InputGroupAddon align="inline-end">
                     <InputGroupButton
                       size="icon-xs"
-                      aria-label={m['pages.sign_up.show_passwords']()}
-                      title={m['pages.sign_up.show_passwords']()}
+                      aria-label={m['pages.auth.sign_up.show_passwords']()}
+                      title={m['pages.auth.sign_up.show_passwords']()}
                       onClick={() => setIsPasswordVisible(pv => !pv)}
                     >
                       {isPasswordVisible ? <IconEye/> : <IconEyeOff/>}

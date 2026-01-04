@@ -1,7 +1,7 @@
 import { createFileRoute, redirect } from '@tanstack/react-router';
-import { SignUpCard } from '@/routes/auth/sign-up/-components';
+import { MagicLinkCard } from '@/routes/auth/magic-link/-components';
 
-export const Route = createFileRoute('/auth/sign-up/')({
+export const Route = createFileRoute('/auth/magic-link/')({
   component: RouteComponent,
   beforeLoad: ({ context: { session } }) => {
     if (session)
@@ -12,6 +12,6 @@ export const Route = createFileRoute('/auth/sign-up/')({
 function RouteComponent() {
 
   return (
-    <SignUpCard className='mx-auto my-auto'/>
-  );
+    <MagicLinkCard className='mx-auto my-auto'/>
+  )
 }

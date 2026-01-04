@@ -104,8 +104,8 @@ export const SignUpForm: FC<IProps> = ({ form, id, onSubmit, disabled, ...props 
                     <InputGroupAddon align="inline-end">
                       <InputGroupButton
                         size="icon-xs"
-                        aria-label={m['pages.sign_up.show_passwords']()}
-                        title={m['pages.sign_up.show_passwords']()}
+                        aria-label={m['pages.auth.sign_up.show_passwords']()}
+                        title={m['pages.auth.sign_up.show_passwords']()}
                         onClick={() => setIsPasswordVisible(pv => !pv)}
                       >
                         {isPasswordVisible ? <IconEye/> : <IconEyeOff/>}
@@ -124,7 +124,7 @@ export const SignUpForm: FC<IProps> = ({ form, id, onSubmit, disabled, ...props 
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
                   <FieldLabel htmlFor="confirm-password-input">
-                    {m['pages.sign_up.confirm_password']()}
+                    {m['pages.auth.sign_up.confirm_password']()}
                   </FieldLabel>
 
                   <InputGroup>
@@ -138,8 +138,8 @@ export const SignUpForm: FC<IProps> = ({ form, id, onSubmit, disabled, ...props 
                     <InputGroupAddon align="inline-end">
                       <InputGroupButton
                         size="icon-xs"
-                        aria-label={m['pages.sign_up.show_passwords']()}
-                        title={m['pages.sign_up.show_passwords']()}
+                        aria-label={m['pages.auth.sign_up.show_passwords']()}
+                        title={m['pages.auth.sign_up.show_passwords']()}
                         onClick={() => setIsPasswordVisible(pv => !pv)}
                       >
                         {isPasswordVisible ? <IconEye/> : <IconEyeOff/>}

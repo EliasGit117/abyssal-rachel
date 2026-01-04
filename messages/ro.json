@@ -12,7 +12,8 @@
     "password": "Parolă",
     "full_name": "Nume complet",
     "invalid": "Incorect",
-    "sign_out": "Deconectare"
+    "sign_out": "Deconectare",
+    "go_back": "Înapoi"
   },
   "components": {
     "locale_dropdown": {
@@ -37,21 +38,30 @@
     }
   },
   "pages": {
-    "sign_in": {
-      "form_title": "Bine ai revenit!",
-      "form_description": "Introdu datele tale pentru autentificare",
-      "dont_have_account": "Nu ai un cont?",
-      "create": "Creează"
-    },
-    "sign_up": {
-      "form_title": "Creează-ți contul",
-      "form_description": "Completează câmpurile de mai jos pentru a crea un cont nou",
-      "confirm_password": "Confirmă parola",
-      "passwords_do_not_match": "Parolele nu coincid",
-      "already_have_account": "Ai deja un cont?",
-      "show_passwords": "Afișează parolele",
-      "sign_in": "Autentifică-te",
-      "success_message": "Verifică e-mailul pentru confirmarea înregistrării"
+    "auth": {
+      "sign_in": {
+        "form_title": "Bine ai revenit!",
+        "form_description": "Introdu datele tale pentru autentificare",
+        "dont_have_account": "Nu ai un cont?",
+        "forgot_password": "Ai uitat parola?",
+        "create": "Creează",
+        "magic_link": "Linkul Magic"
+      },
+      "sign_up": {
+        "form_title": "Creează-ți contul",
+        "form_description": "Completează câmpurile de mai jos pentru a crea un cont nou",
+        "confirm_password": "Confirmă parola",
+        "passwords_do_not_match": "Parolele nu coincid",
+        "already_have_account": "Ai deja un cont?",
+        "show_passwords": "Afișează parolele",
+        "sign_in": "Autentifică-te",
+        "success_message": "Verifică e-mailul pentru confirmarea înregistrării"
+      },
+      "magic_link": {
+        "form_title": "Trimite Magic Link",
+        "form_description": "Introdu adresa de e-mail pentru a trimite Magic Link",
+        "success_message": "Magic Link a fost trimis cu succes. Verifică e-mailul pentru a continua autentificarea."
+      }
     },
     "notifications": {
       "title": "Notificări",

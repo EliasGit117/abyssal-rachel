@@ -13,7 +13,8 @@
     "password": "Пароль",
     "full_name": "Полное имя",
     "invalid": "Неверно",
-    "sign_out": "Выйти"
+    "sign_out": "Выйти",
+    "go_back": "Назад"
   },
   "components": {
     "locale_dropdown": {
@@ -38,21 +39,30 @@
     }
   },
   "pages": {
-    "sign_in": {
-      "form_title": "С возвращением!",
-      "form_description": "Введите свои данные для входа",
-      "dont_have_account": "Нет аккаунта?",
-      "create": "Создать"
-    },
-    "sign_up": {
-      "form_title": "Создать ваш аккаунт",
-      "form_description": "Заполните поля ниже чтобы создать новый аккаунт",
-      "confirm_password": "Подтвердите пароль",
-      "passwords_do_not_match": "Пароли не совпадают",
-      "already_have_account": "Уже есть аккаунт?",
-      "show_passwords": "Показать пароли",
-      "sign_in": "Войти",
-      "success_message": "Проверьте свою почту для подтверждения регистрации"
+    "auth": {
+      "sign_in": {
+        "form_title": "С возвращением!",
+        "form_description": "Введите свои данные для входа",
+        "dont_have_account": "Нет аккаунта?",
+        "create": "Создать",
+        "forgot_password": "Забыли пароль?",
+        "magic_link": "Magic Link"
+      },
+      "sign_up": {
+        "form_title": "Создать ваш аккаунт",
+        "form_description": "Заполните поля ниже чтобы создать новый аккаунт",
+        "confirm_password": "Подтвердите пароль",
+        "passwords_do_not_match": "Пароли не совпадают",
+        "already_have_account": "Уже есть аккаунт?",
+        "show_passwords": "Показать пароли",
+        "sign_in": "Войти",
+        "success_message": "Проверьте свою почту для подтверждения регистрации"
+      },
+      "magic_link": {
+        "form_title": "Отправить Magic Link",
+        "form_description": "Введите свой адрес электронной почты для отправки Magic Link",
+        "success_message": "Magic Link успешно отправлен. Проверьте свою почту для продолжения входа."
+      }
     },
     "notifications": {
       "title": "Уведомления",

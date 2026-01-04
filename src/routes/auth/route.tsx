@@ -1,4 +1,4 @@
-import { createFileRoute, Link, Outlet, redirect } from '@tanstack/react-router';
+import { createFileRoute, Link, Outlet } from '@tanstack/react-router';
 import Logo from '@/assets/icons/logo.svg?react';
 import { Button } from '@/components/ui/button';
 import { ThemeDropdown } from '@/components/theme';
@@ -8,10 +8,6 @@ import { Bar, Progress } from '@bprogress/react';
 
 export const Route = createFileRoute('/auth')({
   component: RouteComponent,
-  beforeLoad: ({ context: { session } }) => {
-    if (session)
-      throw redirect({ to: '/' });
-  },
 });
 
 function RouteComponent() {
