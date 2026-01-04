@@ -61,6 +61,19 @@
         "form_title": "Trimite Magic Link",
         "form_description": "Introdu adresa de e-mail pentru a trimite Magic Link",
         "success_message": "Magic Link a fost trimis cu succes. Verifică e-mailul pentru a continua autentificarea."
+      },
+      "reset_password": {
+        "form_title": "Resetează parola",
+        "form_description": "Introdu datele tale pentru a reseta parola",
+        "success_message": "Verifică e-mailul pentru a reseta parola"
+      },
+      "set_new_password": {
+        "form_title": "Setează noua parolă",
+        "form_description": "Introdu noua parolă pentru contul tău",
+        "passwords_do_not_match": "Parolele nu coincid",
+        "confirm_password": "Confirmați parola",
+        "success_message": "Parola a fost resetată cu succes",
+        "show_passwords": "Afișează parolele"
       }
     },
     "notifications": {

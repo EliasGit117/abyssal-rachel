@@ -15,6 +15,18 @@ export const auth = betterAuth({
   emailAndPassword: {
     enabled: true,
     requireEmailVerification: true,
+    sendResetPassword: async ({user, url}) => {
+      const locale = getLocale();
+
+      void resend.emails.send({
+        to: user.email,
+        from: process.env.AUTH_EMAIL_FROM!,
+        subject: locale === 'ro' ? 'Resetare parola' : 'Сброс пароля',
+        text: locale === 'ro' ?
+          `Atasă linkul pentru resetare parolă: ${url}` :
+          `Нажмите на ссылку для сброса пароля: ${url}`,
+      });
+    },
   },
   emailVerification: {
     autoSignInAfterVerification: true,
@@ -22,8 +34,8 @@ export const auth = betterAuth({
       const locale = getLocale();
 
       return resend.emails.send({
-        from: process.env.AUTH_EMAIL_FROM!,
         to: user.email,
+        from: process.env.AUTH_EMAIL_FROM!,
         subject: locale === 'ro' ? 'Verificare email' : 'Потверждение эл. почты',
         html: `
           <p>Welcome 👋</p>

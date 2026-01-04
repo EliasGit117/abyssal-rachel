@@ -62,6 +62,19 @@
         "form_title": "Отправить Magic Link",
         "form_description": "Введите свой адрес электронной почты для отправки Magic Link",
         "success_message": "Magic Link успешно отправлен. Проверьте свою почту для продолжения входа."
+      },
+      "reset_password": {
+        "form_title": "Сбросить пароль",
+        "form_description": "Введите свои данные для сброса пароля",
+        "success_message": "Проверьте свою почту для сброса пароля"
+      },
+      "set_new_password": {
+        "form_title": "Создать новый пароль",
+        "form_description": "Введите новый пароль который будет у вашего аккаунта",
+        "passwords_do_not_match": "Пароли не совпадают",
+        "confirm_password": "Потвердите пароль",
+        "success_message": "Пароль успешно изменен",
+        "show_passwords": "Показать пароли"
       }
     },
     "notifications": {

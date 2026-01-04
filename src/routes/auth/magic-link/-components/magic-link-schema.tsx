@@ -6,16 +6,16 @@ import { Input } from '@/components/ui/input.tsx';
 import { m } from '@/paraglide/messages';
 
 
-export const magicLinkForm = z.object({
+export const magicLinkSchema = z.object({
   email: z.email(),
 });
 
-export type TMagicLinkForm = z.infer<typeof magicLinkForm>;
+export type TMagicLinkschema = z.infer<typeof magicLinkSchema>;
 
 interface IProps extends Omit<ComponentProps<'form'>, 'onSubmit'> {
   id?: string;
-  form: UseFormReturn<TMagicLinkForm>;
-  onSubmit: (data: TMagicLinkForm) => void;
+  form: UseFormReturn<TMagicLinkschema>;
+  onSubmit: (data: TMagicLinkschema) => void;
   disabled?: boolean;
 }
 
@@ -23,7 +23,7 @@ export const MagicLinkForm: FC<IProps> = ({ form, id, onSubmit, disabled, ...pro
 
   return (
     <form
-      id={id ?? 'sign-in-form'}
+      id={id ?? 'magic-link-form'}
       onSubmit={form.handleSubmit(onSubmit)}
       method="post"
       {...props}

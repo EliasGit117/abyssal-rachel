@@ -13,6 +13,13 @@ const config = defineConfig({
   build: {
     cssCodeSplit: true,
   },
+  optimizeDeps: {
+    exclude: [
+      '@tanstack/react-start',
+      '@tanstack/start-server-core',
+      '@tanstack/start-client-core'
+    ],
+  },
   plugins: [
     paraglideVitePlugin({
       project: './project.inlang',

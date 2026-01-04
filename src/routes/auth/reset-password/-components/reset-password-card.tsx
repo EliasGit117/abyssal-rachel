@@ -14,22 +14,22 @@ import { Link } from '@tanstack/react-router';
 import { m } from '@/paraglide/messages';
 
 
-interface IMagicLinkCard extends ComponentProps<typeof Card> {
-}
+interface IProps extends ComponentProps<typeof Card> {}
 
-export const MagicLinkCard: FC<IMagicLinkCard> = ({ className, ...props }) => {
+export const ResetPasswordCard: FC<IProps> = ({ className, ...props }) => {
   const form = useForm<TMagicLinkschema>({
     resolver: zodResolver(magicLinkSchema),
     defaultValues: { email: '' }
   });
 
   const { mutate: signIn, isPending } = useMutation({
-    mutationFn: ({ email }: TMagicLinkschema) => authClient.signIn.magicLink({
-      email: email
+    mutationFn: ({ email }: TMagicLinkschema) => authClient.requestPasswordReset({
+      email: email,
+      redirectTo: '/auth/set-password'
     }),
     onSuccess: (res) => {
       if (!res.error) {
-        toast.success(m['pages.auth.magic_link.success_message']());
+        toast.success(m['pages.auth.reset_password.success_message']());
         form.reset({ email: '' });
         return;
       }
@@ -45,10 +45,10 @@ export const MagicLinkCard: FC<IMagicLinkCard> = ({ className, ...props }) => {
     <Card className={cn('w-full max-w-sm', className)} {...props}>
       <CardHeader className="text-center">
         <CardTitle className="text-xl">
-          {m['pages.auth.magic_link.form_title']()}
+          {m['pages.auth.reset_password.form_title']()}
         </CardTitle>
         <CardDescription>
-          {m['pages.auth.magic_link.form_description']()}
+          {m['pages.auth.reset_password.form_description']()}
         </CardDescription>
       </CardHeader>
 

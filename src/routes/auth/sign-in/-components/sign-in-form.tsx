@@ -65,7 +65,7 @@ export const SignInForm: FC<IProps> = ({ form, id, onSubmit, disabled, ...props 
                     {m['common.password']()}
                   </FieldLabel>
 
-                  <Link to="/auth/forgot-password" className='text-muted-foreground'>
+                  <Link to="/auth/reset-password" className='text-muted-foreground' replace>
                     {m['pages.auth.sign_in.forgot_password']()}
                   </Link>
                 </div>

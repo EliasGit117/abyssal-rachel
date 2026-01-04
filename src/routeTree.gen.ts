@@ -15,12 +15,13 @@ import { Route as PublicRouteRouteImport } from './routes/_public/route'
 import { Route as AuthIndexRouteImport } from './routes/auth/index'
 import { Route as AdminIndexRouteImport } from './routes/admin/index'
 import { Route as PublicIndexRouteImport } from './routes/_public/index'
-import { Route as PublicNotificationsRouteImport } from './routes/_public/notifications'
 import { Route as PublicContactRouteImport } from './routes/_public/contact'
 import { Route as AuthSignUpIndexRouteImport } from './routes/auth/sign-up/index'
 import { Route as AuthSignInIndexRouteImport } from './routes/auth/sign-in/index'
+import { Route as AuthSetPasswordIndexRouteImport } from './routes/auth/set-password/index'
+import { Route as AuthResetPasswordIndexRouteImport } from './routes/auth/reset-password/index'
 import { Route as AuthMagicLinkIndexRouteImport } from './routes/auth/magic-link/index'
-import { Route as AuthForgotPasswordIndexRouteImport } from './routes/auth/forgot-password/index'
+import { Route as PublicNotificationsIndexRouteImport } from './routes/_public/notifications/index'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
 
 const AuthRouteRoute = AuthRouteRouteImport.update({
@@ -52,11 +53,6 @@ const PublicIndexRoute = PublicIndexRouteImport.update({
   path: '/',
   getParentRoute: () => PublicRouteRoute,
 } as any)
-const PublicNotificationsRoute = PublicNotificationsRouteImport.update({
-  id: '/notifications',
-  path: '/notifications',
-  getParentRoute: () => PublicRouteRoute,
-} as any)
 const PublicContactRoute = PublicContactRouteImport.update({
   id: '/contact',
   path: '/contact',
@@ -72,16 +68,27 @@ const AuthSignInIndexRoute = AuthSignInIndexRouteImport.update({
   path: '/sign-in/',
   getParentRoute: () => AuthRouteRoute,
 } as any)
+const AuthSetPasswordIndexRoute = AuthSetPasswordIndexRouteImport.update({
+  id: '/set-password/',
+  path: '/set-password/',
+  getParentRoute: () => AuthRouteRoute,
+} as any)
+const AuthResetPasswordIndexRoute = AuthResetPasswordIndexRouteImport.update({
+  id: '/reset-password/',
+  path: '/reset-password/',
+  getParentRoute: () => AuthRouteRoute,
+} as any)
 const AuthMagicLinkIndexRoute = AuthMagicLinkIndexRouteImport.update({
   id: '/magic-link/',
   path: '/magic-link/',
   getParentRoute: () => AuthRouteRoute,
 } as any)
-const AuthForgotPasswordIndexRoute = AuthForgotPasswordIndexRouteImport.update({
-  id: '/forgot-password/',
-  path: '/forgot-password/',
-  getParentRoute: () => AuthRouteRoute,
-} as any)
+const PublicNotificationsIndexRoute =
+  PublicNotificationsIndexRouteImport.update({
+    id: '/notifications/',
+    path: '/notifications/',
+    getParentRoute: () => PublicRouteRoute,
+  } as any)
 const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
   id: '/api/auth/$',
   path: '/api/auth/$',
@@ -92,25 +99,27 @@ export interface FileRoutesByFullPath {
   '/admin': typeof AdminRouteRouteWithChildren
   '/auth': typeof AuthRouteRouteWithChildren
   '/contact': typeof PublicContactRoute
-  '/notifications': typeof PublicNotificationsRoute
   '/': typeof PublicIndexRoute
   '/admin/': typeof AdminIndexRoute
   '/auth/': typeof AuthIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
-  '/auth/forgot-password': typeof AuthForgotPasswordIndexRoute
+  '/notifications': typeof PublicNotificationsIndexRoute
   '/auth/magic-link': typeof AuthMagicLinkIndexRoute
+  '/auth/reset-password': typeof AuthResetPasswordIndexRoute
+  '/auth/set-password': typeof AuthSetPasswordIndexRoute
   '/auth/sign-in': typeof AuthSignInIndexRoute
   '/auth/sign-up': typeof AuthSignUpIndexRoute
 }
 export interface FileRoutesByTo {
   '/contact': typeof PublicContactRoute
-  '/notifications': typeof PublicNotificationsRoute
   '/': typeof PublicIndexRoute
   '/admin': typeof AdminIndexRoute
   '/auth': typeof AuthIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
-  '/auth/forgot-password': typeof AuthForgotPasswordIndexRoute
+  '/notifications': typeof PublicNotificationsIndexRoute
   '/auth/magic-link': typeof AuthMagicLinkIndexRoute
+  '/auth/reset-password': typeof AuthResetPasswordIndexRoute
+  '/auth/set-password': typeof AuthSetPasswordIndexRoute
   '/auth/sign-in': typeof AuthSignInIndexRoute
   '/auth/sign-up': typeof AuthSignUpIndexRoute
 }
@@ -120,13 +129,14 @@ export interface FileRoutesById {
   '/admin': typeof AdminRouteRouteWithChildren
   '/auth': typeof AuthRouteRouteWithChildren
   '/_public/contact': typeof PublicContactRoute
-  '/_public/notifications': typeof PublicNotificationsRoute
   '/_public/': typeof PublicIndexRoute
   '/admin/': typeof AdminIndexRoute
   '/auth/': typeof AuthIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
-  '/auth/forgot-password/': typeof AuthForgotPasswordIndexRoute
+  '/_public/notifications/': typeof PublicNotificationsIndexRoute
   '/auth/magic-link/': typeof AuthMagicLinkIndexRoute
+  '/auth/reset-password/': typeof AuthResetPasswordIndexRoute
+  '/auth/set-password/': typeof AuthSetPasswordIndexRoute
   '/auth/sign-in/': typeof AuthSignInIndexRoute
   '/auth/sign-up/': typeof AuthSignUpIndexRoute
 }
@@ -136,25 +146,27 @@ export interface FileRouteTypes {
     | '/admin'
     | '/auth'
     | '/contact'
-    | '/notifications'
     | '/'
     | '/admin/'
     | '/auth/'
     | '/api/auth/$'
-    | '/auth/forgot-password'
+    | '/notifications'
     | '/auth/magic-link'
+    | '/auth/reset-password'
+    | '/auth/set-password'
     | '/auth/sign-in'
     | '/auth/sign-up'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/contact'
-    | '/notifications'
     | '/'
     | '/admin'
     | '/auth'
     | '/api/auth/$'
-    | '/auth/forgot-password'
+    | '/notifications'
     | '/auth/magic-link'
+    | '/auth/reset-password'
+    | '/auth/set-password'
     | '/auth/sign-in'
     | '/auth/sign-up'
   id:
@@ -163,13 +175,14 @@ export interface FileRouteTypes {
     | '/admin'
     | '/auth'
     | '/_public/contact'
-    | '/_public/notifications'
     | '/_public/'
     | '/admin/'
     | '/auth/'
     | '/api/auth/$'
-    | '/auth/forgot-password/'
+    | '/_public/notifications/'
     | '/auth/magic-link/'
+    | '/auth/reset-password/'
+    | '/auth/set-password/'
     | '/auth/sign-in/'
     | '/auth/sign-up/'
   fileRoutesById: FileRoutesById
@@ -225,13 +238,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PublicIndexRouteImport
       parentRoute: typeof PublicRouteRoute
     }
-    '/_public/notifications': {
-      id: '/_public/notifications'
-      path: '/notifications'
-      fullPath: '/notifications'
-      preLoaderRoute: typeof PublicNotificationsRouteImport
-      parentRoute: typeof PublicRouteRoute
-    }
     '/_public/contact': {
       id: '/_public/contact'
       path: '/contact'
@@ -253,6 +259,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthSignInIndexRouteImport
       parentRoute: typeof AuthRouteRoute
     }
+    '/auth/set-password/': {
+      id: '/auth/set-password/'
+      path: '/set-password'
+      fullPath: '/auth/set-password'
+      preLoaderRoute: typeof AuthSetPasswordIndexRouteImport
+      parentRoute: typeof AuthRouteRoute
+    }
+    '/auth/reset-password/': {
+      id: '/auth/reset-password/'
+      path: '/reset-password'
+      fullPath: '/auth/reset-password'
+      preLoaderRoute: typeof AuthResetPasswordIndexRouteImport
+      parentRoute: typeof AuthRouteRoute
+    }
     '/auth/magic-link/': {
       id: '/auth/magic-link/'
       path: '/magic-link'
@@ -260,12 +280,12 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthMagicLinkIndexRouteImport
       parentRoute: typeof AuthRouteRoute
     }
-    '/auth/forgot-password/': {
-      id: '/auth/forgot-password/'
-      path: '/forgot-password'
-      fullPath: '/auth/forgot-password'
-      preLoaderRoute: typeof AuthForgotPasswordIndexRouteImport
-      parentRoute: typeof AuthRouteRoute
+    '/_public/notifications/': {
+      id: '/_public/notifications/'
+      path: '/notifications'
+      fullPath: '/notifications'
+      preLoaderRoute: typeof PublicNotificationsIndexRouteImport
+      parentRoute: typeof PublicRouteRoute
     }
     '/api/auth/$': {
       id: '/api/auth/$'
@@ -279,14 +299,14 @@ declare module '@tanstack/react-router' {
 
 interface PublicRouteRouteChildren {
   PublicContactRoute: typeof PublicContactRoute
-  PublicNotificationsRoute: typeof PublicNotificationsRoute
   PublicIndexRoute: typeof PublicIndexRoute
+  PublicNotificationsIndexRoute: typeof PublicNotificationsIndexRoute
 }
 
 const PublicRouteRouteChildren: PublicRouteRouteChildren = {
   PublicContactRoute: PublicContactRoute,
-  PublicNotificationsRoute: PublicNotificationsRoute,
   PublicIndexRoute: PublicIndexRoute,
+  PublicNotificationsIndexRoute: PublicNotificationsIndexRoute,
 }
 
 const PublicRouteRouteWithChildren = PublicRouteRoute._addFileChildren(
@@ -307,16 +327,18 @@ const AdminRouteRouteWithChildren = AdminRouteRoute._addFileChildren(
 
 interface AuthRouteRouteChildren {
   AuthIndexRoute: typeof AuthIndexRoute
-  AuthForgotPasswordIndexRoute: typeof AuthForgotPasswordIndexRoute
   AuthMagicLinkIndexRoute: typeof AuthMagicLinkIndexRoute
+  AuthResetPasswordIndexRoute: typeof AuthResetPasswordIndexRoute
+  AuthSetPasswordIndexRoute: typeof AuthSetPasswordIndexRoute
   AuthSignInIndexRoute: typeof AuthSignInIndexRoute
   AuthSignUpIndexRoute: typeof AuthSignUpIndexRoute
 }
 
 const AuthRouteRouteChildren: AuthRouteRouteChildren = {
   AuthIndexRoute: AuthIndexRoute,
-  AuthForgotPasswordIndexRoute: AuthForgotPasswordIndexRoute,
   AuthMagicLinkIndexRoute: AuthMagicLinkIndexRoute,
+  AuthResetPasswordIndexRoute: AuthResetPasswordIndexRoute,
+  AuthSetPasswordIndexRoute: AuthSetPasswordIndexRoute,
   AuthSignInIndexRoute: AuthSignInIndexRoute,
   AuthSignUpIndexRoute: AuthSignUpIndexRoute,
 }
