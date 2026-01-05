@@ -10,7 +10,7 @@ import {
 } from '@/components/ui/navigation-menu';
 import { cn } from '@/lib/utils';
 import { ComponentProps, FC } from 'react';
-import { baseLinks, ILinkItem, MenuItemType } from '@/routes/_public/-consts';
+import { baseLinks, ILinkItem, MenuItemType, TLinkItem } from '@/routes/_public/-consts';
 import { useSession } from '@/hooks/use-session.ts';
 
 interface IProps extends ComponentProps<typeof NavigationMenu> {
@@ -25,12 +25,15 @@ const triggerAltClassName = cn(
 
 
 const HeaderNavMenu: FC<IProps> = ({ transparent, ...props }) => {
-  const session = useSession();
+  const { user } = useSession();
   const triggerClassName = cn('bg-transparent duration-0 [&_svg]:duration-0 [&_svg]:transition-none', transparent ? triggerAltClassName : '');
 
-  let links = baseLinks;
-  if (!session)
+  let links: TLinkItem[] = [];
+  if (!user)
     links = baseLinks.filter(link => !link.protected);
+  else
+    links = baseLinks.filter(link =>
+      !link.forRoles || link.forRoles?.includes((user?.role ?? '')));
 
   return (
     <NavigationMenu viewport={false} {...props}>

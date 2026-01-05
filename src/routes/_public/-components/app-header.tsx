@@ -22,7 +22,7 @@ import { SignedOut } from '@/components/auth/signed-out.tsx';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar.tsx';
 import { SignedIn } from '@/components/auth/signed-in.tsx';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { authClient } from '@/lib/auth-client.ts';
+import { authClient } from '@/features/auth/lib/auth-client.ts';
 import { useSession } from '@/hooks/use-session.ts';
 import { Spinner } from '@/components/ui/spinner.tsx';
 import { toast } from 'sonner';

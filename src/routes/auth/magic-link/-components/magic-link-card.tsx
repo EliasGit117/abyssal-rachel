@@ -5,7 +5,7 @@ import { IconArrowBackUp, IconSend } from '@tabler/icons-react';
 import { useForm } from 'react-hook-form';
 import { LoadingButton } from '@/components/ui/loading-button.tsx';
 import { useMutation } from '@tanstack/react-query';
-import { authClient } from '@/lib/auth-client.ts';
+import { authClient } from '@/features/auth/lib/auth-client.ts';
 import { toast } from 'sonner';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { magicLinkSchema, MagicLinkForm, TMagicLinkschema } from '@/routes/auth/magic-link/-components/magic-link-schema.tsx';

@@ -1,12 +1,13 @@
 import { LinkOptions } from '@tanstack/react-router';
-import type { Icon } from '@tabler/icons-react';
 import {
+  type Icon,
   IconBoxMultiple,
   IconDashboard,
   IconNews,
   IconSettings,
   IconShoppingBag,
   IconTag,
+  IconUsers
 } from '@tabler/icons-react';
 
 
@@ -22,6 +23,11 @@ export const mainLinks: INavItem[] = [
     title: 'Dashboard',
     linkOptions: { to: '/admin', activeOptions: { exact: true } },
     icon: IconDashboard
+  },
+  {
+    title: 'Users',
+    linkOptions: { to: '/admin/users' },
+    icon: IconUsers
   },
   {
     title: 'Banners',

@@ -14,7 +14,8 @@
     "full_name": "Полное имя",
     "invalid": "Неверно",
     "sign_out": "Выйти",
-    "go_back": "Назад"
+    "go_back": "Назад",
+    "refresh": "Обновить"
   },
   "components": {
     "locale_dropdown": {

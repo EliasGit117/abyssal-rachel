@@ -1,15 +1,27 @@
-import { betterAuth } from 'better-auth';
+import { betterAuth } from "better-auth/minimal";
 import { prismaAdapter } from 'better-auth/adapters/prisma';
 import { prisma } from '@/lib/prisma.ts';
 import { localization } from 'better-auth-localization';
 import { getLocale } from '@/paraglide/runtime';
-import { resend } from './resend';
-import { magicLink } from 'better-auth/plugins';
+import { resend } from '@/lib/resend.ts';
+import { admin as adminPlugin, magicLink } from 'better-auth/plugins';
+import { accessControl, user, admin } from '@/features/auth/lib/permissions.ts';
 
 
 export const auth = betterAuth({
+  // user: {
+  //   additionalFields: {
+  //     role: { type: "string", input: false, required: false, defaultValue: "user" }
+  //   },
+  // },
+  session: {
+    cookieCache: {
+      enabled: true,
+      maxAge: 5 * 60
+    },
+  },
   database: prismaAdapter(prisma, {
-    provider: 'postgresql'
+    provider: 'postgresql',
   }),
   trustedOrigins: [process.env.VITE_BETTER_AUTH_URL!],
   emailAndPassword: {
@@ -57,6 +69,13 @@ export const auth = betterAuth({
   plugins: [
     // Removed coz breaks the production app build
     // tanstackStartCookies(),
+    adminPlugin({
+      ac: accessControl,
+      roles: {
+        admin,
+        user
+      }
+    }),
     magicLink({
       sendMagicLink: async ({ email, url }) => {
         const locale = getLocale();
@@ -99,4 +118,7 @@ export const auth = betterAuth({
     })
   ]
 });
+
+export type TUser = typeof auth.$Infer.Session.user;
+export type TSession = typeof auth.$Infer.Session.session;
 

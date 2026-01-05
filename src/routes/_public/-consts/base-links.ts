@@ -12,8 +12,20 @@ export enum MenuItemType {
   Group = 'group',
 }
 
-export type TSingleLinkItem = { type: MenuItemType.Single; item: ILinkItem, protected?: boolean };
-export type TLinkGroupItem = { type: MenuItemType.Group; title: string; items: ILinkItem[], protected?: boolean };
+export type TSingleLinkItem = {
+  type: MenuItemType.Single;
+  item: ILinkItem;
+  protected?: boolean;
+  forRoles?: string[];
+};
+
+export type TLinkGroupItem = {
+  type: MenuItemType.Group;
+  title: string;
+  items: ILinkItem[];
+  protected?: boolean;
+  forRoles?: string[];
+};
 
 export type TLinkItem = TSingleLinkItem | TLinkGroupItem;
 
@@ -72,6 +84,7 @@ export const baseLinks: TLinkItem[] = [
   {
     type: MenuItemType.Single,
     item: { label: 'Admin', linkOpt: { to: '/admin' } },
+    forRoles: ['admin'],
     protected: true
   }
 ];

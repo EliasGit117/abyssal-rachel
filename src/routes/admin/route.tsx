@@ -3,16 +3,17 @@ import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar.tsx';
 import { AdminHeader } from '@/routes/admin/-components/header';
 import { AdminSidebar } from '@/routes/admin/-components/sidebar';
 
+
 export const Route = createFileRoute('/admin')({
   component: RouteComponent,
-  beforeLoad: ({ context: { session } }) => {
-    if (!session)
-      throw redirect({ to: '/' })
+  beforeLoad: ({ context: { user } }) => {
+    if (!user || user.role !== 'admin')
+      throw redirect({ to: '/' });
   },
   staticData: {
-    breadcrumbs: { title: 'Admin' },
-  },
-})
+    breadcrumbs: { title: 'Admin' }
+  }
+});
 
 function RouteComponent() {
   return (
@@ -23,5 +24,5 @@ function RouteComponent() {
         <Outlet/>
       </SidebarInset>
     </SidebarProvider>
-  )
+  );
 }

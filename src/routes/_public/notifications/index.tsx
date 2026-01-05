@@ -4,6 +4,10 @@ import { getAllNotificationsQueryOptions } from '@/features/notifications/server
 import { TBreadcrumbData } from '@/components/layout';
 import { m } from '@/paraglide/messages';
 import { CreateNotificationCard, NotificationListSection } from '@/routes/_public/notifications/-components';
+import { useSession } from '@/hooks/use-session.ts';
+import { canRole } from '@/features/auth/lib/can-role.ts';
+import { Permission } from '@/features/auth/lib/permissions.ts';
+import { cn } from '@/lib/utils.ts';
 
 
 export const Route = createFileRoute('/_public/notifications/')({
@@ -17,12 +21,19 @@ export const Route = createFileRoute('/_public/notifications/')({
 })
 
 function RouteComponent() {
+  const { user } = useSession();
+  const canCreate = canRole({
+    role: user?.role,
+    permissions: {
+      notifications: [Permission.Create]
+    }
+  });
 
   return (
     <main className="container mx-auto p-4 space-y-4 min-h-safe-screen">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        <NotificationListSection/>
-        <CreateNotificationCard/>
+        <NotificationListSection className={cn(!canCreate && 'col-span-full')}/>
+        {canCreate && <CreateNotificationCard/>}
       </div>
     </main>
   )

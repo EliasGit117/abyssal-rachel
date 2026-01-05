@@ -1,5 +1,5 @@
 import { createMiddleware } from '@tanstack/react-start';
-import { auth } from '@/lib/auth';
+import { auth } from '@/features/auth/lib/auth.ts';
 import { throwUnauthorizedError } from '@/features/shared/utils/throw-api-error.ts';
 
 

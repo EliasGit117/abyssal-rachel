@@ -81,3 +81,17 @@ export function throwUnauthorizedError(
   });
 }
 
+export function throwForbiddenError(
+  message?: string,
+  options: Omit<IApiErrorOptions, 'message' | 'status'> = {}
+): never {
+  const locale = getLocale();
+  const translated = getTranslatedError(StatusCodes.FORBIDDEN, locale);
+
+  throwApiError({
+    status: StatusCodes.FORBIDDEN,
+    name: options.name ?? translated.name ?? 'Forbidden',
+    message: message ?? translated.message ?? 'You do not have permission'
+  });
+}
+

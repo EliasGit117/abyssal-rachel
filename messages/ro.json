@@ -13,7 +13,8 @@
     "full_name": "Nume complet",
     "invalid": "Incorect",
     "sign_out": "Deconectare",
-    "go_back": "Înapoi"
+    "go_back": "Înapoi",
+    "refresh": "Reîncarcă"
   },
   "components": {
     "locale_dropdown": {

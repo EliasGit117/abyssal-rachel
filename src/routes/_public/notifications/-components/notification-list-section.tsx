@@ -8,16 +8,22 @@ import { cn } from '@/lib/utils.ts';
 import { Skeleton } from '@/components/ui/skeleton.tsx';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip.tsx';
 import { LoadingButton } from '@/components/ui/loading-button.tsx';
-import { IconPlus, IconProgressAlert, IconTrash } from '@tabler/icons-react';
+import { IconPlus, IconProgressAlert, IconRefresh, IconTrash } from '@tabler/icons-react';
 import { m } from '@/paraglide/messages';
 import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from '@/components/ui/empty.tsx';
 import { Button } from '@/components/ui/button.tsx';
-
+import { useSession } from '@/hooks/use-session.ts';
+import { Permission } from '@/features/auth/lib/permissions.ts';
+import { canRole } from '@/features/auth/lib/can-role.ts';
 
 
 export const NotificationListSection: FC<ComponentProps<'section'>> = ({ className, ...props }) => {
+  const { user } = useSession();
+  const canDelete = canRole({ role: user?.role, permission: { notifications: [Permission.Delete] } });
+  const canCreate = canRole({ role: user?.role, permission: { notifications: [Permission.Create] } });
+
   const [deletion, setDeletion] = useState<Record<number, boolean>>({});
-  const { isLoading: isPendingNotifications, data: notifications } = useQuery({
+  const { isLoading: isPendingNotifications, isFetching, data: notifications, refetch } = useQuery({
     ...getAllNotificationsQueryOptions(),
     placeholderData: keepPreviousData
   });
@@ -67,27 +73,29 @@ export const NotificationListSection: FC<ComponentProps<'section'>> = ({ classNa
                   {notification.text}
                 </ItemDescription>
               </ItemContent>
-              <ItemActions>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <LoadingButton
-                      hideText
-                      size="icon"
-                      variant="outline"
-                      loading={deletion[notification.id]}
-                      onClick={() => handleDelete(notification.id)}
-                    >
-                      <IconTrash/>
-                      <span className="sr-only">
-                        {m['common.delete']()}
-                      </span>
-                    </LoadingButton>
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    {m['common.delete']()}
-                  </TooltipContent>
-                </Tooltip>
-              </ItemActions>
+              {canDelete && (
+                <ItemActions>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <LoadingButton
+                        hideText
+                        size="icon"
+                        variant="outline"
+                        loading={deletion[notification.id]}
+                        onClick={() => handleDelete(notification.id)}
+                      >
+                        <IconTrash/>
+                        <span className="sr-only">
+                          {m['common.delete']()}
+                        </span>
+                      </LoadingButton>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      {m['common.delete']()}
+                    </TooltipContent>
+                  </Tooltip>
+                </ItemActions>
+              )}
             </Item>
           ))) : (
           <div className="flex items-center justify-center h-full">
@@ -99,22 +107,30 @@ export const NotificationListSection: FC<ComponentProps<'section'>> = ({ classNa
                 <EmptyTitle>
                   {m['pages.notifications.empty.title']()}
                 </EmptyTitle>
-                <EmptyDescription>
-                  {m['pages.notifications.empty.description']()}
-                </EmptyDescription>
+                {canCreate && (
+                  <EmptyDescription>
+                    {m['pages.notifications.empty.description']()}
+                  </EmptyDescription>
+                )}
               </EmptyHeader>
               <EmptyContent>
                 <div className="flex gap-2">
-                  <Button
-                    onClick={() => {
-                      const el = document.getElementById('name-ro-input');
-                      el?.scrollIntoView();
-                      el?.focus();
-                    }}
-                  >
-                    <IconPlus/>
-                    <span>{m['common.create']()}</span>
-                  </Button>
+                  {canCreate && (
+                    <Button
+                      onClick={() => {
+                        const el = document.getElementById('name-ro-input');
+                        el?.scrollIntoView();
+                        el?.focus();
+                      }}
+                    >
+                      <IconPlus/>
+                      <span>{m['common.create']()}</span>
+                    </Button>
+                  )}
+                  <LoadingButton variant='outline' loading={isFetching} onClick={() => refetch()}>
+                    <IconRefresh/>
+                    <span>{m['common.refresh']()}</span>
+                  </LoadingButton>
                 </div>
               </EmptyContent>
             </Empty>

@@ -6,7 +6,7 @@ import { Link, useRouter } from '@tanstack/react-router';
 import { useForm } from 'react-hook-form';
 import { LoadingButton } from '@/components/ui/loading-button.tsx';
 import { useMutation } from '@tanstack/react-query';
-import { authClient } from '@/lib/auth-client.ts';
+import { authClient } from '@/features/auth/lib/auth-client.ts';
 import { toast } from 'sonner';
 import { m } from '@/paraglide/messages';
 import { SignUpForm, signUpSchema, TSignUpSchema } from './sign-up-form.tsx';
