@@ -34,7 +34,6 @@ export const createNotificationServerFn = createServerFn({ method: 'POST' })
     if (!canCreate.success)
       throwForbiddenError();
 
-
     const createdEntity = await prisma.notification.create({
       data: {
         nameRo: data.nameRo,

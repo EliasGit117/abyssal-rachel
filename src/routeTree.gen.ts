@@ -22,6 +22,7 @@ import { Route as AuthSetPasswordIndexRouteImport } from './routes/auth/set-pass
 import { Route as AuthResetPasswordIndexRouteImport } from './routes/auth/reset-password/index'
 import { Route as AuthMagicLinkIndexRouteImport } from './routes/auth/magic-link/index'
 import { Route as AdminUsersIndexRouteImport } from './routes/admin/users/index'
+import { Route as AdminCategoriesIndexRouteImport } from './routes/admin/categories/index'
 import { Route as PublicNotificationsIndexRouteImport } from './routes/_public/notifications/index'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
 
@@ -89,6 +90,11 @@ const AdminUsersIndexRoute = AdminUsersIndexRouteImport.update({
   path: '/users/',
   getParentRoute: () => AdminRouteRoute,
 } as any)
+const AdminCategoriesIndexRoute = AdminCategoriesIndexRouteImport.update({
+  id: '/categories/',
+  path: '/categories/',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
 const PublicNotificationsIndexRoute =
   PublicNotificationsIndexRouteImport.update({
     id: '/notifications/',
@@ -110,6 +116,7 @@ export interface FileRoutesByFullPath {
   '/auth/': typeof AuthIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/notifications': typeof PublicNotificationsIndexRoute
+  '/admin/categories': typeof AdminCategoriesIndexRoute
   '/admin/users': typeof AdminUsersIndexRoute
   '/auth/magic-link': typeof AuthMagicLinkIndexRoute
   '/auth/reset-password': typeof AuthResetPasswordIndexRoute
@@ -124,6 +131,7 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/notifications': typeof PublicNotificationsIndexRoute
+  '/admin/categories': typeof AdminCategoriesIndexRoute
   '/admin/users': typeof AdminUsersIndexRoute
   '/auth/magic-link': typeof AuthMagicLinkIndexRoute
   '/auth/reset-password': typeof AuthResetPasswordIndexRoute
@@ -142,6 +150,7 @@ export interface FileRoutesById {
   '/auth/': typeof AuthIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/_public/notifications/': typeof PublicNotificationsIndexRoute
+  '/admin/categories/': typeof AdminCategoriesIndexRoute
   '/admin/users/': typeof AdminUsersIndexRoute
   '/auth/magic-link/': typeof AuthMagicLinkIndexRoute
   '/auth/reset-password/': typeof AuthResetPasswordIndexRoute
@@ -160,6 +169,7 @@ export interface FileRouteTypes {
     | '/auth/'
     | '/api/auth/$'
     | '/notifications'
+    | '/admin/categories'
     | '/admin/users'
     | '/auth/magic-link'
     | '/auth/reset-password'
@@ -174,6 +184,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/api/auth/$'
     | '/notifications'
+    | '/admin/categories'
     | '/admin/users'
     | '/auth/magic-link'
     | '/auth/reset-password'
@@ -191,6 +202,7 @@ export interface FileRouteTypes {
     | '/auth/'
     | '/api/auth/$'
     | '/_public/notifications/'
+    | '/admin/categories/'
     | '/admin/users/'
     | '/auth/magic-link/'
     | '/auth/reset-password/'
@@ -299,6 +311,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminUsersIndexRouteImport
       parentRoute: typeof AdminRouteRoute
     }
+    '/admin/categories/': {
+      id: '/admin/categories/'
+      path: '/categories'
+      fullPath: '/admin/categories'
+      preLoaderRoute: typeof AdminCategoriesIndexRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
     '/_public/notifications/': {
       id: '/_public/notifications/'
       path: '/notifications'
@@ -334,11 +353,13 @@ const PublicRouteRouteWithChildren = PublicRouteRoute._addFileChildren(
 
 interface AdminRouteRouteChildren {
   AdminIndexRoute: typeof AdminIndexRoute
+  AdminCategoriesIndexRoute: typeof AdminCategoriesIndexRoute
   AdminUsersIndexRoute: typeof AdminUsersIndexRoute
 }
 
 const AdminRouteRouteChildren: AdminRouteRouteChildren = {
   AdminIndexRoute: AdminIndexRoute,
+  AdminCategoriesIndexRoute: AdminCategoriesIndexRoute,
   AdminUsersIndexRoute: AdminUsersIndexRoute,
 }
 

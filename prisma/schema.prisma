@@ -80,6 +80,40 @@ model Verification {
   @@map("verifications")
 }
 
+enum CategoryStatus {
+  ACTIVE
+  INACTIVE
+}
+
+model Category {
+  id   Int    @id @default(autoincrement())
+  slug String
+
+  idPath   String @map("id_path")
+  slugPath String @map("slug_path")
+
+  nameRo String @map("name_ro")
+  nameRu String @map("name_ru")
+
+  descriptionRo String? @map("description_ro")
+  descriptionRu String? @map("description_ru")
+
+  parentId Int?       @map("parent_id")
+  parent   Category?  @relation("CategoryTree", fields: [parentId], references: [id])
+  children Category[] @relation("CategoryTree")
+
+  status CategoryStatus @default(ACTIVE)
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@unique([slug])
+  @@index([parentId])
+  @@index([idPath])
+  @@index([slugPath])
+  @@map("categories")
+}
+
 model Notification {
   id        Int      @id @default(autoincrement())
   nameRo    String   @map("name_ro")

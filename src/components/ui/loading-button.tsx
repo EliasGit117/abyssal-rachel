@@ -13,23 +13,36 @@ interface IProps extends React.ComponentProps<typeof Button> {
 }
 
 function LoadingButton(props: IProps) {
-  const { loading, hideText, children, disabled, hideTextOnMobile, loadingText, ...restOfProps } = props;
-
-  if (loading)
-    return (
-      <Button {...restOfProps} asChild={false} disabled={disabled ?? true}>
-        <Spinner/>
-        {!hideText && (
-          <span className={cn(hideTextOnMobile && 'hidden sm:block')}>
-            {loadingText ?? m['common.loading']()}
-          </span>
-        )}
-      </Button>
-    );
+  const {
+    loading,
+    hideText,
+    children,
+    disabled,
+    hideTextOnMobile,
+    loadingText,
+    className,
+    ...rest
+  } = props;
 
   return (
-    <Button{...restOfProps} disabled={disabled}>
-      {children}
+    <Button
+      {...rest}
+      data-loading={loading}
+      disabled={loading ? true : disabled}
+      className={cn("flex items-center gap-2", className)}
+    >
+      {loading ? (
+        <>
+          <Spinner/>
+          {!hideText && (
+            <span className={cn(hideTextOnMobile && "hidden sm:block")}>
+              {loadingText ?? m["common.loading"]()}
+            </span>
+          )}
+        </>
+      ) : (
+        children
+      )}
     </Button>
   );
 }

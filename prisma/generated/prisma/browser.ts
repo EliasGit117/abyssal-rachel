@@ -38,6 +38,11 @@ export type Session = Prisma.SessionModel
  */
 export type Verification = Prisma.VerificationModel
 /**
+ * Model Category
+ * 
+ */
+export type Category = Prisma.CategoryModel
+/**
  * Model Notification
  * 
  */

@@ -5,14 +5,14 @@ import { defaultStatements, adminAc } from 'better-auth/plugins/admin/access';
 
 export enum Permission {
   List = 'list',
-  View = 'view',
+  Get = 'get',
   Create = 'create',
   Update = 'update',
   Delete = 'delete',
 }
 
-const { List, View, Create, Update, Delete } = Permission;
-const AllPermissions = [List, View, Create, Update, Delete];
+const { List, Get, Create, Update, Delete } = Permission;
+const AllPermissions = [List, Get, Create, Update, Delete];
 
 
 const statement = {
@@ -26,7 +26,7 @@ const statement = {
 export const accessControl = createAccessControl(statement);
 
 export const user = accessControl.newRole({
-  notifications: [List, View],
+  notifications: [List, Get],
   banners: [List]
 });
 

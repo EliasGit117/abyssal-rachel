@@ -55,6 +55,7 @@ export const ModelName = {
   Account: 'Account',
   Session: 'Session',
   Verification: 'Verification',
+  Category: 'Category',
   Notification: 'Notification'
 } as const
 
@@ -134,6 +135,24 @@ export const VerificationScalarFieldEnum = {
 } as const
 
 export type VerificationScalarFieldEnum = (typeof VerificationScalarFieldEnum)[keyof typeof VerificationScalarFieldEnum]
+
+
+export const CategoryScalarFieldEnum = {
+  id: 'id',
+  slug: 'slug',
+  idPath: 'idPath',
+  slugPath: 'slugPath',
+  nameRo: 'nameRo',
+  nameRu: 'nameRu',
+  descriptionRo: 'descriptionRo',
+  descriptionRu: 'descriptionRu',
+  parentId: 'parentId',
+  status: 'status',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CategoryScalarFieldEnum = (typeof CategoryScalarFieldEnum)[keyof typeof CategoryScalarFieldEnum]
 
 
 export const NotificationScalarFieldEnum = {

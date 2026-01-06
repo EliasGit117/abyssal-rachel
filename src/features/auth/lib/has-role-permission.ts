@@ -4,7 +4,7 @@ type TCheckRolePermissionParams = Parameters<typeof authClient.admin.checkRolePe
 
 type TRoleCanParams = { role?: string | null; } & Omit<TCheckRolePermissionParams, 'role'>;
 
-export function canRole({ role, ...params }: TRoleCanParams) {
+export function hasRolePermission({ role, ...params }: TRoleCanParams) {
   return authClient.admin.checkRolePermission({
     // @ts-ignore
     role: role ?? '',

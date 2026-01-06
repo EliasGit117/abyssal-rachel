@@ -15,12 +15,14 @@ import { NavUser } from './nav-user.tsx';
 import { NavLinkGroup } from './nav-link-group.tsx';
 import { mainLinks } from './links.ts';
 import { NavSettings } from './nav-settings.tsx';
+import { useSession } from '@/hooks/use-session.ts';
 
 
 interface IAdminSidebarProps extends ComponentProps<typeof Sidebar> {
 }
 
 export function AdminSidebar({ ...props }: IAdminSidebarProps) {
+  const { user } = useSession();
 
   return (
     <Sidebar {...props}>
@@ -40,7 +42,7 @@ export function AdminSidebar({ ...props }: IAdminSidebarProps) {
       </SidebarHeader>
 
       <SidebarContent>
-        <NavLinkGroup label="Main" items={mainLinks}/>
+        <NavLinkGroup label="Main" items={mainLinks({ role: user?.role })}/>
         <div className="flex-1"/>
         <NavSettings/>
       </SidebarContent>

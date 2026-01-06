@@ -5,7 +5,7 @@ import { TBreadcrumbData } from '@/components/layout';
 import { m } from '@/paraglide/messages';
 import { CreateNotificationCard, NotificationListSection } from '@/routes/_public/notifications/-components';
 import { useSession } from '@/hooks/use-session.ts';
-import { canRole } from '@/features/auth/lib/can-role.ts';
+import { hasRolePermission } from '@/features/auth/lib/has-role-permission.ts';
 import { Permission } from '@/features/auth/lib/permissions.ts';
 import { cn } from '@/lib/utils.ts';
 
@@ -22,7 +22,7 @@ export const Route = createFileRoute('/_public/notifications/')({
 
 function RouteComponent() {
   const { user } = useSession();
-  const canCreate = canRole({
+  const canCreate = hasRolePermission({
     role: user?.role,
     permissions: {
       notifications: [Permission.Create]

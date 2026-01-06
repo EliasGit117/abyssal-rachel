@@ -14,13 +14,13 @@ import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTi
 import { Button } from '@/components/ui/button.tsx';
 import { useSession } from '@/hooks/use-session.ts';
 import { Permission } from '@/features/auth/lib/permissions.ts';
-import { canRole } from '@/features/auth/lib/can-role.ts';
+import { hasRolePermission } from '@/features/auth/lib/has-role-permission.ts';
 
 
 export const NotificationListSection: FC<ComponentProps<'section'>> = ({ className, ...props }) => {
   const { user } = useSession();
-  const canDelete = canRole({ role: user?.role, permission: { notifications: [Permission.Delete] } });
-  const canCreate = canRole({ role: user?.role, permission: { notifications: [Permission.Create] } });
+  const canDelete = hasRolePermission({ role: user?.role, permission: { notifications: [Permission.Delete] } });
+  const canCreate = hasRolePermission({ role: user?.role, permission: { notifications: [Permission.Create] } });
 
   const [deletion, setDeletion] = useState<Record<number, boolean>>({});
   const { isLoading: isPendingNotifications, isFetching, data: notifications, refetch } = useQuery({

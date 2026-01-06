@@ -6,7 +6,7 @@
     "node": ">=20"
   },
   "scripts": {
-    "dev": "bun --bun vite dev --force --port 3000",
+    "dev": "bun --bun vite dev --port 3000",
     "build": "bun --bun vite build",
     "preview": "bun .output/server/index.mjs",
     "test": "vitest run",
@@ -15,6 +15,8 @@
   "dependencies": {
     "@faker-js/faker": "^10.0.0",
     "@fontsource-variable/inter": "^5.2.8",
+    "@headless-tree/core": "^1.6.1",
+    "@headless-tree/react": "^1.6.1",
     "@hookform/resolvers": "^5.2.2",
     "@n8tb1t/use-scroll-position": "^4.0.0",
     "@prisma/adapter-pg": "^7.2.0",
