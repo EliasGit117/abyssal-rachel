@@ -12,7 +12,6 @@ import {
   ComboboxList,
   ComboboxTrigger
 } from '@/components/ui/combobox.tsx';
-import { IconSelector } from '@tabler/icons-react';
 import { Spinner } from '@/components/ui/spinner.tsx';
 
 
@@ -21,7 +20,7 @@ interface IProps extends Omit<ComponentProps<typeof Button>, 'value'> {
   setValue: (value: number | undefined | null) => void;
 }
 
-export const CategorySelectPopover: FC<IProps> = ({ value, setValue, className, disabled, ...btnProps }) => {
+export const CategorySelectCombobox: FC<IProps> = ({ value, setValue, className, disabled, ...btnProps }) => {
   const { isFetching, data: categories } = useQuery({
     ...getAllCategoriesQueryOptions(),
     gcTime: 0,
@@ -33,22 +32,17 @@ export const CategorySelectPopover: FC<IProps> = ({ value, setValue, className, 
 
   return (
     <Combobox value={value} onValueChange={setValue}>
-      <ComboboxTrigger disabled={isFetching} {...btnProps} asChild>
-        <div>
-          {isFetching ? (
-            <>
-              <span>Loading</span>
-              <Spinner/>
-            </>
-          ) : (
-            <>
-              <span>
-                {selectedCategory ? `${selectedCategory.nameRo} / ${selectedCategory.nameRu}` : 'Select category'}
-              </span>
-              <IconSelector/>
-            </>
-          )}
-        </div>
+      <ComboboxTrigger showIcon={!isFetching} disabled={isFetching} {...btnProps}>
+        {isFetching ? (
+          <>
+            <span>Loading</span>
+            <Spinner/>
+          </>
+        ) : (
+          <span>
+            {selectedCategory ? `${selectedCategory.nameRo} / ${selectedCategory.nameRu}` : 'Select category'}
+          </span>
+        )}
       </ComboboxTrigger>
 
       <ComboboxContent className="w-(--radix-popover-trigger-width)">

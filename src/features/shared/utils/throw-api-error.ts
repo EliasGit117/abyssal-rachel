@@ -3,9 +3,11 @@ import { StatusCodes } from 'http-status-codes';
 import { getLocale, type Locale } from '@/paraglide/runtime';
 import { ApiError, IApiErrorOptions } from '@/features/shared/utils/api-error.ts';
 
+type ErrorLocale = Locale | 'en';
+
 interface IErrorTranslation {
-  name: Record<Locale, string>;
-  message: Record<Locale, string>;
+  name: Record<ErrorLocale, string>;
+  message: Record<ErrorLocale, string>;
 }
 
 interface IResolvedErrorTranslation {
@@ -15,28 +17,59 @@ interface IResolvedErrorTranslation {
 
 const ERROR_TRANSLATIONS: Partial<Record<StatusCodes, IErrorTranslation>> = {
   [StatusCodes.BAD_REQUEST]: {
-    name: { ro: 'Request incorect', ru: 'Неправильный запрос' },
-    message: { ro: 'Datele introduse nu sunt valide', ru: 'Введенные данные недействительны' }
+    name: {
+      en: 'Bad request',
+      ro: 'Request incorect',
+      ru: 'Неправильный запрос'
+    },
+    message: {
+      en: 'Invalid input',
+      ro: 'Datele introduse nu sunt valide',
+      ru: 'Введенные данные недействительны'
+    }
   },
 
   [StatusCodes.UNAUTHORIZED]: {
-    name: { ro: 'Neautorizat', ru: 'Неавторизован' },
-    message: { ro: 'Va rugam sa va autentificati pentru a obtine acces', ru: 'Пожалуйста авторизуйтесь чтобы получить доступ' }
+    name: {
+      en: 'Unauthorized',
+      ro: 'Neautorizat',
+      ru: 'Неавторизован'
+    },
+    message: {
+      en: 'Please sign in to get access',
+      ro: 'Vă rugăm să vă autentificați pentru a obține acces',
+      ru: 'Пожалуйста, авторизуйтесь, чтобы получить доступ'
+    }
   },
 
   [StatusCodes.FORBIDDEN]: {
-    name: { ro: 'Interzis', ru: 'Доступ запрещен' },
-    message: { ro: 'Nu aveți permisiuni', ru: 'Недостаточно прав' }
+    name: {
+      en: 'Forbidden',
+      ro: 'Interzis',
+      ru: 'Доступ запрещен'
+    },
+    message: {
+      en: 'You do not have permission',
+      ro: 'Nu aveți permisiuni',
+      ru: 'Недостаточно прав'
+    }
   },
 
   [StatusCodes.NOT_FOUND]: {
-    name: { ro: 'Nu a fost găsit', ru: 'Не найдено' },
-    message: { ro: 'Resursa nu există', ru: 'Ресурс не существует' }
+    name: {
+      en: 'Not found',
+      ro: 'Nu a fost găsit',
+      ru: 'Не найдено'
+    },
+    message: {
+      en: 'Resource does not exist',
+      ro: 'Resursa nu există',
+      ru: 'Ресурс не существует'
+    }
   }
-}
+};
 
-
-function getTranslatedError(status: StatusCodes, locale: Locale): IResolvedErrorTranslation {
+function getTranslatedError(status: StatusCodes, locale: ErrorLocale): IResolvedErrorTranslation {
   const translation = ERROR_TRANSLATIONS[status];
 
   return {
@@ -45,53 +78,54 @@ function getTranslatedError(status: StatusCodes, locale: Locale): IResolvedError
   };
 }
 
-
-
 function throwApiError({ status = StatusCodes.INTERNAL_SERVER_ERROR, ...options }: IApiErrorOptions): never {
   setResponseStatus(status);
   throw new ApiError({ status, ...options });
 }
 
-export function throwBadRequest(
-  message?: string,
-  options: Omit<IApiErrorOptions, 'message' | 'status'> = {}
-): never {
-  const locale = getLocale();
-  const translated = getTranslatedError(StatusCodes.BAD_REQUEST, locale);
+interface IThrowOptions
+  extends Omit<IApiErrorOptions, 'status'> {
+  translated?: boolean;
+}
+
+export function throwBadRequest({ translated = true, ...options }: IThrowOptions = {}): never {
+  const locale: ErrorLocale = translated ? getLocale() : 'en';
+  const translatedError = getTranslatedError(
+    StatusCodes.BAD_REQUEST,
+    locale
+  );
 
   throwApiError({
     status: StatusCodes.BAD_REQUEST,
-    name: options.name ?? translated.name ?? 'Bad request',
-    message: message ?? translated.message ?? 'Invalid input'
+    name: options.name ?? translatedError.name,
+    message: options.message ?? translatedError.message
   });
 }
 
-
-export function throwUnauthorizedError(
-  message?: string,
-  options: Omit<IApiErrorOptions, 'message' | 'status'> = {}
-): never {
-  const locale = getLocale();
-  const translated = getTranslatedError(StatusCodes.UNAUTHORIZED, locale);
+export function throwUnauthorizedError({ translated = true, ...options }: IThrowOptions = {}): never {
+  const locale: ErrorLocale = translated ? getLocale() : 'en';
+  const translatedError = getTranslatedError(
+    StatusCodes.UNAUTHORIZED,
+    locale
+  );
 
   throwApiError({
     status: StatusCodes.UNAUTHORIZED,
-    name: options.name ?? translated.name ?? 'Unauthorized',
-    message: message ?? translated.message ?? 'Please sign in to get access'
+    name: options.name ?? translatedError.name,
+    message: options.message ?? translatedError.message
   });
 }
 
-export function throwForbiddenError(
-  message?: string,
-  options: Omit<IApiErrorOptions, 'message' | 'status'> = {}
-): never {
-  const locale = getLocale();
-  const translated = getTranslatedError(StatusCodes.FORBIDDEN, locale);
+export function throwForbiddenError({ translated = true, ...options }: IThrowOptions = {}): never {
+  const locale: ErrorLocale = translated ? getLocale() : 'en';
+  const translatedError = getTranslatedError(
+    StatusCodes.FORBIDDEN,
+    locale
+  );
 
   throwApiError({
     status: StatusCodes.FORBIDDEN,
-    name: options.name ?? translated.name ?? 'Forbidden',
-    message: message ?? translated.message ?? 'You do not have permission'
+    name: options.name ?? translatedError.name,
+    message: options.message ?? translatedError.message
   });
 }
-

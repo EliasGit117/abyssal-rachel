@@ -12,7 +12,7 @@ export class CategoryService {
     return prisma.$transaction(async (tx) => {
       const withSameSlug = await prisma.category.findFirst({ where: { slug: data.slug } });
       if (withSameSlug)
-        throwBadRequest('Category with same slug already exists');
+        throwBadRequest({ message: 'Category with same slug already exists' });
 
       let parent = null;
 
@@ -20,7 +20,7 @@ export class CategoryService {
         parent = await tx.category.findUnique({ where: { id: data.parentId } });
 
         if (!parent)
-          throwBadRequest('Parent category not found');
+          throwBadRequest({ message: 'Parent category not found' });
       }
 
       const category = await tx.category.create({
@@ -53,7 +53,7 @@ export class CategoryService {
       const category = await tx.category.findUnique({ where: { id } });
 
       if (!category)
-        throwBadRequest('Category not found');
+        throwBadRequest({ message: 'Category not found' });
 
       let parent = null;
 
@@ -62,7 +62,7 @@ export class CategoryService {
         nameRo: nameRo.trim(),
         nameRu: nameRu.trim(),
         descriptionRo: descriptionRo?.trim() || null,
-        descriptionRu: descriptionRu?.trim() || null,
+        descriptionRu: descriptionRu?.trim() || null
       };
 
       if (parentId !== undefined) {
@@ -70,7 +70,7 @@ export class CategoryService {
           parent = await tx.category.findUnique({ where: { id: parentId } });
 
           if (!parent)
-            throwBadRequest('Parent category not found');
+            throwBadRequest({ message: 'Parent category not found' });
 
           CategoryPathService.ensureNoCircularMove(category, parent);
         }
@@ -102,13 +102,13 @@ export class CategoryService {
       const category = await tx.category.findUnique({ where: { id: categoryId } });
 
       if (!category)
-        throwBadRequest('Category not found');
+        throwBadRequest({ message: 'Category not found' });
 
       // Check if the category has children (fast, index-backed)
       const hasChildren = await tx.category.count({ where: { parentId: categoryId } });
 
       if (hasChildren > 0)
-        throwBadRequest('Cannot delete category with children');
+        throwBadRequest({ message: 'Cannot delete category with children' });
 
       await tx.category.delete({ where: { id: categoryId } });
     });
@@ -116,7 +116,7 @@ export class CategoryService {
 
   static async getTree(): Promise<Category[]> {
     const categories = await prisma.category.findMany({
-      orderBy: [{ idPath: 'asc' }],
+      orderBy: [{ idPath: 'asc' }]
     });
 
     const map = new Map<number, Category & { children?: Category[] }>();
@@ -125,7 +125,7 @@ export class CategoryService {
     for (const category of categories) {
       map.set(category.id, {
         ...category,
-        children: [],
+        children: []
       });
     }
 

@@ -8,19 +8,20 @@ import { CategoryTree } from '@/routes/admin/categories/-components/category-tre
 
 export const Route = createFileRoute('/admin/categories/')({
   component: RouteComponent,
+  staticData: {
+    breadcrumbs: { title: 'Categories' }
+  }
 });
 
 function RouteComponent() {
   return (
     <CreateCategorySheetProvider>
       <main className="container mx-auto p-4 space-y-4">
-        <CategoryTree
-          toolbarChildren={() =>
-            <div className="flex gap-2 ml-auto">
-              <CreateCategorySheetTrigger size="sm" variant="ghost" className="ml-auto w-8 sm:w-fit"/>
-            </div>
-          }
-        />
+        <div className="flex gap-2">
+          <CreateCategorySheetTrigger size="sm" variant="ghost" className="ml-auto w-8 sm:w-fit"/>
+        </div>
+
+        <CategoryTree/>
       </main>
 
       <CreateCategorySheet/>

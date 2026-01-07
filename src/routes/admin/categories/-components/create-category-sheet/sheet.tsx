@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from 'react';
+import { FC, useEffect } from 'react';
 import {
   Sheet,
   SheetClose,
@@ -17,40 +17,33 @@ import { createCategorySchema, TCreateCategory } from '@/features/categories/sch
 import { zodResolver } from '@hookform/resolvers/zod';
 import { CategoryStatus } from '~/prisma/generated/prisma/enums.ts';
 import { IconSend, IconX } from '@tabler/icons-react';
-import { Checkbox } from '@/components/ui/checkbox.tsx';
-import { Label } from '@/components/ui/label.tsx';
 import { useCreateCategoryMutation } from '@/features/categories/server-functions/create.ts';
 import { LoadingButton } from '@/components/ui/loading-button.tsx';
 import { toast } from 'sonner';
 
 
+
 interface IProps {}
 
 export const CreateCategorySheet: FC<IProps> = ({}) => {
-  const { isOpen, setIsOpen } = useCreateCategorySheet();
-  const [editAfterCreation, setEditAfterCreation] = useState(true);
+  const { isOpen, open, close, options } = useCreateCategorySheet();
   const form = useForm<TCreateCategory>({
     resolver: zodResolver(createCategorySchema),
-    defaultValues: {
-      parentId: undefined,
-      slug: '',
-      nameRo: '',
-      nameRu: '',
-      descriptionRo: '',
-      descriptionRu: '',
-      status: CategoryStatus.ACTIVE
-    }
+    defaultValues: getDefaultValues({ parentId: options?.parentId })
   });
 
   useEffect(() => {
     if (!isOpen)
       return;
 
-    form.reset();
-  }, [isOpen]);
+    form.reset(getDefaultValues({ parentId: options?.parentId }));
+  }, [isOpen, options?.parentId]);
 
   const { mutate: createCtg, isPending: isCreatingCtg } = useCreateCategoryMutation({
-    onSuccess: () => form.reset(),
+    onSuccess: () => {
+      form.reset();
+      close();
+    },
     onError: (e) => toast.error(e.name, { description: e.message })
   });
 
@@ -58,7 +51,12 @@ export const CreateCategorySheet: FC<IProps> = ({}) => {
     if (isCreatingCtg)
       return;
 
-    setIsOpen(value);
+    if (value) {
+      open();
+      return;
+    }
+
+    close();
   };
 
 
@@ -86,23 +84,6 @@ export const CreateCategorySheet: FC<IProps> = ({}) => {
         </ScrollArea>
 
         <SheetFooter className="flex flex-col sm:flex-row gap-4 justify-between items-end pt-0">
-          <div className="flex items-start gap-3 mt-4 w-full">
-            <Checkbox
-              id="edit-after-creation-checkbox"
-              checked={editAfterCreation}
-              onCheckedChange={(v) => setEditAfterCreation(!!v)}
-              disabled={isCreatingCtg}
-            />
-            <div className="grid gap-2">
-              <Label htmlFor="edit-after-creation-checkbox">
-                Edit after creation
-              </Label>
-              <p className="text-muted-foreground text-xs">
-                Redirect to created product page to edit it
-              </p>
-            </div>
-          </div>
-
           <div className="flex flex-row sm:justify-end gap-2 w-full">
             <SheetClose className="grow sm:grow-0 sm:min-w-32" asChild>
               <Button variant="outline" disabled={isCreatingCtg}>
@@ -121,3 +102,16 @@ export const CreateCategorySheet: FC<IProps> = ({}) => {
     </Sheet>
   );
 };
+
+
+function getDefaultValues(values?: Partial<TCreateCategory>) {
+  return {
+    parentId: values?.parentId ?? undefined,
+    slug: values?.slug ?? '',
+    nameRo: values?.nameRo ?? '',
+    nameRu: values?.nameRu ?? '',
+    descriptionRo: values?.descriptionRo ?? '',
+    descriptionRu: values?.descriptionRu ?? '',
+    status: values?.status ?? CategoryStatus.ACTIVE
+  };
+}

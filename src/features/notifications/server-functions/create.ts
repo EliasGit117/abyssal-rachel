@@ -29,8 +29,6 @@ export const createNotificationServerFn = createServerFn({ method: 'POST' })
       },
     });
 
-    console.log(session, canCreate);
-
     if (!canCreate.success)
       throwForbiddenError();
 

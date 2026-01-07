@@ -65,7 +65,7 @@ interface ComboboxTriggerProps
 
 function ComboboxTrigger(props: ComboboxTriggerProps) {
   const { showIcon = true, className, children, placeholder = 'Select...', asChild, ...btnProps } = props;
-  const { open, value } = useComboboxContext();
+  const { open } = useComboboxContext();
 
   return (
     <PopoverTrigger asChild>
@@ -73,7 +73,7 @@ function ComboboxTrigger(props: ComboboxTriggerProps) {
         variant="outline"
         role="combobox"
         aria-expanded={open}
-        className={cn('w-full justify-between gap-2 font-normal', !value && 'text-muted-foreground', className)}
+        className={cn('w-full justify-between gap-2 font-normal', className)}
         asChild={asChild}
         {...btnProps}
       >
@@ -81,13 +81,13 @@ function ComboboxTrigger(props: ComboboxTriggerProps) {
           asChild ? (children) : (
             <>
               {children}
-              {showIcon && <IconSelector className="size-4 opacity-50 ml-auto"/>}
+              {showIcon && <IconSelector className="size-4 text-muted-foreground ml-auto"/>}
             </>
           )
         ) : (
           <>
             <span className="truncate">{placeholder}</span>
-            <IconSelector className="size-4 opacity-50"/>
+            <IconSelector className="size-4 text-muted-foreground"/>
           </>
         )}
       </Button>

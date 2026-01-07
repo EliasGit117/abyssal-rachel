@@ -8,8 +8,8 @@ import { Textarea } from '@/components/ui/textarea.tsx';
 import { CategoryStatus } from '~/prisma/generated/prisma/enums.ts';
 import { IconCircleCheck, IconCircleMinus } from '@tabler/icons-react';
 import {
-  CategorySelectPopover
-} from '@/routes/admin/categories/-components/create-category-sheet/category-select-popover.tsx';
+  CategorySelectCombobox
+} from '@/routes/admin/categories/-components/create-category-sheet/category-select-combobox.tsx';
 import {
   Combobox,
   ComboboxContent,
@@ -44,10 +44,11 @@ export const CreateCategoryForm: FC<IProps> = ({ form, onSubmit, id, disabled, .
             control={form.control}
             render={({ field, fieldState }) => (
               <Field data-invalid={fieldState.invalid}>
-                <FieldLabel htmlFor="parent-dropdown">
+                <FieldLabel htmlFor="parent-id-combobox">
                   Parent
                 </FieldLabel>
-                <CategorySelectPopover
+                <CategorySelectCombobox
+                  id='parent-id-combobox'
                   value={field.value}
                   setValue={v => field.onChange(v, { shouldValidate: true })}
                   disabled={disabled}
@@ -101,7 +102,7 @@ export const CreateCategoryForm: FC<IProps> = ({ form, onSubmit, id, disabled, .
                         field.onChange(v, { shouldValidate: true })
                       }
                     >
-                      <ComboboxTrigger className='justify-start' disabled={field.disabled}>
+                      <ComboboxTrigger id='status-dropdown' className='justify-start' disabled={field.disabled}>
                         {selectedStatus && (<selectedStatus.icon className='opacity-50'/>)}
                         <span>{selectedStatus ? selectedStatus.label : 'Select status'}</span>
                       </ComboboxTrigger>
