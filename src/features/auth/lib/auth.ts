@@ -6,6 +6,7 @@ import { getLocale } from '@/paraglide/runtime';
 import { resend } from '@/lib/resend.ts';
 import { admin as adminPlugin, magicLink } from 'better-auth/plugins';
 import { accessControl, user, admin } from '@/features/auth/lib/permissions.ts';
+import { tanstackStartCookies } from 'better-auth/tanstack-start';
 
 
 export const auth = betterAuth({
@@ -67,8 +68,7 @@ export const auth = betterAuth({
     },
   },
   plugins: [
-    // Removed coz breaks the production app build
-    // tanstackStartCookies(),
+    tanstackStartCookies(),
     adminPlugin({
       ac: accessControl,
       roles: {
