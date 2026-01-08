@@ -47,7 +47,7 @@ export const NotificationListSection: FC<ComponentProps<'section'>> = ({ classNa
   return (
     <section className={cn('space-y-2', className)} {...props}>
       {isPendingNotifications ? (
-        Array.from([1, 2, 3, 4, 5]).map((_, i) => (
+        Array.from({ length: 5 }).map((_, i) => (
           <Item variant="outline" key={i}>
             <ItemContent>
               <div className="w-full">

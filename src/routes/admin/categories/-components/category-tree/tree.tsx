@@ -164,7 +164,7 @@ export const CategoryTree: FC<ICategoryTreeProps> = ({ className }) => {
             <DropdownMenu>
               <DropdownMenuTrigger disabled={disabled} asChild>
                 <Button size="icon-sm" variant="ghost">
-                  <IconDots className='size-4'/>
+                  <IconDots className='size-4 text-muted-foreground'/>
                 </Button>
               </DropdownMenuTrigger>
 

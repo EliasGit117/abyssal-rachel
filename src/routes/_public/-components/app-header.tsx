@@ -17,7 +17,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu.tsx';
-import { IconKey, IconLogin2, IconUserCircle, IconUserPlus } from '@tabler/icons-react';
+import { IconKey, IconLogin2, IconUser, IconUserCircle, IconUserPlus } from '@tabler/icons-react';
 import { SignedOut } from '@/components/auth/signed-out.tsx';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar.tsx';
 import { SignedIn } from '@/components/auth/signed-in.tsx';
@@ -133,6 +133,7 @@ const AuthDropdown: FC<IAuthDropdown> = ({ align, ...props }) => {
               <span>{m['components.auth_dropdown.sign_in']()}</span>
             </Link>
           </DropdownMenuItem>
+
           <DropdownMenuItem asChild>
             <Link to="/auth/sign-up">
               <IconUserPlus/>
@@ -192,6 +193,13 @@ const UserDropdown: FC<IUserDropdown> = ({ align, className, ...props }) => {
         </DropdownMenuLabel>
 
         <DropdownMenuSeparator/>
+
+        <DropdownMenuItem asChild>
+          <Link to="/profile">
+            <IconUser/>
+            <span>{m['components.user_dropdown.profile']()}</span>
+          </Link>
+        </DropdownMenuItem>
 
         <DropdownMenuGroup>
           <DropdownMenuItem disabled={isPending} onClick={() => signOut()}>

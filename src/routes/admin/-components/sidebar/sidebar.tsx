@@ -3,10 +3,13 @@ import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
+  SidebarGroup,
+  SidebarGroupContent,
   SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
-  SidebarMenuItem
+  SidebarMenuItem,
+  useSidebar
 } from '@/components/ui/sidebar.tsx';
 import { Link } from '@tanstack/react-router';
 import { envConfig } from '@/lib/env-config.ts';
@@ -16,6 +19,7 @@ import { NavLinkGroup } from './nav-link-group.tsx';
 import { mainLinks } from './links.ts';
 import { NavSettings } from './nav-settings.tsx';
 import { useSession } from '@/hooks/use-session.ts';
+import { IconBuildingStore } from '@tabler/icons-react';
 
 
 interface IAdminSidebarProps extends ComponentProps<typeof Sidebar> {
@@ -23,6 +27,7 @@ interface IAdminSidebarProps extends ComponentProps<typeof Sidebar> {
 
 export function AdminSidebar({ ...props }: IAdminSidebarProps) {
   const { user } = useSession();
+  const { setOpenMobile } = useSidebar();
 
   return (
     <Sidebar {...props}>
@@ -42,6 +47,21 @@ export function AdminSidebar({ ...props }: IAdminSidebarProps) {
       </SidebarHeader>
 
       <SidebarContent>
+        <SidebarGroup>
+          <SidebarGroupContent className="flex flex-col gap-2">
+            <SidebarMenu>
+                <SidebarMenuItem>
+                  <SidebarMenuButton tooltip='Shop' asChild>
+                    <Link onClick={() => setOpenMobile(false)} to='/'>
+                      <IconBuildingStore/>
+                      <span>Store</span>
+                    </Link>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+
         <NavLinkGroup label="Main" items={mainLinks({ role: user?.role })}/>
         <div className="flex-1"/>
         <NavSettings/>

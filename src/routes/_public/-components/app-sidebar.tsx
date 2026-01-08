@@ -16,13 +16,17 @@ import { Link } from '@tanstack/react-router';
 import { useAppSidebar } from './app-sidebar-provider';
 import { ComponentProps, FC } from 'react';
 import { cn } from '@/lib/utils';
-import { baseLinks, ILinkItem, MenuItemType } from '@/routes/_public/-consts';
+import { getBaseLinks, ILinkItem, MenuItemType } from '@/routes/_public/-consts';
 import { IconLayoutSidebar } from '@tabler/icons-react';
 import { useSession } from '@/hooks/use-session.ts';
+import { getLocale } from '@/paraglide/runtime';
+import Logo from '@/assets/icons/logo.svg?react';
 
 
 
 export const AppSidebar = () => {
+  const locale = getLocale();
+  const baseLinks = getBaseLinks(locale);
   const isOpen = useAppSidebar((s) => s.isOpen);
   const setOpen = useAppSidebar((s) => s.setOpen);
   const { session } = useSession();
@@ -34,16 +38,18 @@ export const AppSidebar = () => {
 
   return (
     <Sheet open={isOpen} onOpenChange={setOpen}>
-      <SheetContent side="left">
-        <SheetHeader>
-          <SheetTitle>
-            Navigation Links
-          </SheetTitle>
-
-          <SheetDescription className="max-w-xs">
-            Navigate through different sections of the website
-          </SheetDescription>
+      <SheetContent side="left" showCloseButton={false}>
+        <SheetHeader className='hidden'>
+          <SheetTitle/>
+          <SheetDescription/>
         </SheetHeader>
+
+        <Button variant='link' size='dense' className='mx-4 mt-4' asChild>
+          <Link to='/'>
+            <Logo className="h-14! w-28! text-foreground"/>
+          </Link>
+        </Button>
+
 
         <div className="flex flex-col gap-4 px-5 overflow-y-auto">
           <Accordion type="single" className="w-full" collapsible>

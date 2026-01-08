@@ -14,12 +14,14 @@ function RouteComponent() {
         <Bar className="h-0.5 bg-primary fixed top-0 z-50"/>
       </Progress>
 
-      <AppHeader/>
-      <AppSidebar/>
-      <BreadcrumbsNavigation className='container mx-auto px-2 lg:px-3'/>
+      <div className='flex flex-col min-h-screen'>
+        <AppHeader/>
+        <AppSidebar/>
+        <BreadcrumbsNavigation className="container mx-auto px-2 lg:px-3"/>
 
-      <Outlet/>
-      <AppFooter className='mt-auto'/>
+        <Outlet/>
+        <AppFooter className="mt-auto"/>
+      </div>
     </AppSidebarProvider>
   );
 }

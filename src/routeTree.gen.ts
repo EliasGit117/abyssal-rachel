@@ -15,16 +15,22 @@ import { Route as PublicRouteRouteImport } from './routes/_public/route'
 import { Route as AuthIndexRouteImport } from './routes/auth/index'
 import { Route as AdminIndexRouteImport } from './routes/admin/index'
 import { Route as PublicIndexRouteImport } from './routes/_public/index'
-import { Route as PublicContactRouteImport } from './routes/_public/contact'
+import { Route as PublicContactsRouteImport } from './routes/_public/contacts'
+import { Route as AdminSettingsRouteRouteImport } from './routes/admin/settings/route'
 import { Route as AuthSignUpIndexRouteImport } from './routes/auth/sign-up/index'
 import { Route as AuthSignInIndexRouteImport } from './routes/auth/sign-in/index'
 import { Route as AuthSetPasswordIndexRouteImport } from './routes/auth/set-password/index'
 import { Route as AuthResetPasswordIndexRouteImport } from './routes/auth/reset-password/index'
 import { Route as AuthMagicLinkIndexRouteImport } from './routes/auth/magic-link/index'
 import { Route as AdminUsersIndexRouteImport } from './routes/admin/users/index'
+import { Route as AdminSettingsIndexRouteImport } from './routes/admin/settings/index'
 import { Route as AdminCategoriesIndexRouteImport } from './routes/admin/categories/index'
+import { Route as PublicProfileIndexRouteImport } from './routes/_public/profile/index'
 import { Route as PublicNotificationsIndexRouteImport } from './routes/_public/notifications/index'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
+import { Route as AdminSettingsSecurityRouteImport } from './routes/admin/settings/security'
+import { Route as AdminSettingsProfileRouteImport } from './routes/admin/settings/profile'
+import { Route as AdminSettingsPreferencesRouteImport } from './routes/admin/settings/preferences'
 
 const AuthRouteRoute = AuthRouteRouteImport.update({
   id: '/auth',
@@ -55,10 +61,15 @@ const PublicIndexRoute = PublicIndexRouteImport.update({
   path: '/',
   getParentRoute: () => PublicRouteRoute,
 } as any)
-const PublicContactRoute = PublicContactRouteImport.update({
-  id: '/contact',
-  path: '/contact',
+const PublicContactsRoute = PublicContactsRouteImport.update({
+  id: '/contacts',
+  path: '/contacts',
   getParentRoute: () => PublicRouteRoute,
+} as any)
+const AdminSettingsRouteRoute = AdminSettingsRouteRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => AdminRouteRoute,
 } as any)
 const AuthSignUpIndexRoute = AuthSignUpIndexRouteImport.update({
   id: '/sign-up/',
@@ -90,10 +101,20 @@ const AdminUsersIndexRoute = AdminUsersIndexRouteImport.update({
   path: '/users/',
   getParentRoute: () => AdminRouteRoute,
 } as any)
+const AdminSettingsIndexRoute = AdminSettingsIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AdminSettingsRouteRoute,
+} as any)
 const AdminCategoriesIndexRoute = AdminCategoriesIndexRouteImport.update({
   id: '/categories/',
   path: '/categories/',
   getParentRoute: () => AdminRouteRoute,
+} as any)
+const PublicProfileIndexRoute = PublicProfileIndexRouteImport.update({
+  id: '/profile/',
+  path: '/profile/',
+  getParentRoute: () => PublicRouteRoute,
 } as any)
 const PublicNotificationsIndexRoute =
   PublicNotificationsIndexRouteImport.update({
@@ -106,17 +127,39 @@ const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
   path: '/api/auth/$',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminSettingsSecurityRoute = AdminSettingsSecurityRouteImport.update({
+  id: '/security',
+  path: '/security',
+  getParentRoute: () => AdminSettingsRouteRoute,
+} as any)
+const AdminSettingsProfileRoute = AdminSettingsProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => AdminSettingsRouteRoute,
+} as any)
+const AdminSettingsPreferencesRoute =
+  AdminSettingsPreferencesRouteImport.update({
+    id: '/preferences',
+    path: '/preferences',
+    getParentRoute: () => AdminSettingsRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/admin': typeof AdminRouteRouteWithChildren
   '/auth': typeof AuthRouteRouteWithChildren
-  '/contact': typeof PublicContactRoute
+  '/admin/settings': typeof AdminSettingsRouteRouteWithChildren
+  '/contacts': typeof PublicContactsRoute
   '/': typeof PublicIndexRoute
   '/admin/': typeof AdminIndexRoute
   '/auth/': typeof AuthIndexRoute
+  '/admin/settings/preferences': typeof AdminSettingsPreferencesRoute
+  '/admin/settings/profile': typeof AdminSettingsProfileRoute
+  '/admin/settings/security': typeof AdminSettingsSecurityRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/notifications': typeof PublicNotificationsIndexRoute
+  '/profile': typeof PublicProfileIndexRoute
   '/admin/categories': typeof AdminCategoriesIndexRoute
+  '/admin/settings/': typeof AdminSettingsIndexRoute
   '/admin/users': typeof AdminUsersIndexRoute
   '/auth/magic-link': typeof AuthMagicLinkIndexRoute
   '/auth/reset-password': typeof AuthResetPasswordIndexRoute
@@ -125,13 +168,18 @@ export interface FileRoutesByFullPath {
   '/auth/sign-up': typeof AuthSignUpIndexRoute
 }
 export interface FileRoutesByTo {
-  '/contact': typeof PublicContactRoute
+  '/contacts': typeof PublicContactsRoute
   '/': typeof PublicIndexRoute
   '/admin': typeof AdminIndexRoute
   '/auth': typeof AuthIndexRoute
+  '/admin/settings/preferences': typeof AdminSettingsPreferencesRoute
+  '/admin/settings/profile': typeof AdminSettingsProfileRoute
+  '/admin/settings/security': typeof AdminSettingsSecurityRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/notifications': typeof PublicNotificationsIndexRoute
+  '/profile': typeof PublicProfileIndexRoute
   '/admin/categories': typeof AdminCategoriesIndexRoute
+  '/admin/settings': typeof AdminSettingsIndexRoute
   '/admin/users': typeof AdminUsersIndexRoute
   '/auth/magic-link': typeof AuthMagicLinkIndexRoute
   '/auth/reset-password': typeof AuthResetPasswordIndexRoute
@@ -144,13 +192,19 @@ export interface FileRoutesById {
   '/_public': typeof PublicRouteRouteWithChildren
   '/admin': typeof AdminRouteRouteWithChildren
   '/auth': typeof AuthRouteRouteWithChildren
-  '/_public/contact': typeof PublicContactRoute
+  '/admin/settings': typeof AdminSettingsRouteRouteWithChildren
+  '/_public/contacts': typeof PublicContactsRoute
   '/_public/': typeof PublicIndexRoute
   '/admin/': typeof AdminIndexRoute
   '/auth/': typeof AuthIndexRoute
+  '/admin/settings/preferences': typeof AdminSettingsPreferencesRoute
+  '/admin/settings/profile': typeof AdminSettingsProfileRoute
+  '/admin/settings/security': typeof AdminSettingsSecurityRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/_public/notifications/': typeof PublicNotificationsIndexRoute
+  '/_public/profile/': typeof PublicProfileIndexRoute
   '/admin/categories/': typeof AdminCategoriesIndexRoute
+  '/admin/settings/': typeof AdminSettingsIndexRoute
   '/admin/users/': typeof AdminUsersIndexRoute
   '/auth/magic-link/': typeof AuthMagicLinkIndexRoute
   '/auth/reset-password/': typeof AuthResetPasswordIndexRoute
@@ -163,13 +217,19 @@ export interface FileRouteTypes {
   fullPaths:
     | '/admin'
     | '/auth'
-    | '/contact'
+    | '/admin/settings'
+    | '/contacts'
     | '/'
     | '/admin/'
     | '/auth/'
+    | '/admin/settings/preferences'
+    | '/admin/settings/profile'
+    | '/admin/settings/security'
     | '/api/auth/$'
     | '/notifications'
+    | '/profile'
     | '/admin/categories'
+    | '/admin/settings/'
     | '/admin/users'
     | '/auth/magic-link'
     | '/auth/reset-password'
@@ -178,13 +238,18 @@ export interface FileRouteTypes {
     | '/auth/sign-up'
   fileRoutesByTo: FileRoutesByTo
   to:
-    | '/contact'
+    | '/contacts'
     | '/'
     | '/admin'
     | '/auth'
+    | '/admin/settings/preferences'
+    | '/admin/settings/profile'
+    | '/admin/settings/security'
     | '/api/auth/$'
     | '/notifications'
+    | '/profile'
     | '/admin/categories'
+    | '/admin/settings'
     | '/admin/users'
     | '/auth/magic-link'
     | '/auth/reset-password'
@@ -196,13 +261,19 @@ export interface FileRouteTypes {
     | '/_public'
     | '/admin'
     | '/auth'
-    | '/_public/contact'
+    | '/admin/settings'
+    | '/_public/contacts'
     | '/_public/'
     | '/admin/'
     | '/auth/'
+    | '/admin/settings/preferences'
+    | '/admin/settings/profile'
+    | '/admin/settings/security'
     | '/api/auth/$'
     | '/_public/notifications/'
+    | '/_public/profile/'
     | '/admin/categories/'
+    | '/admin/settings/'
     | '/admin/users/'
     | '/auth/magic-link/'
     | '/auth/reset-password/'
@@ -262,12 +333,19 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PublicIndexRouteImport
       parentRoute: typeof PublicRouteRoute
     }
-    '/_public/contact': {
-      id: '/_public/contact'
-      path: '/contact'
-      fullPath: '/contact'
-      preLoaderRoute: typeof PublicContactRouteImport
+    '/_public/contacts': {
+      id: '/_public/contacts'
+      path: '/contacts'
+      fullPath: '/contacts'
+      preLoaderRoute: typeof PublicContactsRouteImport
       parentRoute: typeof PublicRouteRoute
+    }
+    '/admin/settings': {
+      id: '/admin/settings'
+      path: '/settings'
+      fullPath: '/admin/settings'
+      preLoaderRoute: typeof AdminSettingsRouteRouteImport
+      parentRoute: typeof AdminRouteRoute
     }
     '/auth/sign-up/': {
       id: '/auth/sign-up/'
@@ -311,12 +389,26 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminUsersIndexRouteImport
       parentRoute: typeof AdminRouteRoute
     }
+    '/admin/settings/': {
+      id: '/admin/settings/'
+      path: '/'
+      fullPath: '/admin/settings/'
+      preLoaderRoute: typeof AdminSettingsIndexRouteImport
+      parentRoute: typeof AdminSettingsRouteRoute
+    }
     '/admin/categories/': {
       id: '/admin/categories/'
       path: '/categories'
       fullPath: '/admin/categories'
       preLoaderRoute: typeof AdminCategoriesIndexRouteImport
       parentRoute: typeof AdminRouteRoute
+    }
+    '/_public/profile/': {
+      id: '/_public/profile/'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof PublicProfileIndexRouteImport
+      parentRoute: typeof PublicRouteRoute
     }
     '/_public/notifications/': {
       id: '/_public/notifications/'
@@ -332,32 +424,74 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiAuthSplatRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/settings/security': {
+      id: '/admin/settings/security'
+      path: '/security'
+      fullPath: '/admin/settings/security'
+      preLoaderRoute: typeof AdminSettingsSecurityRouteImport
+      parentRoute: typeof AdminSettingsRouteRoute
+    }
+    '/admin/settings/profile': {
+      id: '/admin/settings/profile'
+      path: '/profile'
+      fullPath: '/admin/settings/profile'
+      preLoaderRoute: typeof AdminSettingsProfileRouteImport
+      parentRoute: typeof AdminSettingsRouteRoute
+    }
+    '/admin/settings/preferences': {
+      id: '/admin/settings/preferences'
+      path: '/preferences'
+      fullPath: '/admin/settings/preferences'
+      preLoaderRoute: typeof AdminSettingsPreferencesRouteImport
+      parentRoute: typeof AdminSettingsRouteRoute
+    }
   }
 }
 
 interface PublicRouteRouteChildren {
-  PublicContactRoute: typeof PublicContactRoute
+  PublicContactsRoute: typeof PublicContactsRoute
   PublicIndexRoute: typeof PublicIndexRoute
   PublicNotificationsIndexRoute: typeof PublicNotificationsIndexRoute
+  PublicProfileIndexRoute: typeof PublicProfileIndexRoute
 }
 
 const PublicRouteRouteChildren: PublicRouteRouteChildren = {
-  PublicContactRoute: PublicContactRoute,
+  PublicContactsRoute: PublicContactsRoute,
   PublicIndexRoute: PublicIndexRoute,
   PublicNotificationsIndexRoute: PublicNotificationsIndexRoute,
+  PublicProfileIndexRoute: PublicProfileIndexRoute,
 }
 
 const PublicRouteRouteWithChildren = PublicRouteRoute._addFileChildren(
   PublicRouteRouteChildren,
 )
 
+interface AdminSettingsRouteRouteChildren {
+  AdminSettingsPreferencesRoute: typeof AdminSettingsPreferencesRoute
+  AdminSettingsProfileRoute: typeof AdminSettingsProfileRoute
+  AdminSettingsSecurityRoute: typeof AdminSettingsSecurityRoute
+  AdminSettingsIndexRoute: typeof AdminSettingsIndexRoute
+}
+
+const AdminSettingsRouteRouteChildren: AdminSettingsRouteRouteChildren = {
+  AdminSettingsPreferencesRoute: AdminSettingsPreferencesRoute,
+  AdminSettingsProfileRoute: AdminSettingsProfileRoute,
+  AdminSettingsSecurityRoute: AdminSettingsSecurityRoute,
+  AdminSettingsIndexRoute: AdminSettingsIndexRoute,
+}
+
+const AdminSettingsRouteRouteWithChildren =
+  AdminSettingsRouteRoute._addFileChildren(AdminSettingsRouteRouteChildren)
+
 interface AdminRouteRouteChildren {
+  AdminSettingsRouteRoute: typeof AdminSettingsRouteRouteWithChildren
   AdminIndexRoute: typeof AdminIndexRoute
   AdminCategoriesIndexRoute: typeof AdminCategoriesIndexRoute
   AdminUsersIndexRoute: typeof AdminUsersIndexRoute
 }
 
 const AdminRouteRouteChildren: AdminRouteRouteChildren = {
+  AdminSettingsRouteRoute: AdminSettingsRouteRouteWithChildren,
   AdminIndexRoute: AdminIndexRoute,
   AdminCategoriesIndexRoute: AdminCategoriesIndexRoute,
   AdminUsersIndexRoute: AdminUsersIndexRoute,

@@ -22,8 +22,7 @@ interface IMainLinksOptions {
 export const mainLinks: (options?: IMainLinksOptions) => INavItem[] = (options) => {
   const { role } = options ?? {};
   let result: INavItem[] = [
-    { title: 'Dashboard', linkOptions: { to: '/admin', activeOptions: { exact: true } }, icon: IconDashboard },
-    { title: 'Settings', linkOptions: { to: '/' }, icon: IconSettings }
+    { title: 'Dashboard', linkOptions: { to: '/admin', activeOptions: { exact: true } }, icon: IconDashboard }
   ];
 
   const canListUsers = hasRolePermission({ role: role, permissions: { user: [Permission.List] } });
@@ -33,6 +32,10 @@ export const mainLinks: (options?: IMainLinksOptions) => INavItem[] = (options) 
   const canListCategories = hasRolePermission({ role: role, permissions: { categories: [Permission.List] } });
   if (canListCategories)
     result.push({ title: 'Categories', linkOptions: { to: '/admin/categories' }, icon: IconCategory });
+
+  result.push(
+    { title: 'Settings', linkOptions: { to: '/admin/settings' }, icon: IconSettings }
+  );
 
   return result;
 };

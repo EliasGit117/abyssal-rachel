@@ -12,12 +12,16 @@ import { ButtonGroup } from '@/components/ui/button-group.tsx';
 import { Button } from '@/components/ui/button.tsx';
 import { cn } from '@/lib/utils.ts';
 import { toast } from 'sonner';
+import { TBreadcrumbData } from '@/components/layout';
+import { m } from '@/paraglide/messages';
 
 
-export const Route = createFileRoute('/_public/contact')({
+
+export const Route = createFileRoute('/_public/contacts')({
   component: RouteComponent,
-  staticData: {
-    breadcrumbs: { title: 'Contact' }
+  loader: () => {
+    const breadcrumb: TBreadcrumbData = { title: m['pages.contacts.title']() };
+    return { breadcrumbs: breadcrumb }
   }
 });
 

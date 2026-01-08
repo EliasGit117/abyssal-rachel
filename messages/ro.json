@@ -31,14 +31,33 @@
       "sign_in": "Autentificare",
       "sign_up": "Înregistrare"
     },
+    "user_dropdown": {
+      "profile": "Contul"
+    },
     "sessions_card": {
       "title": "Sesiuni",
       "description": "Lista sesiunilor active",
       "revoke": "Revocă",
       "current_session": "Sesiune curentă"
+    },
+    "reset_password_card": {
+      "form_title": "Resetează parola",
+      "form_description": "Introdu datele tale pentru a reseta parola",
+      "success_message": "Verifică e-mailul pentru a reseta parola"
+    },
+    "edit_name_card": {
+      "form_title": "Editează numele",
+      "form_description": "Introdu datele tale pentru a actualiza numele",
+      "success_message": "Numele a fost actualizat cu succes"
     }
   },
   "pages": {
+    "profile": {
+      "title": "Profil"
+    },
+    "contacts": {
+      "title": "Contacte"
+    },
     "auth": {
       "sign_in": {
         "form_title": "Bine ai revenit!",
@@ -62,11 +81,6 @@
         "form_title": "Trimite Magic Link",
         "form_description": "Introdu adresa de e-mail pentru a trimite Magic Link",
         "success_message": "Magic Link a fost trimis cu succes. Verifică e-mailul pentru a continua autentificarea."
-      },
-      "reset_password": {
-        "form_title": "Resetează parola",
-        "form_description": "Introdu datele tale pentru a reseta parola",
-        "success_message": "Verifică e-mailul pentru a reseta parola"
       },
       "set_new_password": {
         "form_title": "Setează noua parolă",

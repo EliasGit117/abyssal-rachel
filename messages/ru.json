@@ -32,14 +32,33 @@
       "sign_in": "Войти",
       "sign_up": "Регистрация"
     },
+    "user_dropdown": {
+      "profile": "Профиль"
+    },
     "sessions_card": {
       "title": "Сессии",
       "description": "Список ваших активных сессий",
       "revoke": "Отозвать",
       "current_session": "Текущая сессия"
+    },
+    "reset_password_card": {
+      "form_title": "Сбросить пароль",
+      "form_description": "Введите свои данные для сброса пароля",
+      "success_message": "Проверьте свою почту для сброса пароля"
+    },
+    "edit_name_card": {
+      "form_title": "Изменить имя",
+      "form_description": "Введите свои данные для обновления имени",
+      "success_message": "Имя успешно обновлено"
     }
   },
   "pages": {
+    "profile": {
+      "title": "Профиль"
+    },
+    "contacts": {
+      "title": "Контакты"
+    },
     "auth": {
       "sign_in": {
         "form_title": "С возвращением!",
@@ -63,11 +82,6 @@
         "form_title": "Отправить Magic Link",
         "form_description": "Введите свой адрес электронной почты для отправки Magic Link",
         "success_message": "Magic Link успешно отправлен. Проверьте свою почту для продолжения входа."
-      },
-      "reset_password": {
-        "form_title": "Сбросить пароль",
-        "form_description": "Введите свои данные для сброса пароля",
-        "success_message": "Проверьте свою почту для сброса пароля"
       },
       "set_new_password": {
         "form_title": "Создать новый пароль",

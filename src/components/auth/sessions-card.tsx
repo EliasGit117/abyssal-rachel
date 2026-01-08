@@ -10,7 +10,6 @@ import {
 import {
   IconDeviceLaptop,
   IconDeviceMobile,
-  IconList,
   IconLogout,
   IconRefresh,
   IconX
@@ -32,17 +31,51 @@ import { useSession } from '@/hooks/use-session';
 import { getSessionQueryOptions } from '@/features/auth/server-functions/get-session.ts';
 import { m } from '@/paraglide/messages';
 
+const ENGLISH_MESSAGES = {
+  title: 'Sessions',
+  description: 'Manage your active sessions',
+  currentSession: 'Current session',
+  revoke: 'Revoke',
+  signOut: 'Sign out',
+  error: 'Error',
+  unknown: 'Unknown'
+};
 
 export interface SessionsCardProps {
   className?: string;
+  translated?: boolean;
 }
 
-export function SessionsCard({ className }: SessionsCardProps) {
+export function SessionsCard({ className, translated = true }: SessionsCardProps) {
   const { session: currentSession } = useSession();
   const queryClient = useQueryClient();
 
   const [revokingToken, setRevokingToken] = useState<string | null>(null);
   const [signingOut, setSigningOut] = useState(false);
+
+  const getText = (key: keyof typeof ENGLISH_MESSAGES, fallback: string = '') => {
+    if (!translated)
+      return ENGLISH_MESSAGES[key];
+
+    switch (key) {
+      case 'title':
+        return m['components.sessions_card.title']();
+      case 'description':
+        return m['components.sessions_card.description']();
+      case 'currentSession':
+        return m['components.sessions_card.current_session']();
+      case 'revoke':
+        return m['components.sessions_card.revoke']();
+      case 'signOut':
+        return m['common.sign_out']();
+      case 'error':
+        return m['common.error']();
+      case 'unknown':
+        return 'Unknown';
+      default:
+        return fallback;
+    }
+  };
 
   const {
     data: res,
@@ -52,7 +85,7 @@ export function SessionsCard({ className }: SessionsCardProps) {
   } = useQuery({
     queryKey: ['sessions'],
     queryFn: () => authClient.listSessions(),
-    placeholderData: keepPreviousData,
+    placeholderData: keepPreviousData
   });
 
   const revokeMutation = useMutation({
@@ -67,7 +100,7 @@ export function SessionsCard({ className }: SessionsCardProps) {
     onSuccess: () =>
       queryClient.invalidateQueries({ queryKey: ['sessions'] }),
     onError: (e) =>
-      toast.error(m['common.error'](), { description: e.message })
+      toast.error(getText('error'), { description: e.message })
   });
 
   const signOutMutation = useMutation({
@@ -79,26 +112,24 @@ export function SessionsCard({ className }: SessionsCardProps) {
       setSigningOut(false);
     },
     onSuccess: () => {
-      void queryClient.invalidateQueries({ queryKey: getSessionQueryOptions().queryKey });
+      void queryClient.invalidateQueries({
+        queryKey: getSessionQueryOptions().queryKey
+      });
     },
     onError: (e) =>
-      toast.error(m['common.error'](), { description: e.message })
+      toast.error(getText('error'), { description: e.message })
   });
 
-  if (!currentSession)
-    return null;
+  if (!currentSession) return null;
 
   return (
     <Card className={cn('relative', className)}>
       <CardHeader>
-        <CardTitle className="flex gap-2 items-center">
-          <IconList className="size-4"/>
-          <h3>{m['components.sessions_card.title']()}</h3>
+        <CardTitle className="flex gap-2 items-center text-xl">
+          <h3>{getText('title')}</h3>
         </CardTitle>
 
-        <CardDescription>
-          {m['components.sessions_card.description']()}
-        </CardDescription>
+        <CardDescription>{getText('description')}</CardDescription>
 
         <CardAction>
           <LoadingButton
@@ -115,7 +146,9 @@ export function SessionsCard({ className }: SessionsCardProps) {
 
       <CardContent className="grid gap-4 pt-4">
         {isPending ? (
-          <Skeleton className="h-13 rounded-lg"/>
+          Array.from({ length: 5 }).map((_, i) => (
+            <Skeleton className="h-13 rounded-lg" key={i}/>
+          ))
         ) : res?.error ? (
           <p className="text-sm text-destructive">
             {res.error.message}
@@ -130,22 +163,33 @@ export function SessionsCard({ className }: SessionsCardProps) {
             const isLoading = isRevokingThisSession || isSigningOutCurrent;
 
             return (
-              <div key={session.id} className="flex flex-row items-center gap-3 px-4 py-3 border rounded-xl">
-                {isMobile ? (<IconDeviceMobile className="size-4"/>) : (<IconDeviceLaptop className="size-4"/>)}
+              <div
+                key={session.id}
+                className="flex flex-row items-center gap-3 px-4 py-3 border rounded-xl"
+              >
+                {isMobile ? (
+                  <IconDeviceMobile className="size-4"/>
+                ) : (
+                  <IconDeviceLaptop className="size-4"/>
+                )}
 
                 <div className="flex flex-col">
                   <span className="text-sm font-semibold">
-                    {isCurrent ? m['components.sessions_card.current_session']() : session.ipAddress}
+                    {isCurrent
+                      ? getText('currentSession')
+                      : session.ipAddress}
                   </span>
 
                   <span className="text-xs text-muted-foreground">
-                    {parser.os.name && parser.browser.name ? `${parser.os.name}, ${parser.browser.name}` : session.userAgent || 'Unknown'}
+                    {parser.os.name && parser.browser.name
+                      ? `${parser.os.name}, ${parser.browser.name}`
+                      : session.userAgent || getText('unknown')}
                   </span>
                 </div>
 
                 <LoadingButton
                   size="sm"
-                  variant={"outline"}
+                  variant="outline"
                   className="relative ms-auto min-w-28"
                   loading={isLoading}
                   onClick={() => {
@@ -160,16 +204,12 @@ export function SessionsCard({ className }: SessionsCardProps) {
                   {isCurrent ? (
                     <>
                       <IconLogout/>
-                      <span>
-                        {m['common.sign_out']()}
-                      </span>
+                      <span>{getText('signOut')}</span>
                     </>
                   ) : (
                     <>
                       <IconX/>
-                      <span>
-                        {m['components.sessions_card.revoke']()}
-                      </span>
+                      <span>{getText('revoke')}</span>
                     </>
                   )}
                 </LoadingButton>
