@@ -22,7 +22,6 @@ import { cn } from '@/lib/utils.ts';
 import { toast } from 'sonner';
 import { useCategoryTree } from '@/routes/admin/categories/-components/category-tree/provider.tsx';
 import { Skeleton } from '@/components/ui/skeleton.tsx';
-import { useIsMobile } from '@/hooks/use-mobile.ts';
 import { useCreateCategorySheet } from '@/routes/admin/categories/-components/create-category-sheet';
 import { useEditCategorySheet } from '@/routes/admin/categories/-components/edit-category-sheet';
 import { useConfirm } from '@/components/ui/confirm-dialog.tsx';
@@ -250,8 +249,6 @@ interface ICategoryTreeToolbarProps extends ComponentProps<'div'> {
 }
 
 export const CategoryTreeToolbar: FC<ICategoryTreeToolbarProps> = ({ disabled, className, children, ...divProps }) => {
-  const isMobile = useIsMobile();
-
   const { user } = useSession();
   const canCreate = hasRolePermission({ role: user?.role, permissions: { categories: [Permission.Create] } });
   const canEdit = hasRolePermission({ role: user?.role, permissions: { categories: [Permission.Create] } });
@@ -266,6 +263,32 @@ export const CategoryTreeToolbar: FC<ICategoryTreeToolbarProps> = ({ disabled, c
       className={cn('flex items-center gap-2', className)}
       {...divProps}
     >
+      {canCreate && (
+        <Button
+          size="sm"
+          variant="outline"
+          className='w-8 lg:w-fit'
+          onClick={() => tree.collapseAll()}
+          disabled={isToolbarDisabled}
+        >
+          <IconFolderMinus/>
+          <span className='sr-only lg:not-sr-only'>Collapse all</span>
+        </Button>
+      )}
+
+      {canEdit && (
+        <Button
+          size="sm"
+          variant="outline"
+          className='w-8 lg:w-fit'
+          onClick={() => tree.expandAll()}
+          disabled={isToolbarDisabled}
+        >
+          <IconFolderPlus/>
+          <span className='sr-only lg:not-sr-only'>Expand all</span>
+        </Button>
+      )}
+
       <InputGroup className="max-w-64 h-8">
         <InputGroupAddon align="inline-start">
           <InputGroupText>
@@ -306,29 +329,6 @@ export const CategoryTreeToolbar: FC<ICategoryTreeToolbarProps> = ({ disabled, c
         )}
       </InputGroup>
 
-      {canCreate && (
-        <Button
-          size="sm"
-          variant="outline"
-          onClick={() => tree.collapseAll()}
-          disabled={isToolbarDisabled}
-        >
-          <IconFolderMinus/>
-          <span>{isMobile ? 'Collapse' : 'Collapse all'}</span>
-        </Button>
-      )}
-
-      {canEdit && (
-        <Button
-          size="sm"
-          variant="outline"
-          onClick={() => tree.expandAll()}
-          disabled={isToolbarDisabled}
-        >
-          <IconFolderPlus/>
-          <span>{isMobile ? 'Expand' : 'Expand all'}</span>
-        </Button>
-      )}
 
       {children}
     </div>
