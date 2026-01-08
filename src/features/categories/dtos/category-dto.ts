@@ -1,4 +1,4 @@
-import { Category, Prisma } from '~/prisma/generated/prisma/client.ts';
+import { Category, CategoryStatus, Prisma } from '~/prisma/generated/prisma/client.ts';
 
 type TCategoryWithChildren = Prisma.CategoryGetPayload<{ include: { children: true } }>;
 
@@ -7,6 +7,9 @@ export interface ICategoryDto {
   slug: string;
   nameRo: string;
   nameRu: string;
+  descriptionRo?: string | null;
+  descriptionRu?: string | null;
+  status: CategoryStatus;
   idPath: string;
   slugPath: string;
   parentId?: number | null;
@@ -23,6 +26,9 @@ export class CategoryDtoMapper {
       slug: entity.slug,
       nameRo: entity.nameRo,
       nameRu: entity.nameRu,
+      descriptionRo: entity.descriptionRo,
+      descriptionRu: entity.descriptionRu,
+      status: entity.status,
       parentId: entity.parentId,
       idPath: entity.idPath,
       slugPath: entity.slugPath

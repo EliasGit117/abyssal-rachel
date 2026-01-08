@@ -8,8 +8,8 @@ import { Textarea } from '@/components/ui/textarea.tsx';
 import { CategoryStatus } from '~/prisma/generated/prisma/enums.ts';
 import { IconCircleCheck, IconCircleMinus } from '@tabler/icons-react';
 import {
-  CategorySelectCombobox
-} from '@/routes/admin/categories/-components/create-category-sheet/category-select-combobox.tsx';
+  SelectCategoryCombobox
+} from '@/routes/admin/categories/-components/category-form/select-category-combobox.tsx';
 import {
   Combobox,
   ComboboxContent,
@@ -47,7 +47,7 @@ export const CreateCategoryForm: FC<IProps> = ({ form, onSubmit, id, disabled, .
                 <FieldLabel htmlFor="parent-id-combobox">
                   Parent
                 </FieldLabel>
-                <CategorySelectCombobox
+                <SelectCategoryCombobox
                   id='parent-id-combobox'
                   value={field.value}
                   setValue={v => field.onChange(v, { shouldValidate: true })}

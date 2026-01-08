@@ -142,4 +142,12 @@ export class CategoryService {
 
     return roots;
   }
+
+  static async getById(id: number) {
+    const category = await prisma.category.findFirst({ where: { id: id } });
+    if (!category)
+      throwBadRequest({ message: 'Category not found', translated: false });
+
+    return category;
+  }
 }

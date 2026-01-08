@@ -6,7 +6,7 @@ import {
   IconFolderMinus,
   IconFolderPlus,
   IconInfoCircle,
-  IconPencil,
+  IconPencil, IconPlus, IconProgressAlert, IconRefresh,
   IconTrash
 } from '@tabler/icons-react';
 import {
@@ -16,14 +16,19 @@ import {
   DropdownMenuSubContent, DropdownMenuSubTrigger,
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu.tsx';
-import { useCreateCategorySheet } from '@/routes/admin/categories/-components/create-category-sheet';
 import { cn } from '@/lib/utils.ts';
 import { toast } from 'sonner';
 import { useCategoryTree } from '@/routes/admin/categories/-components/category-tree/provider.tsx';
 import { Skeleton } from '@/components/ui/skeleton.tsx';
 import { useIsMobile } from '@/hooks/use-mobile.ts';
-
-
+import { useCreateCategorySheet } from '@/routes/admin/categories/-components/create-category-sheet';
+import { useEditCategorySheet } from '@/routes/admin/categories/-components/edit-category-sheet';
+import { useConfirm } from '@/components/ui/confirm-dialog.tsx';
+import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from '@/components/ui/empty.tsx';
+import { LoadingButton } from '@/components/ui/loading-button.tsx';
+import { hasRolePermission } from '@/features/auth/lib/has-role-permission.ts';
+import { useSession } from '@/hooks/use-session.ts';
+import { Permission } from '@/features/auth/lib/permissions.ts';
 
 
 interface ICategoryTreeProps {
@@ -34,8 +39,38 @@ export const CategoryTree: FC<ICategoryTreeProps> = ({ className }) => {
   // noinspection BadExpressionStatementJS
   'use no memo';
 
-  const { open } = useCreateCategorySheet();
-  const { tree, disabled, deleteCategory, isPendingCategories, indent } = useCategoryTree();
+  const { user } = useSession();
+  const { open: openCreateSheet } = useCreateCategorySheet();
+  const { open: openEditSheet } = useEditCategorySheet();
+  const { tree, disabled, deleteCategory, isPendingCategories, indent, isEmpty, refetch } = useCategoryTree();
+  const confirm = useConfirm();
+
+  const canCreate = hasRolePermission({ role: user?.role, permissions: { categories: [Permission.Create] } });
+  const canEdit = hasRolePermission({ role: user?.role, permissions: { categories: [Permission.Create] } });
+  const canDelete = hasRolePermission({ role: user?.role, permissions: { categories: [Permission.Delete] } });
+
+  const deleteWithConfirm = async (id: number) => {
+    const isConfirmed = await confirm({
+      title: 'Delete category',
+      description: 'Are you sure you want to delete category?',
+      confirmText: 'Delete',
+      cancelText: 'Cancel'
+    });
+
+    if (!isConfirmed)
+      return;
+
+    toast.promise(
+      deleteCategory({ categoryId: id }),
+      {
+        loading: 'Deleting category...',
+        success: () => 'Category deleted successfully',
+        error: (err) => {
+          return err?.message ?? 'Failed to delete category';
+        }
+      }
+    );
+  };
 
   if (isPendingCategories)
     return (
@@ -47,6 +82,43 @@ export const CategoryTree: FC<ICategoryTreeProps> = ({ className }) => {
           </div>
         ))}
       </div>
+    );
+
+  if (isEmpty)
+    return (
+      <Empty className="mt-12 sm:mt-24">
+        <EmptyHeader>
+          <EmptyMedia variant="icon">
+            <IconProgressAlert/>
+          </EmptyMedia>
+          <EmptyTitle>
+            Empty
+          </EmptyTitle>
+          <EmptyDescription>
+            The category tree is empty
+          </EmptyDescription>
+        </EmptyHeader>
+        <EmptyContent>
+          <div className="flex gap-2">
+            {canCreate && (
+              <Button
+                onClick={() => {
+                  const el = document.getElementById('create-category-sheet-trigger');
+                  el?.click();
+                }}
+              >
+                <IconPlus/>
+                <span>Create</span>
+              </Button>
+            )}
+
+            <LoadingButton variant="outline" loading={isPendingCategories} onClick={() => refetch()}>
+              <IconRefresh/>
+              <span>Refresh</span>
+            </LoadingButton>
+          </div>
+        </EmptyContent>
+      </Empty>
     );
 
   return (
@@ -90,15 +162,19 @@ export const CategoryTree: FC<ICategoryTreeProps> = ({ className }) => {
               <DropdownMenuSeparator/>
 
               <DropdownMenuGroup>
-                <DropdownMenuItem onClick={() => open({ parentId: Number(item.getId()) })}>
-                  <IconFolderPlus className="text-muted-foreground"/>
-                  <span>Add child</span>
-                </DropdownMenuItem>
+                {canCreate && (
+                  <DropdownMenuItem onClick={() => openCreateSheet({ parentId: Number(item.getId()) })}>
+                    <IconFolderPlus className="text-muted-foreground"/>
+                    <span>Add child</span>
+                  </DropdownMenuItem>
+                )}
 
-                <DropdownMenuItem>
-                  <IconPencil className="text-muted-foreground"/>
-                  <span>Edit</span>
-                </DropdownMenuItem>
+                {canEdit && (
+                  <DropdownMenuItem onClick={() => openEditSheet(Number(item.getId()))}>
+                    <IconPencil className="text-muted-foreground"/>
+                    <span>Edit</span>
+                  </DropdownMenuItem>
+                )}
 
                 <DropdownMenuSub>
                   <DropdownMenuSubTrigger>
@@ -118,25 +194,16 @@ export const CategoryTree: FC<ICategoryTreeProps> = ({ className }) => {
                   </DropdownMenuPortal>
                 </DropdownMenuSub>
 
-                <DropdownMenuItem
-                  variant="destructive"
-                  disabled={disabled || isPendingCategories}
-                  onClick={() => {
-                    toast.promise(
-                      deleteCategory({ categoryId: Number(item.getId()) }),
-                      {
-                        loading: 'Deleting category...',
-                        success: () => 'Category deleted successfully',
-                        error: (err) => {
-                          return err?.message ?? 'Failed to delete category';
-                        }
-                      }
-                    );
-                  }}
-                >
-                  <IconTrash/>
-                  <span>Delete</span>
-                </DropdownMenuItem>
+                {canDelete && (
+                  <DropdownMenuItem
+                    variant="destructive"
+                    disabled={disabled || isPendingCategories}
+                    onClick={() => deleteWithConfirm(Number(item.getId()))}
+                  >
+                    <IconTrash/>
+                    <span>Delete</span>
+                  </DropdownMenuItem>
+                )}
               </DropdownMenuGroup>
             </DropdownMenuContent>
           </DropdownMenu>
@@ -154,6 +221,10 @@ export const CategoryTreeToolbar: FC<ICategoryTreeToolbarProps> = ({ disabled, c
   const isMobile = useIsMobile();
   const { tree, disabled: isTreeDisabled } = useCategoryTree();
 
+  const { user } = useSession();
+  const canCreate = hasRolePermission({ role: user?.role, permissions: { categories: [Permission.Create] } });
+  const canEdit = hasRolePermission({ role: user?.role, permissions: { categories: [Permission.Create] } });
+
   const isToolbarDisabled = isTreeDisabled || disabled;
 
   return (
@@ -163,25 +234,29 @@ export const CategoryTreeToolbar: FC<ICategoryTreeToolbarProps> = ({ disabled, c
       className={cn('flex items-center gap-2', className)}
       {...divProps}
     >
-      <Button
-        size="sm"
-        variant="ghost"
-        onClick={() => tree.collapseAll()}
-        disabled={isToolbarDisabled}
-      >
-        <IconFolderMinus/>
-        <span>{isMobile ? 'Collapse' : 'Collapse all'}</span>
-      </Button>
+      {canCreate && (
+        <Button
+          size="sm"
+          variant="outline"
+          onClick={() => tree.collapseAll()}
+          disabled={isToolbarDisabled}
+        >
+          <IconFolderMinus/>
+          <span>{isMobile ? 'Collapse' : 'Collapse all'}</span>
+        </Button>
+      )}
 
-      <Button
-        size="sm"
-        variant="ghost"
-        onClick={() => tree.expandAll()}
-        disabled={isToolbarDisabled}
-      >
-        <IconFolderPlus/>
-        <span>{isMobile ? 'Expand' : 'Expand all'}</span>
-      </Button>
+      {canEdit && (
+        <Button
+          size="sm"
+          variant="outline"
+          onClick={() => tree.expandAll()}
+          disabled={isToolbarDisabled}
+        >
+          <IconFolderPlus/>
+          <span>{isMobile ? 'Expand' : 'Expand all'}</span>
+        </Button>
+      )}
 
       {children}
     </div>

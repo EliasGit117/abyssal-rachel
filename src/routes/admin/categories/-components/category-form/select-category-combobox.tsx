@@ -1,7 +1,7 @@
 import { ComponentProps, FC } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { Button } from '@/components/ui/button';
-import { getAllCategoriesQueryOptions } from '@/features/categories/server-functions/get-all';
+import { Button } from '@/components/ui/button.tsx';
+import { getAllCategoriesQueryOptions } from '@/features/categories/server-functions/get-all.ts';
 import {
   Combobox,
   ComboboxContent,
@@ -18,9 +18,11 @@ import { Spinner } from '@/components/ui/spinner.tsx';
 interface IProps extends Omit<ComponentProps<typeof Button>, 'value'> {
   value: number | undefined | null;
   setValue: (value: number | undefined | null) => void;
+  disabledIds?: number[];
 }
 
-export const CategorySelectCombobox: FC<IProps> = ({ value, setValue, className, disabled, ...btnProps }) => {
+export const SelectCategoryCombobox: FC<IProps> = (props) => {
+  const { value, setValue, className, disabled, disabledIds, ...btnProps } = props;
   const { isFetching, data: categories } = useQuery({
     ...getAllCategoriesQueryOptions(),
     gcTime: 0,
@@ -40,7 +42,7 @@ export const CategorySelectCombobox: FC<IProps> = ({ value, setValue, className,
           </>
         ) : (
           <span>
-            {selectedCategory ? `${selectedCategory.nameRo} / ${selectedCategory.nameRu}` : 'Select category'}
+            {selectedCategory ? `${selectedCategory.nameRo} / ${selectedCategory.nameRu}` : 'None'}
           </span>
         )}
       </ComboboxTrigger>
@@ -58,9 +60,10 @@ export const CategorySelectCombobox: FC<IProps> = ({ value, setValue, className,
 
             {categories?.map((ctg) => (
               <ComboboxItem
-                key={ctg.id}
-                value={ctg.id}
+                disabled={disabledIds?.includes(ctg.id)}
                 selected={value === ctg.id}
+                value={ctg.id}
+                key={ctg.id}
               >
                 {ctg.nameRo} / {ctg.nameRu}
               </ComboboxItem>

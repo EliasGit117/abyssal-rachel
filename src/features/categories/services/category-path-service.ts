@@ -1,4 +1,5 @@
 import { Category, Prisma } from '~/prisma/generated/prisma/client.ts';
+import { throwBadRequest } from '@/features/shared/utils/throw-api-error.ts';
 
 export class CategoryPathService {
 
@@ -11,9 +12,11 @@ export class CategoryPathService {
   }
 
   static ensureNoCircularMove(category: Category, parent: Category) {
+    if (parent.idPath.startsWith(category.idPath))
+      throwBadRequest({ message: 'Cannot move category into its own subtree', translated: false });
 
-    if (`${parent.idPath}${parent.id}/`.startsWith(`${category.idPath}${category.id}/`))
-      throw new Error('Cannot move category into its own subtree');
+    if (parent.slugPath.startsWith(category.slugPath))
+      throwBadRequest({ message: 'Cannot move category into its own subtree (slug path)', translated: false });
   }
 
   static async updateSubtree(tx: Prisma.TransactionClient, category: Category, newIdPath: string, newSlugPath: string) {

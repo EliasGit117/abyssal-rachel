@@ -11,7 +11,6 @@ import {
 import { Button } from '@/components/ui/button.tsx';
 import { useCreateCategorySheet } from '@/routes/admin/categories/-components/create-category-sheet/provider.tsx';
 import { ScrollArea } from '@/components/ui/scroll-area.tsx';
-import { CreateCategoryForm } from '@/routes/admin/categories/-components/create-category-sheet/form.tsx';
 import { useForm } from 'react-hook-form';
 import { createCategorySchema, TCreateCategory } from '@/features/categories/schemas';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -20,6 +19,7 @@ import { IconSend, IconX } from '@tabler/icons-react';
 import { useCreateCategoryMutation } from '@/features/categories/server-functions/create.ts';
 import { LoadingButton } from '@/components/ui/loading-button.tsx';
 import { toast } from 'sonner';
+import { CreateCategoryForm } from '@/routes/admin/categories/-components/category-form';
 
 
 
@@ -92,7 +92,12 @@ export const CreateCategorySheet: FC<IProps> = ({}) => {
               </Button>
             </SheetClose>
 
-            <LoadingButton loadingText="Loading" form="create-category-form" className="grow sm:min-w-32 sm:grow-0">
+            <LoadingButton
+              loadingText="Loading"
+              form="create-category-form"
+              className="grow sm:min-w-32 sm:grow-0"
+              loading={isCreatingCtg}
+            >
               <IconSend/>
               <span>Submit</span>
             </LoadingButton>

@@ -4,6 +4,7 @@ import { ThemeProvider } from '@/components/theme';
 import { Toaster } from '@/components/ui/sonner.tsx';
 import { BProgress } from '@bprogress/core';
 import { useRouter } from '@tanstack/react-router';
+import { ConfirmDialogProvider } from '@/components/ui/confirm-dialog.tsx';
 
 interface IProps extends PropsWithChildren {
 }
@@ -28,8 +29,10 @@ const Providers: FC<IProps> = ({ children }) => {
     <>
       <ThemeProvider defaultTheme="system">
         <ProgressProvider options={{ template: null, positionUsing: 'width' }} disableStyle>
+          <ConfirmDialogProvider>
             {children}
             <Toaster richColors/>
+          </ConfirmDialogProvider>
         </ProgressProvider>
       </ThemeProvider>
     </>

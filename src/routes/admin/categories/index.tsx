@@ -13,6 +13,10 @@ import { FC } from 'react';
 import { Button } from '@/components/ui/button.tsx';
 import { IconRefresh } from '@tabler/icons-react';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip.tsx';
+import {
+  EditCategorySheet,
+  EditCategorySheetProvider
+} from '@/routes/admin/categories/-components/edit-category-sheet';
 
 
 export const Route = createFileRoute('/admin/categories/')({
@@ -24,18 +28,23 @@ export const Route = createFileRoute('/admin/categories/')({
 
 function RouteComponent() {
   return (
-    <CategoryTreeProvider>
-      <CreateCategorySheetProvider>
-        <main className="container mx-auto p-4 space-y-4">
-          <CategoryTreeToolbar>
-            <ToolbarAdditionButtons/>
-          </CategoryTreeToolbar>
-          <CategoryTree/>
-        </main>
+    <CreateCategorySheetProvider>
+      <EditCategorySheetProvider>
+        <CategoryTreeProvider>
 
-        <CreateCategorySheet/>
-      </CreateCategorySheetProvider>
-    </CategoryTreeProvider>
+          <main className="container mx-auto p-4 space-y-4">
+            <CategoryTreeToolbar>
+              <ToolbarAdditionButtons/>
+            </CategoryTreeToolbar>
+            <CategoryTree/>
+          </main>
+
+          <CreateCategorySheet/>
+          <EditCategorySheet/>
+
+        </CategoryTreeProvider>
+      </EditCategorySheetProvider>
+    </CreateCategorySheetProvider>
   );
 }
 
@@ -48,11 +57,16 @@ const ToolbarAdditionButtons: FC<{ disabled?: boolean }> = ({ disabled }) => {
 
   return (
     <>
-      <div className='flex-1'/>
+      <div className="flex-1"/>
 
       <Tooltip delayDuration={500}>
         <TooltipTrigger asChild>
-          <Button size='sm' variant='ghost' className='w-8 sm:w-fit' onClick={() => refetch()} disabled={disabled}>
+          <Button
+            size="sm"
+            variant="ghost"
+            className="w-8 sm:w-fit" onClick={() => refetch()}
+            disabled={isDisabled}
+          >
             <IconRefresh/>
             <span className="sr-only sm:not-sr-only">Refresh</span>
           </Button>

@@ -1,30 +1,27 @@
 import { Button } from '@/components/ui/button';
 import { ComponentProps, FC } from 'react';
-import { IconFilePlus } from '@tabler/icons-react';
-import { useCreateCategorySheet } from './provider.tsx';
+import { IconSquareRoundedPlus } from '@tabler/icons-react';
+import { useEditCategorySheet } from './provider.tsx';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip.tsx';
 
 interface IProps extends Omit<ComponentProps<typeof Button>, 'onClick'> {
+  categoryId: number;
   text?: string;
 }
 
-export const CreateCategorySheetTrigger: FC<IProps> = (props) => {
-  const { children, asChild, text, ...btnProps } = props;
-  const { open } = useCreateCategorySheet();
+export const EditCategorySheetTrigger: FC<IProps> = (props) => {
+  const { children, asChild, text, categoryId, ...btnProps } = props;
+  const { open } = useEditCategorySheet();
 
-  let _text = text ?? 'Create';
+  let _text = text ?? 'Edit';
 
   return  (
     <Tooltip delayDuration={500}>
       <TooltipTrigger asChild>
-        <Button
-          id='create-category-sheet-trigger'
-          onClick={() => open()} asChild={asChild}
-          {...btnProps}
-        >
+        <Button asChild={asChild} {...btnProps} onClick={() => open(categoryId)}>
           {(asChild && children) ?? (
             <>
-              <IconFilePlus/>
+              <IconSquareRoundedPlus/>
               <span className="sr-only sm:not-sr-only">{_text}</span>
             </>
           )}

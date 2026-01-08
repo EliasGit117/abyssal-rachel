@@ -12,9 +12,12 @@ import {
   syncDataLoaderFeature,
   TreeInstance
 } from '@headless-tree/core';
+import { CategoryStatus } from '~/prisma/generated/prisma/enums.ts';
+
 
 
 interface IProps {
+  isEmpty: boolean;
   deleteCategory: (values: { categoryId: number }) => Promise<void>;
   isPendingCategories?: boolean;
   disabled?: boolean;
@@ -39,6 +42,8 @@ export const CategoryTreeProvider = ({ children, disabled }: IProviderProps) => 
   const { data: categories, isPending, refetch } = useQuery({ ...getCategoryTreeQueryOptions() });
   const { mutateAsync: deleteCategory, isPending: isDeleting } = useDeleteCategoryMutation();
 
+
+
   const categoriesMap = useMemo(() => {
     const map = new Map<number, ICategoryDto>();
     const traverse = (cats: ICategoryDto[]) => {
@@ -55,6 +60,9 @@ export const CategoryTreeProvider = ({ children, disabled }: IProviderProps) => 
       slug: '',
       nameRo: 'Categorii',
       nameRu: 'Категории',
+      descriptionRo: '',
+      descriptionRu: '',
+      status: CategoryStatus.ACTIVE,
       slugPath: '/',
       idPath: '/',
       children: categories
@@ -84,6 +92,9 @@ export const CategoryTreeProvider = ({ children, disabled }: IProviderProps) => 
             slug: '',
             nameRo: '…',
             nameRu: '…',
+            descriptionRo: '',
+            descriptionRu: '',
+            status: CategoryStatus.ACTIVE,
             idPath: '/',
             slugPath: '/',
             children: []
@@ -109,9 +120,10 @@ export const CategoryTreeProvider = ({ children, disabled }: IProviderProps) => 
 
   const value = {
     tree: tree,
-    disabled: isDisabled,
-    isPendingCategories: isPending,
     indent: indent,
+    disabled: isDisabled,
+    isEmpty: !categories || !(categories.length > 0),
+    isPendingCategories: isPending,
     deleteCategory: deleteCategory,
     refetch: refetch
   };
