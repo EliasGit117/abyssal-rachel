@@ -17,10 +17,17 @@ import {
   EditCategorySheet,
   EditCategorySheetProvider
 } from '@/routes/admin/categories/-components/edit-category-sheet';
+import { getCategoryTreeForAdminQueryOptions } from '@/features/categories/admin/server-functions/get-tree.ts';
 
 
 export const Route = createFileRoute('/admin/categories/')({
   component: RouteComponent,
+  loader: async ({ context: { queryClient } }) => {
+    if (typeof window === 'undefined')
+      return;
+
+    void queryClient.prefetchQuery(getCategoryTreeForAdminQueryOptions());
+  },
   staticData: {
     breadcrumbs: { title: 'Categories' }
   }
@@ -36,7 +43,7 @@ function RouteComponent() {
             <CategoryTreeToolbar>
               <ToolbarAdditionButtons/>
             </CategoryTreeToolbar>
-            
+
             <CategoryTree/>
           </main>
 
@@ -48,7 +55,6 @@ function RouteComponent() {
     </CreateCategorySheetProvider>
   );
 }
-
 
 
 const ToolbarAdditionButtons: FC<{ disabled?: boolean }> = ({ disabled }) => {

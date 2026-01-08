@@ -41,9 +41,7 @@ const rootItemId = '-1';
 
 
 export const CategoryTreeProvider = ({ children, disabled }: IProviderProps) => {
-  const { data: categories, isPending, refetch } = useQuery({
-    ...getCategoryTreeForAdminQueryOptions()
-  });
+  const { data: categories, isPending, refetch } = useQuery(getCategoryTreeForAdminQueryOptions());
   const { mutateAsync: deleteCategory, isPending: isDeleting } =
     useDeleteCategoryMutation();
 
@@ -174,13 +172,11 @@ export const CategoryTreeProvider = ({ children, disabled }: IProviderProps) => 
     disabled: isDisabled,
     isEmpty: !categories || categories.length === 0,
     isPendingCategories: isPending,
-    deleteCategory,
-    refetch,
-
-    // expose filtering controls
-    searchValue,
-    setSearchValue,
-    filteredIds
+    searchValue: searchValue,
+    deleteCategory: deleteCategory,
+    setSearchValue: setSearchValue,
+    filteredIds: filteredIds,
+    refetch: refetch,
   };
 
   return (

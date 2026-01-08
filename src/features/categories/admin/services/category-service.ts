@@ -3,46 +3,46 @@ import { prisma } from '@/lib/prisma.ts';
 import { throwBadRequest } from '@/features/shared/utils/throw-api-error.ts';
 import { CategoryPathService } from '@/features/categories/admin/services/category-path-service.ts';
 import { TDeleteCategory, TUpdateCategory } from '@/features/categories/admin/schemas';
-import { Category } from '~/prisma/generated/prisma/client.ts';
+import { Category, Prisma } from '~/prisma/generated/prisma/client.ts';
 
 
 export class CategoryService {
 
   static async create(data: TCreateCategory) {
     return prisma.$transaction(async (tx) => {
-      const withSameSlug = await prisma.category.findFirst({ where: { slug: data.slug } });
-      if (withSameSlug)
-        throwBadRequest({ message: 'Category with same slug already exists' });
-
       let parent = null;
 
-      // If has parent id check if exists parent actually exists
-      if (data.parentId) {
-        parent = await tx.category.findUnique({ where: { id: data.parentId } });
+      if (data.parentId != null) {
+        parent = await tx.category.findUnique({
+          where: { id: data.parentId }
+        });
 
         if (!parent)
           throwBadRequest({ message: 'Parent category not found' });
       }
 
+      const slug = data.slug.trim();
+      await CategoryService.ensureSlugUnique(tx, slug, data.parentId ?? null);
+
       const category = await tx.category.create({
         data: {
-          slug: data.slug.trim(),
+          slug,
           nameRo: data.nameRo.trim(),
           nameRu: data.nameRu.trim(),
           descriptionRo: data.descriptionRo?.trim() || null,
           descriptionRu: data.descriptionRu?.trim() || null,
           parentId: data.parentId ?? null,
-          idPath: '', // Later will generate
-          slugPath: '' // Later will generate
+          idPath: '',
+          slugPath: ''
         }
       });
 
       const idPath = CategoryPathService.buildIdPath(parent?.idPath, category.id);
-      const slugPath = CategoryPathService.buildSlugPath(parent?.slugPath, category.slug);
+      const slugPath = CategoryPathService.buildSlugPath(parent?.slugPath, slug);
 
       return tx.category.update({
         where: { id: category.id },
-        data: { idPath: idPath, slugPath: slugPath }
+        data: { idPath, slugPath }
       });
     });
   }
@@ -62,7 +62,7 @@ export class CategoryService {
         nameRu: nameRu.trim(),
         descriptionRo: descriptionRo?.trim() || null,
         descriptionRu: descriptionRu?.trim() || null,
-        status: status,
+        status: status
       };
 
       const slugChanged = slug !== category.slug;
@@ -70,7 +70,8 @@ export class CategoryService {
 
       if (parentChanged || slugChanged) {
         let parent = null;
-        const targetParentId = 'parentId' in data ? parentId : category.parentId;
+        const targetParentId = 'parentId' in data ? parentId ?? null : category.parentId;
+        await CategoryService.ensureSlugUnique(tx, slug.trim(), targetParentId, category.id);
 
         if (targetParentId != null) {
           parent = await tx.category.findUnique({ where: { id: targetParentId } });
@@ -155,4 +156,22 @@ export class CategoryService {
 
     return category;
   }
+
+  static async ensureSlugUnique(
+    tx: Prisma.TransactionClient,
+    slug: string,
+    parentId: number | null,
+    excludeId?: number
+  ) {
+    const conflict = await tx.category.findFirst({
+      where: { slug, parentId, ...(excludeId && { id: { not: excludeId } }) },
+      select: { id: true }
+    });
+
+    if (!conflict)
+      return;
+
+    throwBadRequest({ message: 'Category with this slug already exists in this level', translated: false });
+  }
 }
+

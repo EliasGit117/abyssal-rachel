@@ -2,7 +2,8 @@ import { Tree, TreeItem, TreeItemLabel } from '@/components/ui/tree.tsx';
 import { ComponentProps, FC } from 'react';
 import { Button } from '@/components/ui/button.tsx';
 import {
-  IconDots, IconFilter,
+  IconDots,
+  IconFilter,
   IconFolderMinus,
   IconFolderPlus,
   IconInfoCircle,
@@ -38,6 +39,7 @@ import {
 } from '@/components/ui/input-group';
 import { IAdminCategoryDto } from '@/features/categories/admin/dtos/admin-category-dto.ts';
 import { ItemInstance } from '@headless-tree/core';
+import { CategoryStatus } from '~/prisma/generated/prisma/enums.ts';
 
 
 interface ICategoryTreeProps {
@@ -86,8 +88,8 @@ export const CategoryTree: FC<ICategoryTreeProps> = ({ className }) => {
       <div className={cn('space-y-2', className)}>
         {Array.from({ length: 10 }).map((_, i) => (
           <div className="flex items-center gap-2" key={i}>
-            <Skeleton className="h-8 w-full"/>
             <Skeleton className="size-8"/>
+            <Skeleton className="h-8 w-full"/>
           </div>
         ))}
       </div>
@@ -134,22 +136,20 @@ export const CategoryTree: FC<ICategoryTreeProps> = ({ className }) => {
       role="tree"
     >
       {tree.getItems().map((item) => {
-        const isItemVisible = (
-          item: ItemInstance<IAdminCategoryDto>,
-          searchValue: string
-        ): boolean => {
-          if (!searchValue.trim()) return true;
+        const data = item.getItemData();
+        const isItemVisible = (item: ItemInstance<IAdminCategoryDto>, searchValue: string): boolean => {
+          if (!searchValue.trim())
+            return true;
 
-          if (item.isMatchingSearch()) return true;
+          if (item.isMatchingSearch())
+            return true;
 
-          const hasMatchingDescendant = (
-            node: ItemInstance<IAdminCategoryDto>
-          ): boolean => {
-            if (!node.isFolder()) return false;
+          const hasMatchingDescendant = (node: ItemInstance<IAdminCategoryDto>): boolean => {
+            if (!node.isFolder())
+              return false;
 
-            return node.getChildren().some((child) => {
-              return child.isMatchingSearch() || hasMatchingDescendant(child);
-            });
+            return node.getChildren()
+              .some((child) => child.isMatchingSearch() || hasMatchingDescendant(child));
           };
 
           return hasMatchingDescendant(item);
@@ -161,30 +161,14 @@ export const CategoryTree: FC<ICategoryTreeProps> = ({ className }) => {
             className="flex items-center gap-2 not-last:pb-0.5 data-[visible=false]:hidden"
             data-visible={isItemVisible(item, searchValue)}
           >
-            <TreeItem className="flex-1 not-last:pb-0" item={item}>
-              <TreeItemLabel
-                className="before:-inset-y-0.5 before:-z-10 relative before:absolute before:inset-x-0 before:bg-background"
-              >
-                <span className="flex items-center gap-2">
-                  {item.getItemName()}
-                  {item.isFolder() && (
-                    <span className="-ms-1 text-muted-foreground">
-                      {`(${item.getChildren().length})`}
-                    </span>
-                  )}
-                </span>
-              </TreeItemLabel>
-            </TreeItem>
-
-
             <DropdownMenu>
               <DropdownMenuTrigger disabled={disabled} asChild>
                 <Button size="icon-sm" variant="ghost">
-                  <IconDots/>
+                  <IconDots className='size-4'/>
                 </Button>
               </DropdownMenuTrigger>
 
-              <DropdownMenuContent className="min-w-44" align="end">
+              <DropdownMenuContent className="min-w-44" align="start">
                 <DropdownMenuLabel>
                   Category actions
                 </DropdownMenuLabel>
@@ -237,6 +221,25 @@ export const CategoryTree: FC<ICategoryTreeProps> = ({ className }) => {
                 </DropdownMenuGroup>
               </DropdownMenuContent>
             </DropdownMenu>
+
+            <TreeItem className="flex-1 not-last:pb-0" item={item}>
+              <TreeItemLabel
+                className={cn(
+                  "before:-inset-y-0.5 before:-z-10 relative before:absolute before:inset-x-0 before:bg-background",
+                  data.status === CategoryStatus.INACTIVE && 'text-muted-foreground'
+                )}
+              >
+
+                <span className="flex items-center gap-2">
+                  {data.nameRo}
+                  {item.isFolder() && (
+                    <span className="-ms-1 text-muted-foreground">
+                      {`(${item.getChildren().length})`}
+                    </span>
+                  )}
+                </span>
+              </TreeItemLabel>
+            </TreeItem>
           </div>
         );
       })}
@@ -267,12 +270,12 @@ export const CategoryTreeToolbar: FC<ICategoryTreeToolbarProps> = ({ disabled, c
         <Button
           size="sm"
           variant="outline"
-          className='w-8 lg:w-fit'
+          className="w-8 lg:w-fit"
           onClick={() => tree.collapseAll()}
           disabled={isToolbarDisabled}
         >
           <IconFolderMinus/>
-          <span className='sr-only lg:not-sr-only'>Collapse all</span>
+          <span className="sr-only lg:not-sr-only">Collapse all</span>
         </Button>
       )}
 
@@ -280,12 +283,12 @@ export const CategoryTreeToolbar: FC<ICategoryTreeToolbarProps> = ({ disabled, c
         <Button
           size="sm"
           variant="outline"
-          className='w-8 lg:w-fit'
+          className="w-8 lg:w-fit"
           onClick={() => tree.expandAll()}
           disabled={isToolbarDisabled}
         >
           <IconFolderPlus/>
-          <span className='sr-only lg:not-sr-only'>Expand all</span>
+          <span className="sr-only lg:not-sr-only">Expand all</span>
         </Button>
       )}
 
