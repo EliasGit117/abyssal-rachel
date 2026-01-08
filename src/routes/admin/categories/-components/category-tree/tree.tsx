@@ -2,14 +2,14 @@ import { Tree, TreeItem, TreeItemLabel } from '@/components/ui/tree.tsx';
 import { ComponentProps, FC } from 'react';
 import { Button } from '@/components/ui/button.tsx';
 import {
-  IconDots,
+  IconDots, IconFilter,
   IconFolderMinus,
   IconFolderPlus,
   IconInfoCircle,
   IconPencil,
   IconPlus,
   IconProgressAlert,
-  IconTrash
+  IconTrash, IconX
 } from '@tabler/icons-react';
 import {
   DropdownMenu,
@@ -30,6 +30,15 @@ import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTi
 import { hasRolePermission } from '@/features/auth/lib/has-role-permission.ts';
 import { useSession } from '@/hooks/use-session.ts';
 import { Permission } from '@/features/auth/lib/permissions.ts';
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupButton,
+  InputGroupInput,
+  InputGroupText
+} from '@/components/ui/input-group';
+import { IAdminCategoryDto } from '@/features/categories/admin/dtos/admin-category-dto.ts';
+import { ItemInstance } from '@headless-tree/core';
 
 
 interface ICategoryTreeProps {
@@ -43,7 +52,7 @@ export const CategoryTree: FC<ICategoryTreeProps> = ({ className }) => {
   const { user } = useSession();
   const { open: openCreateSheet } = useCreateCategorySheet();
   const { open: openEditSheet } = useEditCategorySheet();
-  const { tree, disabled, deleteCategory, isPendingCategories, indent, isEmpty } = useCategoryTree();
+  const { tree, disabled, deleteCategory, isPendingCategories, indent, isEmpty, searchValue } = useCategoryTree();
   const confirm = useConfirm();
 
   const canCreate = hasRolePermission({ role: user?.role, permissions: { categories: [Permission.Create] } });
@@ -125,86 +134,113 @@ export const CategoryTree: FC<ICategoryTreeProps> = ({ className }) => {
       aria-label="Categories"
       role="tree"
     >
-      {tree.getItems().map((item) => (
-        <div className="flex items-center gap-2 not-last:pb-0.5" key={item.getId()}>
-          <TreeItem className="flex-1 not-last:pb-0" item={item}>
-            <TreeItemLabel
-              className="before:-inset-y-0.5 before:-z-10 relative before:absolute before:inset-x-0 before:bg-background"
-            >
-              <span className="flex items-center gap-2">
-                {item.getItemName()}
-                {item.isFolder() && (
-                  <span className="-ms-1 text-muted-foreground">
-                    {`(${item.getChildren().length})`}
-                  </span>
-                )}
-              </span>
-            </TreeItemLabel>
-          </TreeItem>
+      {tree.getItems().map((item) => {
+        const isItemVisible = (
+          item: ItemInstance<IAdminCategoryDto>,
+          searchValue: string
+        ): boolean => {
+          if (!searchValue.trim()) return true;
+
+          if (item.isMatchingSearch()) return true;
+
+          const hasMatchingDescendant = (
+            node: ItemInstance<IAdminCategoryDto>
+          ): boolean => {
+            if (!node.isFolder()) return false;
+
+            return node.getChildren().some((child) => {
+              return child.isMatchingSearch() || hasMatchingDescendant(child);
+            });
+          };
+
+          return hasMatchingDescendant(item);
+        };
+
+        return (
+          <div
+            key={item.getId()}
+            className="flex items-center gap-2 not-last:pb-0.5 data-[visible=false]:hidden"
+            data-visible={isItemVisible(item, searchValue)}
+          >
+            <TreeItem className="flex-1 not-last:pb-0" item={item}>
+              <TreeItemLabel
+                className="before:-inset-y-0.5 before:-z-10 relative before:absolute before:inset-x-0 before:bg-background"
+              >
+                <span className="flex items-center gap-2">
+                  {item.getItemName()}
+                  {item.isFolder() && (
+                    <span className="-ms-1 text-muted-foreground">
+                      {`(${item.getChildren().length})`}
+                    </span>
+                  )}
+                </span>
+              </TreeItemLabel>
+            </TreeItem>
 
 
-          <DropdownMenu>
-            <DropdownMenuTrigger disabled={disabled} asChild>
-              <Button size="icon-sm" variant="ghost">
-                <IconDots/>
-              </Button>
-            </DropdownMenuTrigger>
+            <DropdownMenu>
+              <DropdownMenuTrigger disabled={disabled} asChild>
+                <Button size="icon-sm" variant="ghost">
+                  <IconDots/>
+                </Button>
+              </DropdownMenuTrigger>
 
-            <DropdownMenuContent className="min-w-44" align="end">
-              <DropdownMenuLabel>
-                Category actions
-              </DropdownMenuLabel>
+              <DropdownMenuContent className="min-w-44" align="end">
+                <DropdownMenuLabel>
+                  Category actions
+                </DropdownMenuLabel>
 
-              <DropdownMenuSeparator/>
+                <DropdownMenuSeparator/>
 
-              <DropdownMenuGroup>
-                {canCreate && (
-                  <DropdownMenuItem onClick={() => openCreateSheet({ parentId: Number(item.getId()) })}>
-                    <IconFolderPlus className="text-muted-foreground"/>
-                    <span>Add child</span>
-                  </DropdownMenuItem>
-                )}
+                <DropdownMenuGroup>
+                  {canCreate && (
+                    <DropdownMenuItem onClick={() => openCreateSheet({ parentId: Number(item.getId()) })}>
+                      <IconFolderPlus className="text-muted-foreground"/>
+                      <span>Add child</span>
+                    </DropdownMenuItem>
+                  )}
 
-                {canEdit && (
-                  <DropdownMenuItem onClick={() => openEditSheet(Number(item.getId()))}>
-                    <IconPencil className="text-muted-foreground"/>
-                    <span>Edit</span>
-                  </DropdownMenuItem>
-                )}
+                  {canEdit && (
+                    <DropdownMenuItem onClick={() => openEditSheet(Number(item.getId()))}>
+                      <IconPencil className="text-muted-foreground"/>
+                      <span>Edit</span>
+                    </DropdownMenuItem>
+                  )}
 
-                <DropdownMenuSub>
-                  <DropdownMenuSubTrigger>
-                    <IconInfoCircle className="text-muted-foreground"/>
-                    <span>Short info</span>
-                  </DropdownMenuSubTrigger>
-                  <DropdownMenuPortal>
-                    <DropdownMenuSubContent className="p-2 min-w-48">
-                      <div className="text-xs whitespace-pre-wrap rounded-md bg-muted p-3 overflow-auto max-h-80">
-                        {JSON.stringify({
-                          ...item.getItemData(),
-                          childrenCount: item.getChildren().length,
-                          children: undefined
-                        }, null, 2)}
-                      </div>
-                    </DropdownMenuSubContent>
-                  </DropdownMenuPortal>
-                </DropdownMenuSub>
+                  <DropdownMenuSub>
+                    <DropdownMenuSubTrigger>
+                      <IconInfoCircle className="text-muted-foreground"/>
+                      <span>Short info</span>
+                    </DropdownMenuSubTrigger>
+                    <DropdownMenuPortal>
+                      <DropdownMenuSubContent className="p-2 min-w-48">
+                        <div className="text-xs whitespace-pre-wrap rounded-md bg-muted p-3 overflow-auto max-h-80">
+                          {JSON.stringify({
+                            ...item.getItemData(),
+                            childrenCount: item.getChildren().length,
+                            children: undefined
+                          }, null, 2)}
+                        </div>
+                      </DropdownMenuSubContent>
+                    </DropdownMenuPortal>
+                  </DropdownMenuSub>
 
-                {canDelete && (
-                  <DropdownMenuItem
-                    variant="destructive"
-                    disabled={disabled || isPendingCategories}
-                    onClick={() => deleteWithConfirm(Number(item.getId()))}
-                  >
-                    <IconTrash/>
-                    <span>Delete</span>
-                  </DropdownMenuItem>
-                )}
-              </DropdownMenuGroup>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </div>
-      ))}
+                  {canDelete && (
+                    <DropdownMenuItem
+                      variant="destructive"
+                      disabled={disabled || isPendingCategories}
+                      onClick={() => deleteWithConfirm(Number(item.getId()))}
+                    >
+                      <IconTrash/>
+                      <span>Delete</span>
+                    </DropdownMenuItem>
+                  )}
+                </DropdownMenuGroup>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
+        );
+      })}
     </Tree>
   );
 };
@@ -215,11 +251,11 @@ interface ICategoryTreeToolbarProps extends ComponentProps<'div'> {
 
 export const CategoryTreeToolbar: FC<ICategoryTreeToolbarProps> = ({ disabled, className, children, ...divProps }) => {
   const isMobile = useIsMobile();
-  const { tree, disabled: isTreeDisabled } = useCategoryTree();
 
   const { user } = useSession();
   const canCreate = hasRolePermission({ role: user?.role, permissions: { categories: [Permission.Create] } });
   const canEdit = hasRolePermission({ role: user?.role, permissions: { categories: [Permission.Create] } });
+  const { tree, disabled: isTreeDisabled, searchValue, setSearchValue } = useCategoryTree();
 
   const isToolbarDisabled = isTreeDisabled || disabled;
 
@@ -230,6 +266,46 @@ export const CategoryTreeToolbar: FC<ICategoryTreeToolbarProps> = ({ disabled, c
       className={cn('flex items-center gap-2', className)}
       {...divProps}
     >
+      <InputGroup className="max-w-64 h-8">
+        <InputGroupAddon align="inline-start">
+          <InputGroupText>
+            <IconFilter/>
+          </InputGroupText>
+        </InputGroupAddon>
+
+        <InputGroupInput
+          placeholder="Search..."
+          value={searchValue}
+          onChange={(e) => {
+            setSearchValue(e.target.value);
+
+            const props = tree.getSearchInputElementProps();
+            props.onChange?.(e);
+
+            if (e.target.value.trim()) tree.expandAll();
+          }}
+          disabled={isToolbarDisabled}
+        />
+
+        {searchValue && (
+          <InputGroupAddon align="inline-end">
+            <InputGroupButton
+              variant="ghost"
+              aria-label="Clear"
+              size="icon-xs"
+              disabled={isToolbarDisabled}
+              onClick={() => {
+                setSearchValue('');
+                const props = tree.getSearchInputElementProps();
+                props.onChange?.({ target: { value: '' } });
+              }}
+            >
+              <IconX/>
+            </InputGroupButton>
+          </InputGroupAddon>
+        )}
+      </InputGroup>
+
       {canCreate && (
         <Button
           size="sm"
