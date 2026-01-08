@@ -1,6 +1,6 @@
 import { ComponentProps, FC } from 'react';
 import { Controller, UseFormReturn } from 'react-hook-form';
-import { TCreateCategory } from '@/features/categories/schemas';
+import { TCreateCategory } from '@/features/categories/admin/schemas';
 import { Field, FieldError, FieldGroup, FieldLabel } from '@/components/ui/field.tsx';
 import { Input } from '@/components/ui/input.tsx';
 import { Textarea } from '@/components/ui/textarea.tsx';

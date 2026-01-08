@@ -36,6 +36,7 @@ function RouteComponent() {
             <CategoryTreeToolbar>
               <ToolbarAdditionButtons/>
             </CategoryTreeToolbar>
+            
             <CategoryTree/>
           </main>
 

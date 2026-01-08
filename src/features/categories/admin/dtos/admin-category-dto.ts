@@ -2,7 +2,7 @@ import { Category, CategoryStatus, Prisma } from '~/prisma/generated/prisma/clie
 
 type TCategoryWithChildren = Prisma.CategoryGetPayload<{ include: { children: true } }>;
 
-export interface ICategoryDto {
+export interface IAdminCategoryDto {
   id: number;
   slug: string;
   nameRo: string;
@@ -13,13 +13,13 @@ export interface ICategoryDto {
   idPath: string;
   slugPath: string;
   parentId?: number | null;
-  children?: ICategoryDto[] | null;
+  children?: IAdminCategoryDto[] | null;
 }
 
 
-export class CategoryDtoMapper {
+export class AdminCategoryDtoMapper {
 
-  private static baseFromEntity(entity: Category): ICategoryDto {
+  private static baseFromEntity(entity: Category): IAdminCategoryDto {
 
     return {
       id: entity.id,
@@ -35,8 +35,8 @@ export class CategoryDtoMapper {
     };
   }
 
-  static fromEntity<T extends Category | TCategoryWithChildren>(entity: T): ICategoryDto {
-    const dto: ICategoryDto = this.baseFromEntity(entity);
+  static fromEntity<T extends Category | TCategoryWithChildren>(entity: T): IAdminCategoryDto {
+    const dto: IAdminCategoryDto = this.baseFromEntity(entity);
 
     if ('children' in entity && Array.isArray(entity.children))
       dto.children = entity.children.map((child) => this.fromEntity(child));
@@ -44,7 +44,7 @@ export class CategoryDtoMapper {
     return dto;
   }
 
-  static fromEntities<T extends Category | TCategoryWithChildren>(entities: T[]): ICategoryDto[] {
+  static fromEntities<T extends Category | TCategoryWithChildren>(entities: T[]): IAdminCategoryDto[] {
     return entities.map((entity) => this.fromEntity(entity));
   }
 }

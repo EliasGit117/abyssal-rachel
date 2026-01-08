@@ -6,7 +6,9 @@ import {
   IconFolderMinus,
   IconFolderPlus,
   IconInfoCircle,
-  IconPencil, IconPlus, IconProgressAlert, IconRefresh,
+  IconPencil,
+  IconPlus,
+  IconProgressAlert,
   IconTrash
 } from '@tabler/icons-react';
 import {
@@ -25,7 +27,6 @@ import { useCreateCategorySheet } from '@/routes/admin/categories/-components/cr
 import { useEditCategorySheet } from '@/routes/admin/categories/-components/edit-category-sheet';
 import { useConfirm } from '@/components/ui/confirm-dialog.tsx';
 import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from '@/components/ui/empty.tsx';
-import { LoadingButton } from '@/components/ui/loading-button.tsx';
 import { hasRolePermission } from '@/features/auth/lib/has-role-permission.ts';
 import { useSession } from '@/hooks/use-session.ts';
 import { Permission } from '@/features/auth/lib/permissions.ts';
@@ -42,7 +43,7 @@ export const CategoryTree: FC<ICategoryTreeProps> = ({ className }) => {
   const { user } = useSession();
   const { open: openCreateSheet } = useCreateCategorySheet();
   const { open: openEditSheet } = useEditCategorySheet();
-  const { tree, disabled, deleteCategory, isPendingCategories, indent, isEmpty, refetch } = useCategoryTree();
+  const { tree, disabled, deleteCategory, isPendingCategories, indent, isEmpty } = useCategoryTree();
   const confirm = useConfirm();
 
   const canCreate = hasRolePermission({ role: user?.role, permissions: { categories: [Permission.Create] } });
@@ -111,11 +112,6 @@ export const CategoryTree: FC<ICategoryTreeProps> = ({ className }) => {
                 <span>Create</span>
               </Button>
             )}
-
-            <LoadingButton variant="outline" loading={isPendingCategories} onClick={() => refetch()}>
-              <IconRefresh/>
-              <span>Refresh</span>
-            </LoadingButton>
           </div>
         </EmptyContent>
       </Empty>

@@ -2,7 +2,7 @@ import * as z from "zod";
 import { CategoryStatus } from '~/prisma/generated/prisma/enums.ts';
 
 
-export const categoryIdSchema = z.number().int().positive();
+export const categoryIdSchema = z.number().int();
 export const slugSchema = z.string().min(1).regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, "Invalid slug format");
 
 export const categorySchema = z.object({

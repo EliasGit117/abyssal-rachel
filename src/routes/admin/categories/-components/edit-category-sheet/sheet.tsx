@@ -21,11 +21,11 @@ import { EditCategoryForm } from '@/routes/admin/categories/-components/category
 import {
   TUpdateCategory,
   updateCategorySchema
-} from '@/features/categories/schemas';
-import { useUpdateCategoryMutation } from '@/features/categories/server-functions/update.ts';
+} from '@/features/categories/admin/schemas';
+import { useUpdateCategoryMutation } from '@/features/categories/admin/server-functions/update.ts';
 import { useEditCategorySheet } from './provider';
 import { useQuery } from '@tanstack/react-query';
-import { getCategoryByIdQueryOptions } from '@/features/categories/server-functions/get-by-id.ts';
+import { getCategoryByIdForAdminQueryOptions } from '@/features/categories/admin/server-functions/get-by-id.ts';
 
 
 interface IProps {}
@@ -39,7 +39,7 @@ export const EditCategorySheet: FC<IProps> = () => {
     isError,
     error
   } = useQuery({
-    ...getCategoryByIdQueryOptions(categoryId!),
+    ...getCategoryByIdForAdminQueryOptions(categoryId!),
     enabled: !!categoryId,
     staleTime: 0,
     gcTime: 0,
@@ -61,6 +61,9 @@ export const EditCategorySheet: FC<IProps> = () => {
   });
 
   useEffect(() => {
+    if (isOpen)
+      form.reset();
+
     if (!category)
       return;
 
@@ -74,7 +77,7 @@ export const EditCategorySheet: FC<IProps> = () => {
       status: category.status,
       parentId: category.parentId
     }, { keepDirtyValues: false });
-  }, [category?.id, form]);
+  }, [category?.id, form, isOpen]);
 
   const { mutate: updateCtg, isPending: isUpdatingCtg } =
     useUpdateCategoryMutation({

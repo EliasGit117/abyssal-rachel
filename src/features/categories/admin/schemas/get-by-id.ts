@@ -1,4 +1,4 @@
-import { categoryIdSchema } from '@/features/categories/schemas/base.ts';
+import { categoryIdSchema } from '@/features/categories/admin/schemas/base.ts';
 import * as z from 'zod';
 
 

@@ -1,8 +1,8 @@
 import { createServerFn } from '@tanstack/react-start';
 import { requireAuth } from '@/middleware/require-auth.ts';
 import { serverZodValidator } from '@/features/shared/utils/server-zod-validator.ts';
-import { deleteCategorySchema } from '@/features/categories/schemas/delete.ts';
-import { CategoryService } from '@/features/categories/services/category-service.ts';
+import { updateCategorySchema } from '@/features/categories/admin/schemas/update.ts';
+import { CategoryService } from '@/features/categories/admin/services/category-service.ts';
 import { auth } from '@/features/auth/lib/auth.ts';
 import { Permission } from '@/features/auth/lib/permissions.ts';
 import {
@@ -13,8 +13,8 @@ import { getSessionServerFn } from '@/features/auth/server-functions/get-session
 import { useMutation, UseMutationOptions, useQueryClient } from '@tanstack/react-query';
 
 
-export const deleteCategoryServerFn = createServerFn({ method: 'POST' })
-  .inputValidator(serverZodValidator(deleteCategorySchema))
+export const updateCategoryServerFn = createServerFn({ method: 'POST' })
+  .inputValidator(serverZodValidator(updateCategorySchema))
   .middleware([requireAuth()])
   .handler(async ({ data }) => {
     const session = await getSessionServerFn();
@@ -22,34 +22,30 @@ export const deleteCategoryServerFn = createServerFn({ method: 'POST' })
     if (!session)
       throwUnauthorizedError({ translated: false });
 
-    const canDelete = await auth.api.userHasPermission({
-      body: {
-        userId: session.user!.id,
-        permission: { categories: [Permission.Delete] }
-      }
+    const canUpdate = await auth.api.userHasPermission({
+      body: { userId: session.user!.id, permission: { categories: [Permission.Update] } }
     });
 
-    if (!canDelete.success)
+    if (!canUpdate.success)
       throwForbiddenError({ translated: false });
 
-    return CategoryService.delete({ categoryId: data.categoryId });
+
+    return CategoryService.update(data);
   });
 
 
-type TParams = Parameters<typeof deleteCategoryServerFn>[0]['data'];
-type TResult = Awaited<ReturnType<typeof deleteCategoryServerFn>>;
+type TParams = Parameters<typeof updateCategoryServerFn>[0]['data'];
+type TOptions = Omit<UseMutationOptions<Awaited<ReturnType<typeof updateCategoryServerFn>>, Error, TParams>, 'mutationFn' | 'onMutate'>;
 
-type TOptions = Omit<UseMutationOptions<TResult, Error, TParams>, 'mutationFn'>;
-
-export const useDeleteCategoryMutation = (options?: TOptions) => {
+export const useUpdateCategoryMutation = (options?: TOptions) => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (values) => deleteCategoryServerFn({ data: values }),
+    mutationFn: (values) => updateCategoryServerFn({ data: values }),
     ...options,
+
     onSuccess: (data, variables, onMutateResult, context) => {
       void queryClient.invalidateQueries({ predicate: (query) => query.queryKey[0] === 'categories' });
-
       options?.onSuccess?.(data, variables, onMutateResult, context);
     }
   });

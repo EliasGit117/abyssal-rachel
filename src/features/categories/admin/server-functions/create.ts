@@ -1,8 +1,13 @@
 import { createServerFn } from '@tanstack/react-start';
+import {
+  useMutation,
+  UseMutationOptions,
+  useQueryClient
+} from '@tanstack/react-query';
 import { requireAuth } from '@/middleware/require-auth.ts';
 import { serverZodValidator } from '@/features/shared/utils/server-zod-validator.ts';
-import { updateCategorySchema } from '@/features/categories/schemas/update.ts';
-import { CategoryService } from '@/features/categories/services/category-service.ts';
+import { createCategorySchema } from '@/features/categories/admin/schemas/create.ts';
+import { CategoryService } from '@/features/categories/admin/services/category-service.ts';
 import { auth } from '@/features/auth/lib/auth.ts';
 import { Permission } from '@/features/auth/lib/permissions.ts';
 import {
@@ -10,11 +15,10 @@ import {
   throwUnauthorizedError
 } from '@/features/shared/utils/throw-api-error.ts';
 import { getSessionServerFn } from '@/features/auth/server-functions/get-session.ts';
-import { useMutation, UseMutationOptions, useQueryClient } from '@tanstack/react-query';
 
 
-export const updateCategoryServerFn = createServerFn({ method: 'POST' })
-  .inputValidator(serverZodValidator(updateCategorySchema))
+export const createCategoryServerFn = createServerFn({ method: 'POST' })
+  .inputValidator(serverZodValidator(createCategorySchema))
   .middleware([requireAuth()])
   .handler(async ({ data }) => {
     const session = await getSessionServerFn();
@@ -22,33 +26,33 @@ export const updateCategoryServerFn = createServerFn({ method: 'POST' })
     if (!session)
       throwUnauthorizedError({ translated: false });
 
-    const canUpdate = await auth.api.userHasPermission({
+    const canCreate = await auth.api.userHasPermission({
       body: {
         userId: session.user!.id,
-        permission: { categories: [Permission.Update] }
+        permission: { categories: [Permission.Create] }
       }
     });
 
-    if (!canUpdate.success)
+    if (!canCreate.success)
       throwForbiddenError({ translated: false });
 
-
-    return CategoryService.update(data);
+    return CategoryService.create(data);
   });
 
 
-type TParams = Parameters<typeof updateCategoryServerFn>[0]['data'];
-type TOptions = Omit<UseMutationOptions<Awaited<ReturnType<typeof updateCategoryServerFn>>, Error, TParams>, 'mutationFn' | 'onMutate'>;
+type TParams = Parameters<typeof createCategoryServerFn>[0]['data'];
+type TOptions = Omit<UseMutationOptions<Awaited<ReturnType<typeof createCategoryServerFn>>, Error, TParams>, 'mutationFn' | 'onMutate'>;
 
-export const useUpdateCategoryMutation = (options?: TOptions) => {
+export const useCreateCategoryMutation = (options?: TOptions) => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (values) => updateCategoryServerFn({ data: values }),
+    mutationFn: (values) =>
+      createCategoryServerFn({ data: values }),
     ...options,
-
     onSuccess: (data, variables, onMutateResult, context) => {
       void queryClient.invalidateQueries({ predicate: (query) => query.queryKey[0] === 'categories' });
+
       options?.onSuccess?.(data, variables, onMutateResult, context);
     }
   });

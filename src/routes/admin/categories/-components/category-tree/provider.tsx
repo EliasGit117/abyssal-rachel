@@ -1,14 +1,13 @@
 import { useMemo, PropsWithChildren, useEffect } from 'react';
 import { contextFactory } from '@/lib/context-factory';
 import { useQuery } from '@tanstack/react-query';
-import { getCategoryTreeQueryOptions } from '@/features/categories/server-functions/get-tree.ts';
-import { useDeleteCategoryMutation } from '@/features/categories/server-functions/delete.ts';
-import { ICategoryDto } from '@/features/categories/dtos/category-dto.ts';
+import { getCategoryTreeForAdminQueryOptions } from '@/features/categories/admin/server-functions/get-tree.ts';
+import { useDeleteCategoryMutation } from '@/features/categories/admin/server-functions/delete.ts';
+import { IAdminCategoryDto } from '@/features/categories/admin/dtos/admin-category-dto.ts';
 import { useTree } from '@headless-tree/react';
 import {
   expandAllFeature,
   hotkeysCoreFeature,
-  selectionFeature,
   syncDataLoaderFeature,
   TreeInstance
 } from '@headless-tree/core';
@@ -21,7 +20,7 @@ interface IProps {
   deleteCategory: (values: { categoryId: number }) => Promise<void>;
   isPendingCategories?: boolean;
   disabled?: boolean;
-  tree: TreeInstance<ICategoryDto>;
+  tree: TreeInstance<IAdminCategoryDto>;
   indent: number;
   refetch: () => void;
 }
@@ -39,14 +38,14 @@ export const CategoryTreeProvider = ({ children, disabled }: IProviderProps) => 
   // noinspection BadExpressionStatementJS
   'use no memo';
 
-  const { data: categories, isPending, refetch } = useQuery({ ...getCategoryTreeQueryOptions() });
+  const { data: categories, isPending, refetch } = useQuery({ ...getCategoryTreeForAdminQueryOptions() });
   const { mutateAsync: deleteCategory, isPending: isDeleting } = useDeleteCategoryMutation();
 
 
 
   const categoriesMap = useMemo(() => {
-    const map = new Map<number, ICategoryDto>();
-    const traverse = (cats: ICategoryDto[]) => {
+    const map = new Map<number, IAdminCategoryDto>();
+    const traverse = (cats: IAdminCategoryDto[]) => {
       for (const cat of cats) {
         map.set(cat.id, cat);
         if (cat.children)
@@ -74,13 +73,12 @@ export const CategoryTreeProvider = ({ children, disabled }: IProviderProps) => 
 
   const isDisabled = isPending || isDeleting || disabled;
 
-  const tree = useTree<ICategoryDto>({
+  const tree = useTree<IAdminCategoryDto>({
     indent,
     rootItemId,
     features: [
       ...(disabled ? [] : [hotkeysCoreFeature]),
       syncDataLoaderFeature,
-      selectionFeature,
       expandAllFeature
     ],
     dataLoader: {
@@ -98,7 +96,7 @@ export const CategoryTreeProvider = ({ children, disabled }: IProviderProps) => 
             idPath: '/',
             slugPath: '/',
             children: []
-          } satisfies ICategoryDto);
+          } satisfies IAdminCategoryDto);
 
         return category;
       },

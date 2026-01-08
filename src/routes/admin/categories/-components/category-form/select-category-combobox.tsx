@@ -1,7 +1,7 @@
-import { ComponentProps, FC } from 'react';
+import { ComponentProps, FC, useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { Button } from '@/components/ui/button.tsx';
-import { getAllCategoriesQueryOptions } from '@/features/categories/server-functions/get-all.ts';
+import { getCategoryTreeForAdminQueryOptions } from '@/features/categories/admin/server-functions/get-tree.ts';
 import {
   Combobox,
   ComboboxContent,
@@ -13,27 +13,43 @@ import {
   ComboboxTrigger
 } from '@/components/ui/combobox.tsx';
 import { Spinner } from '@/components/ui/spinner.tsx';
-
+import { IAdminCategoryDto } from '@/features/categories/admin/dtos/admin-category-dto.ts';
 
 interface IProps extends Omit<ComponentProps<typeof Button>, 'value'> {
-  value: number | undefined | null;
-  setValue: (value: number | undefined | null) => void;
+  value: number | null | undefined;
+  setValue: (value: number | null | undefined) => void;
   disabledIds?: number[];
 }
 
-export const SelectCategoryCombobox: FC<IProps> = (props) => {
-  const { value, setValue, className, disabled, disabledIds, ...btnProps } = props;
-  const { isFetching, data: categories } = useQuery({
-    ...getAllCategoriesQueryOptions(),
+const valueNoneKey = '__none__';
+
+export const SelectCategoryCombobox: FC<IProps> = ({ value, setValue, disabledIds = [], ...btnProps }) => {
+  const { isFetching, data: tree } = useQuery({
+    ...getCategoryTreeForAdminQueryOptions(),
     gcTime: 0,
-    staleTime: 0,
-    enabled: !!open
+    staleTime: 0
   });
 
-  const selectedCategory = categories?.find((ctg) => ctg.id === value);
+  const flatCategories = useMemo(() => {
+    if (!tree) return [];
+    return flattenCategories(tree, disabledIds);
+  }, [tree, disabledIds]);
+
+  const selectedCategory = flatCategories.find(
+    (ctg) => ctg.id === value
+  );
 
   return (
-    <Combobox value={value} onValueChange={setValue}>
+    <Combobox
+      value={value ?? valueNoneKey}
+      onValueChange={(val) => {
+        if (val === valueNoneKey) {
+          setValue(undefined);
+        } else {
+          setValue(Number(val));
+        }
+      }}
+    >
       <ComboboxTrigger showIcon={!isFetching} disabled={isFetching} {...btnProps}>
         {isFetching ? (
           <>
@@ -42,7 +58,7 @@ export const SelectCategoryCombobox: FC<IProps> = (props) => {
           </>
         ) : (
           <span>
-            {selectedCategory ? `${selectedCategory.nameRo} / ${selectedCategory.nameRu}` : 'None'}
+            {selectedCategory ? `${selectedCategory.nameRo}` : 'None'}
           </span>
         )}
       </ComboboxTrigger>
@@ -54,18 +70,21 @@ export const SelectCategoryCombobox: FC<IProps> = (props) => {
           <ComboboxEmpty>No categories found.</ComboboxEmpty>
 
           <ComboboxGroup>
-            <ComboboxItem value={undefined} selected={!value}>
+            <ComboboxItem value={valueNoneKey} selected={!value}>
               None
             </ComboboxItem>
 
-            {categories?.map((ctg) => (
+            {flatCategories.map((ctg) => (
               <ComboboxItem
-                disabled={disabledIds?.includes(ctg.id)}
-                selected={value === ctg.id}
-                value={ctg.id}
                 key={ctg.id}
+                value={ctg.id}
+                selected={value === ctg.id}
+                disabled={ctg.disabled}
+                style={{
+                  paddingLeft: `${ctg.level * 16 + 8}px`
+                }}
               >
-                {ctg.nameRo} / {ctg.nameRu}
+                {ctg.nameRo}
               </ComboboxItem>
             ))}
           </ComboboxGroup>
@@ -73,4 +92,37 @@ export const SelectCategoryCombobox: FC<IProps> = (props) => {
       </ComboboxContent>
     </Combobox>
   );
+};
+
+
+interface FlatCategory {
+  id: number;
+  nameRo: string;
+  nameRu: string;
+  level: number;
+  disabled: boolean;
+}
+
+const flattenCategories = (categories: IAdminCategoryDto[], disabledIds: number[] = [], level = 0, parentDisabled = false): FlatCategory[] => {
+  return categories.flatMap((category) => {
+    const isDisabled = parentDisabled || disabledIds.includes(category.id);
+
+    const current: FlatCategory = {
+      id: category.id,
+      nameRo: category.nameRo,
+      nameRu: category.nameRu,
+      level,
+      disabled: isDisabled
+    };
+
+    const children = category.children?.length ?
+      flattenCategories(
+        category.children,
+        disabledIds,
+        level + 1,
+        isDisabled
+      ) : [];
+
+    return [current, ...children];
+  });
 };

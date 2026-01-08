@@ -1,8 +1,8 @@
-import { TCreateCategory } from '@/features/categories/schemas/create.ts';
+import { TCreateCategory } from '@/features/categories/admin/schemas/create.ts';
 import { prisma } from '@/lib/prisma.ts';
 import { throwBadRequest } from '@/features/shared/utils/throw-api-error.ts';
-import { CategoryPathService } from '@/features/categories/services/category-path-service.ts';
-import { TDeleteCategory, TUpdateCategory } from '@/features/categories/schemas';
+import { CategoryPathService } from '@/features/categories/admin/services/category-path-service.ts';
+import { TDeleteCategory, TUpdateCategory } from '@/features/categories/admin/schemas';
 import { Category } from '~/prisma/generated/prisma/client.ts';
 
 
@@ -55,8 +55,6 @@ export class CategoryService {
       if (!category)
         throwBadRequest({ message: 'Category not found' });
 
-      let parent = null;
-
       const newData: Partial<TUpdateCategory> = {
         slug: slug.trim(),
         nameRo: nameRo.trim(),
@@ -65,9 +63,15 @@ export class CategoryService {
         descriptionRu: descriptionRu?.trim() || null
       };
 
-      if (parentId !== undefined) {
-        if (parentId !== null) {
-          parent = await tx.category.findUnique({ where: { id: parentId } });
+      const slugChanged = slug !== category.slug;
+      const parentChanged = 'parentId' in data && parentId !== category.parentId;
+
+      if (parentChanged || slugChanged) {
+        let parent = null;
+        const targetParentId = 'parentId' in data ? parentId : category.parentId;
+
+        if (targetParentId != null) {
+          parent = await tx.category.findUnique({ where: { id: targetParentId } });
 
           if (!parent)
             throwBadRequest({ message: 'Parent category not found' });
@@ -75,24 +79,31 @@ export class CategoryService {
           CategoryPathService.ensureNoCircularMove(category, parent);
         }
 
-        const newIdPath = CategoryPathService.buildIdPath(parent?.idPath ?? null, category.id);
-        const newSlugPath = CategoryPathService.buildSlugPath(parent?.slugPath ?? null, slug ?? category.slug);
+        const newSlug = slug ?? category.slug;
+
+        const newIdPath = CategoryPathService.buildIdPath(
+          parent?.idPath ?? null,
+          category.id
+        );
+        const newSlugPath = CategoryPathService.buildSlugPath(
+          parent?.slugPath ?? null,
+          newSlug
+        );
 
         await tx.category.update({
           where: { id },
           data: {
             ...newData,
-            parentId: parentId ?? null,
+            ...('parentId' in data && { parentId: parentId ?? null }),
             idPath: newIdPath,
             slugPath: newSlugPath
           }
         });
 
-        await CategoryPathService.updateSubtree(tx, category, newIdPath, newSlugPath);
+        await CategoryPathService.updateSubtree(tx, id, newIdPath, newSlugPath);
         return;
       }
 
-      // Simple update (no move)
       await tx.category.update({ where: { id }, data: newData });
     });
   }
