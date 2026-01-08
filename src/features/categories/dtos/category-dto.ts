@@ -7,6 +7,8 @@ export interface ICategoryDto {
   slug: string;
   nameRo: string;
   nameRu: string;
+  idPath: string;
+  slugPath: string;
   parentId?: number | null;
   children?: ICategoryDto[] | null;
 }
@@ -21,7 +23,9 @@ export class CategoryDtoMapper {
       slug: entity.slug,
       nameRo: entity.nameRo,
       nameRu: entity.nameRu,
-      parentId: entity.parentId
+      parentId: entity.parentId,
+      idPath: entity.idPath,
+      slugPath: entity.slugPath
     };
   }
 

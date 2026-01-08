@@ -11,35 +11,28 @@ import svgr from 'vite-plugin-svgr';
 
 const config = defineConfig({
   build: {
-    cssCodeSplit: true,
+    cssCodeSplit: true
   },
   optimizeDeps: {
     exclude: [
       '@tanstack/react-start',
       '@tanstack/start-server-core',
       '@tanstack/start-client-core'
-    ],
+    ]
   },
   plugins: [
+    viteTsConfigPaths({ projects: ['./tsconfig.json'] }),
+    tanstackStart(),
+    nitro({ preset: 'bun' }),
+    devtools(),
+    tailwindcss(),
+    viteReact({ babel: { plugins: ['babel-plugin-react-compiler'] } }),
+    svgr(),
     paraglideVitePlugin({
       project: './project.inlang',
       outdir: './src/paraglide',
       strategy: ['cookie', 'preferredLanguage', 'url'],
       cookieName: 'lang'
-    }),
-    devtools(),
-    svgr(),
-    nitro({ preset: 'bun' }),
-    // this is the plugin that enables path aliases
-    viteTsConfigPaths({
-      projects: ['./tsconfig.json']
-    }),
-    tailwindcss(),
-    tanstackStart(),
-    viteReact({
-      babel: {
-        plugins: ['babel-plugin-react-compiler']
-      }
     })
   ]
 });

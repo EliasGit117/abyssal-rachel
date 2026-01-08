@@ -17,7 +17,7 @@ export const CreateCategorySheetTrigger: FC<IProps> = (props) => {
   return  (
     <Tooltip delayDuration={500}>
       <TooltipTrigger asChild>
-        <Button onClick={open} asChild={asChild} {...btnProps}>
+        <Button onClick={() => open()} asChild={asChild} {...btnProps}>
           {(asChild && children) ?? (
             <>
               <IconSquareRoundedPlus/>

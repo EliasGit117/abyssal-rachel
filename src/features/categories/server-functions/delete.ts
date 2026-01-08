@@ -45,8 +45,7 @@ export const useDeleteCategoryMutation = (options?: TOptions) => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (values) =>
-      deleteCategoryServerFn({ data: values }),
+    mutationFn: (values) => deleteCategoryServerFn({ data: values }),
     ...options,
     onSuccess: (data, variables, onMutateResult, context) => {
       void queryClient.invalidateQueries({ predicate: (query) => query.queryKey[0] === 'categories' });
