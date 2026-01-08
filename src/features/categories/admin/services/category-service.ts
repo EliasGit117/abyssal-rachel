@@ -16,6 +16,7 @@ export class CategoryService {
 
       let parent = null;
 
+      // If has parent id check if exists parent actually exists
       if (data.parentId) {
         parent = await tx.category.findUnique({ where: { id: data.parentId } });
 
@@ -31,23 +32,23 @@ export class CategoryService {
           descriptionRo: data.descriptionRo?.trim() || null,
           descriptionRu: data.descriptionRu?.trim() || null,
           parentId: data.parentId ?? null,
-          idPath: '',
-          slugPath: ''
+          idPath: '', // Later will generate
+          slugPath: '' // Later will generate
         }
       });
 
-      const idPath = CategoryPathService.buildIdPath(parent?.idPath ?? null, category.id);
-      const slugPath = CategoryPathService.buildSlugPath(parent?.slugPath ?? null, category.slug);
+      const idPath = CategoryPathService.buildIdPath(parent?.idPath, category.id);
+      const slugPath = CategoryPathService.buildSlugPath(parent?.slugPath, category.slug);
 
       return tx.category.update({
         where: { id: category.id },
-        data: { idPath, slugPath }
+        data: { idPath: idPath, slugPath: slugPath }
       });
     });
   }
 
   static async update(data: TUpdateCategory) {
-    const { id, slug, nameRo, nameRu, descriptionRo, descriptionRu, parentId } = data;
+    const { id, slug, nameRo, nameRu, descriptionRo, descriptionRu, parentId, status } = data;
 
     return prisma.$transaction(async (tx) => {
       const category = await tx.category.findUnique({ where: { id } });
@@ -60,7 +61,8 @@ export class CategoryService {
         nameRo: nameRo.trim(),
         nameRu: nameRu.trim(),
         descriptionRo: descriptionRo?.trim() || null,
-        descriptionRu: descriptionRu?.trim() || null
+        descriptionRu: descriptionRu?.trim() || null,
+        status: status,
       };
 
       const slugChanged = slug !== category.slug;
@@ -81,14 +83,8 @@ export class CategoryService {
 
         const newSlug = slug ?? category.slug;
 
-        const newIdPath = CategoryPathService.buildIdPath(
-          parent?.idPath ?? null,
-          category.id
-        );
-        const newSlugPath = CategoryPathService.buildSlugPath(
-          parent?.slugPath ?? null,
-          newSlug
-        );
+        const newIdPath = CategoryPathService.buildIdPath(parent?.idPath, category.id);
+        const newSlugPath = CategoryPathService.buildSlugPath(parent?.slugPath, newSlug);
 
         await tx.category.update({
           where: { id },
@@ -116,19 +112,17 @@ export class CategoryService {
         throwBadRequest({ message: 'Category not found' });
 
       // Check if the category has children (fast, index-backed)
-      const hasChildren = await tx.category.count({ where: { parentId: categoryId } });
+      const childrenCount = await tx.category.count({ where: { parentId: categoryId } });
 
-      if (hasChildren > 0)
-        throwBadRequest({ message: 'Cannot delete category with children' });
+      if (childrenCount > 0)
+        throwBadRequest({ message: 'Cannot delete category with children', translated: false });
 
       await tx.category.delete({ where: { id: categoryId } });
     });
   }
 
   static async getTree(): Promise<Category[]> {
-    const categories = await prisma.category.findMany({
-      orderBy: [{ idPath: 'asc' }]
-    });
+    const categories = await prisma.category.findMany({ orderBy: [{ nameRo: 'asc' }] });
 
     const map = new Map<number, Category & { children?: Category[] }>();
     const roots: (Category & { children?: Category[] })[] = [];

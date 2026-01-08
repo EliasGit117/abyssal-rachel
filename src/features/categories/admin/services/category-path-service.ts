@@ -3,11 +3,11 @@ import { throwBadRequest } from '@/features/shared/utils/throw-api-error.ts';
 
 export class CategoryPathService {
 
-  static buildIdPath(parentIdPath: string | null, id: number): string {
+  static buildIdPath(parentIdPath: string | null | undefined, id: number): string {
     return parentIdPath ? `${parentIdPath}${id}/` : `/${id}/`;
   }
 
-  static buildSlugPath(parentSlugPath: string | null, slug: string): string {
+  static buildSlugPath(parentSlugPath: string | null | undefined, slug: string): string {
     return parentSlugPath ? `${parentSlugPath}${slug}/` : `/${slug}/`;
   }
 
