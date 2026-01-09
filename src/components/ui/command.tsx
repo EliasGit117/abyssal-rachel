@@ -148,8 +148,9 @@ function CommandSeparator({
 function CommandItem({
   className,
   children,
+  hideCheckIcon,
   ...props
-}: React.ComponentProps<typeof CommandPrimitive.Item>) {
+}: (React.ComponentProps<typeof CommandPrimitive.Item> & { hideCheckIcon?: boolean }) ) {
   return (
     <CommandPrimitive.Item
       data-slot="command-item"
@@ -160,7 +161,14 @@ function CommandItem({
       {...props}
     >
       {children}
-      <IconCheck className="ml-auto opacity-0 group-has-[[data-slot=command-shortcut]]/command-item:hidden group-data-[checked=true]/command-item:opacity-100" />
+      {!hideCheckIcon && (
+        <IconCheck
+          className={cn(
+            "ml-auto opacity-0 group-has-data-[slot=command-shortcut]/command-item:hidden",
+            "group-data-[checked=true]/command-item:opacity-100",
+          )}
+        />
+      )}
     </CommandPrimitive.Item>
   )
 }

@@ -1,0 +1,118 @@
+import { useDataTableContext } from '@/components/data-table/context';
+import { flexRender } from '@tanstack/react-table';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow
+} from '@/components/ui/table';
+import { cn } from '@/lib/utils';
+import { ComponentProps, ReactNode } from 'react';
+import { getCommonPinningStyles } from '@/components/data-table/utils/pinning';
+import { Skeleton } from '@/components/ui/skeleton';
+
+interface DataTableProps<_> extends ComponentProps<'div'> {
+  actionBar?: ReactNode;
+  showSkeleton?: boolean;
+  defaultSkeletonClassName?: string;
+}
+
+export function DataTable<TData>(props: DataTableProps<TData>) {
+  // noinspection BadExpressionStatementJS
+  'use no memo';
+
+  const { table, isPending } = useDataTableContext();
+  const {
+    actionBar,
+    children,
+    className,
+    defaultSkeletonClassName,
+    showSkeleton = true,
+    ...restOfProps
+  } = props;
+
+  const headerGroups = table.getHeaderGroups();
+  const rowModel = table.getRowModel();
+  const visibleColumns = table.getVisibleLeafColumns();
+  const pageSize = table.getState().pagination.pageSize ?? 10;
+
+  return (
+    <div className={cn('flex w-full flex-col gap-2.5 overflow-auto', className)} {...restOfProps}>
+      {children}
+      <div className="overflow-hidden rounded-md border">
+        <Table>
+          <TableHeader>
+            {headerGroups.map((headerGroup) => (
+              <TableRow key={headerGroup.id}>
+                {headerGroup.headers.map((header) => (
+                  <TableHead
+                    key={header.id}
+                    colSpan={header.colSpan}
+                    style={{ ...getCommonPinningStyles({ column: header.column }) }}
+                  >
+                    {header.isPlaceholder
+                      ? null
+                      : flexRender(header.column.columnDef.header, header.getContext())}
+                  </TableHead>
+                ))}
+              </TableRow>
+            ))}
+          </TableHeader>
+
+          <TableBody>
+            {(showSkeleton && isPending) ? (
+              Array.from({ length: pageSize }).map((_, rowIndex) => (
+                <TableRow key={`skeleton-${rowIndex}`}>
+                  {visibleColumns.map((column, colIndex) => (
+                    <TableCell
+                      key={`skeleton-cell-${rowIndex}-${colIndex}`}
+                      className="h-10"
+                      style={{ ...getCommonPinningStyles({ column }) }}
+                    >
+                      {column.columnDef.meta?.skeletonItem ?? (
+                        <Skeleton
+                          className={cn(
+                            'h-4 w-full',
+                            defaultSkeletonClassName,
+                            column.columnDef.meta?.skeletonClassName
+                          )}/>
+                      )}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              ))
+            ) : rowModel.rows?.length ? (
+              rowModel.rows.map((row) => {
+                const isSelected = row.getIsSelected();
+
+                return (
+                  <TableRow key={row.id} data-state={isSelected && 'selected'} className="group">
+                    {row.getVisibleCells().map((cell) => (
+                      <TableCell
+                        key={cell.id}
+                        style={{ ...getCommonPinningStyles({ column: cell.column, row: row }) }}
+                        className={cn(!isSelected && 'group-hover:!bg-[var(--muted-generated-25)]')}
+                      >
+                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                      </TableCell>
+                    ))}
+                  </TableRow>);
+              })
+            ) : (
+              <TableRow>
+                <TableCell
+                  colSpan={visibleColumns.length}
+                  className="h-24 text-center"
+                >
+                  No results.
+                </TableCell>
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
+      </div>
+    </div>
+  );
+}

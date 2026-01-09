@@ -25,6 +25,7 @@ import { Route as AuthMagicLinkIndexRouteImport } from './routes/auth/magic-link
 import { Route as AdminUsersIndexRouteImport } from './routes/admin/users/index'
 import { Route as AdminSettingsIndexRouteImport } from './routes/admin/settings/index'
 import { Route as AdminCategoriesIndexRouteImport } from './routes/admin/categories/index'
+import { Route as AdminBannersIndexRouteImport } from './routes/admin/banners/index'
 import { Route as PublicProfileIndexRouteImport } from './routes/_public/profile/index'
 import { Route as PublicNotificationsIndexRouteImport } from './routes/_public/notifications/index'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
@@ -111,6 +112,11 @@ const AdminCategoriesIndexRoute = AdminCategoriesIndexRouteImport.update({
   path: '/categories/',
   getParentRoute: () => AdminRouteRoute,
 } as any)
+const AdminBannersIndexRoute = AdminBannersIndexRouteImport.update({
+  id: '/banners/',
+  path: '/banners/',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
 const PublicProfileIndexRoute = PublicProfileIndexRouteImport.update({
   id: '/profile/',
   path: '/profile/',
@@ -158,6 +164,7 @@ export interface FileRoutesByFullPath {
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/notifications': typeof PublicNotificationsIndexRoute
   '/profile': typeof PublicProfileIndexRoute
+  '/admin/banners': typeof AdminBannersIndexRoute
   '/admin/categories': typeof AdminCategoriesIndexRoute
   '/admin/settings/': typeof AdminSettingsIndexRoute
   '/admin/users': typeof AdminUsersIndexRoute
@@ -178,6 +185,7 @@ export interface FileRoutesByTo {
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/notifications': typeof PublicNotificationsIndexRoute
   '/profile': typeof PublicProfileIndexRoute
+  '/admin/banners': typeof AdminBannersIndexRoute
   '/admin/categories': typeof AdminCategoriesIndexRoute
   '/admin/settings': typeof AdminSettingsIndexRoute
   '/admin/users': typeof AdminUsersIndexRoute
@@ -203,6 +211,7 @@ export interface FileRoutesById {
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/_public/notifications/': typeof PublicNotificationsIndexRoute
   '/_public/profile/': typeof PublicProfileIndexRoute
+  '/admin/banners/': typeof AdminBannersIndexRoute
   '/admin/categories/': typeof AdminCategoriesIndexRoute
   '/admin/settings/': typeof AdminSettingsIndexRoute
   '/admin/users/': typeof AdminUsersIndexRoute
@@ -228,6 +237,7 @@ export interface FileRouteTypes {
     | '/api/auth/$'
     | '/notifications'
     | '/profile'
+    | '/admin/banners'
     | '/admin/categories'
     | '/admin/settings/'
     | '/admin/users'
@@ -248,6 +258,7 @@ export interface FileRouteTypes {
     | '/api/auth/$'
     | '/notifications'
     | '/profile'
+    | '/admin/banners'
     | '/admin/categories'
     | '/admin/settings'
     | '/admin/users'
@@ -272,6 +283,7 @@ export interface FileRouteTypes {
     | '/api/auth/$'
     | '/_public/notifications/'
     | '/_public/profile/'
+    | '/admin/banners/'
     | '/admin/categories/'
     | '/admin/settings/'
     | '/admin/users/'
@@ -403,6 +415,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminCategoriesIndexRouteImport
       parentRoute: typeof AdminRouteRoute
     }
+    '/admin/banners/': {
+      id: '/admin/banners/'
+      path: '/banners'
+      fullPath: '/admin/banners'
+      preLoaderRoute: typeof AdminBannersIndexRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
     '/_public/profile/': {
       id: '/_public/profile/'
       path: '/profile'
@@ -486,6 +505,7 @@ const AdminSettingsRouteRouteWithChildren =
 interface AdminRouteRouteChildren {
   AdminSettingsRouteRoute: typeof AdminSettingsRouteRouteWithChildren
   AdminIndexRoute: typeof AdminIndexRoute
+  AdminBannersIndexRoute: typeof AdminBannersIndexRoute
   AdminCategoriesIndexRoute: typeof AdminCategoriesIndexRoute
   AdminUsersIndexRoute: typeof AdminUsersIndexRoute
 }
@@ -493,6 +513,7 @@ interface AdminRouteRouteChildren {
 const AdminRouteRouteChildren: AdminRouteRouteChildren = {
   AdminSettingsRouteRoute: AdminSettingsRouteRouteWithChildren,
   AdminIndexRoute: AdminIndexRoute,
+  AdminBannersIndexRoute: AdminBannersIndexRoute,
   AdminCategoriesIndexRoute: AdminCategoriesIndexRoute,
   AdminUsersIndexRoute: AdminUsersIndexRoute,
 }
