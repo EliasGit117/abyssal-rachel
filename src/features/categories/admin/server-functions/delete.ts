@@ -1,5 +1,5 @@
 import { createServerFn } from '@tanstack/react-start';
-import { requireAuth } from '@/middleware/require-auth.ts';
+import { authMiddleware } from '@/middleware/auth.ts';
 import { serverZodValidator } from '@/features/shared/utils/server-zod-validator.ts';
 import { deleteCategorySchema } from '@/features/categories/admin/schemas/delete.ts';
 import { CategoryService } from '@/features/categories/admin/services/category-service.ts';
@@ -9,13 +9,13 @@ import {
   throwForbiddenError,
   throwUnauthorizedError
 } from '@/features/shared/utils/throw-api-error.ts';
-import { getSessionServerFn } from '@/features/auth/server-functions/get-session.ts';
+import { getSessionServerFn } from '@/features/auth/server-functions/public/get-session.ts';
 import { useMutation, UseMutationOptions, useQueryClient } from '@tanstack/react-query';
 
 
 export const deleteCategoryServerFn = createServerFn({ method: 'POST' })
   .inputValidator(serverZodValidator(deleteCategorySchema))
-  .middleware([requireAuth()])
+  .middleware([authMiddleware()])
   .handler(async ({ data }) => {
     const session = await getSessionServerFn();
 

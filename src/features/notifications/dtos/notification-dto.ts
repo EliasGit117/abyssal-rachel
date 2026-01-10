@@ -9,7 +9,7 @@ export interface INotificationBriefDto {
 }
 
 
-export class NotificationBriefDtoMapper {
+export class NotificationBriefDtoFactory {
   private static baseFromEntity(entity: Notification, locale: Locale): INotificationBriefDto {
 
     return {

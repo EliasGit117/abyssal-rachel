@@ -1,13 +1,14 @@
 import { LinkOptions } from '@tanstack/react-router';
 import {
-  type Icon, IconCategory,
+  type Icon,
+  IconCategory,
   IconDashboard,
+  IconNetwork,
   IconSettings,
   IconUsers
 } from '@tabler/icons-react';
 import { hasRolePermission } from '@/features/auth/lib/has-role-permission.ts';
 import { Permission } from '@/features/auth/lib/permissions.ts';
-
 
 export interface INavItem {
   title: string;
@@ -15,27 +16,53 @@ export interface INavItem {
   linkOptions: LinkOptions;
 }
 
-interface IMainLinksOptions {
-  role: string | undefined | null;
+interface ILiknOptions {
+  role?: string | null;
 }
 
-export const mainLinks: (options?: IMainLinksOptions) => INavItem[] = (options) => {
-  const { role } = options ?? {};
-  let result: INavItem[] = [
-    { title: 'Dashboard', linkOptions: { to: '/admin', activeOptions: { exact: true } }, icon: IconDashboard }
-  ];
+interface NavConfig extends INavItem {
+  can?: (role?: string | null) => boolean;
+}
 
-  const canListUsers = hasRolePermission({ role: role, permissions: { user: [Permission.List] } });
-  if (canListUsers)
-    result.push({ title: 'Users', linkOptions: { to: '/admin/users' }, icon: IconUsers });
+const mainLinks: NavConfig[] = [
+  {
+    title: 'Dashboard',
+    icon: IconDashboard,
+    linkOptions: { to: '/admin', activeOptions: { exact: true } }
+  },
+  {
+    title: 'Categories',
+    icon: IconCategory,
+    linkOptions: { to: '/admin/categories' },
+    can: (role) =>
+      hasRolePermission({ role, permissions: { categories: [Permission.List] } })
+  },
+  {
+    title: 'Settings',
+    icon: IconSettings,
+    linkOptions: { to: '/admin/settings' }
+  }
+];
 
-  const canListCategories = hasRolePermission({ role: role, permissions: { categories: [Permission.List] } });
-  if (canListCategories)
-    result.push({ title: 'Categories', linkOptions: { to: '/admin/categories' }, icon: IconCategory });
+const userLinks: NavConfig[] = [
+  {
+    title: 'Users',
+    icon: IconUsers,
+    linkOptions: { to: '/admin/users' },
+    can: (role) =>
+      hasRolePermission({ role, permissions: { user: [Permission.List] } })
+  },
+  {
+    title: 'Sessions',
+    icon: IconNetwork,
+    linkOptions: { to: '/admin/sessions' },
+    can: (role) =>
+      hasRolePermission({ role, permissions: { session: [Permission.List] } })
+  },
+];
 
-  result.push(
-    { title: 'Settings', linkOptions: { to: '/admin/settings' }, icon: IconSettings }
-  );
+export const getMainLinks = ({ role }: ILiknOptions = {}): INavItem[] => mainLinks
+  .filter(({ can }) => !can || can(role));
 
-  return result;
-};
+export const getUserLinks = ({ role }: ILiknOptions = {}): INavItem[] => userLinks
+  .filter(({ can }) => !can || can(role));

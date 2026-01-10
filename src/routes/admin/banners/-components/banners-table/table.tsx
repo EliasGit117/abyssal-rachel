@@ -3,7 +3,8 @@ import { cn } from '@/lib/utils';
 import {
   DataTableProvider,
   DataTableToolbar,
-  DataTable, useDataTable
+  DataTable,
+  useDataTable
 } from '@/components/data-table';
 import { bannerColumns } from '@/routes/admin/banners/-components/banners-table/columns';
 

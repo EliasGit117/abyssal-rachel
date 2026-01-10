@@ -81,7 +81,7 @@ export function DataTableDateFilter<TData, TValue>(props: IDataTableDateFilterPr
             <span>{title}</span>
             {!!dateText && (
               <>
-                <Separator orientation="vertical" className="mx-0.5 data-[orientation=vertical]:h-4"/>
+                <Separator orientation="vertical" className="my-auto mx-0.5 data-[orientation=vertical]:h-4"/>
                 <span className='text-xs'>{dateText}</span>
               </>
             )}

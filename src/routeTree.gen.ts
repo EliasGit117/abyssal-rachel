@@ -24,6 +24,7 @@ import { Route as AuthResetPasswordIndexRouteImport } from './routes/auth/reset-
 import { Route as AuthMagicLinkIndexRouteImport } from './routes/auth/magic-link/index'
 import { Route as AdminUsersIndexRouteImport } from './routes/admin/users/index'
 import { Route as AdminSettingsIndexRouteImport } from './routes/admin/settings/index'
+import { Route as AdminSessionsIndexRouteImport } from './routes/admin/sessions/index'
 import { Route as AdminCategoriesIndexRouteImport } from './routes/admin/categories/index'
 import { Route as AdminBannersIndexRouteImport } from './routes/admin/banners/index'
 import { Route as PublicProfileIndexRouteImport } from './routes/_public/profile/index'
@@ -107,6 +108,11 @@ const AdminSettingsIndexRoute = AdminSettingsIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AdminSettingsRouteRoute,
 } as any)
+const AdminSessionsIndexRoute = AdminSessionsIndexRouteImport.update({
+  id: '/sessions/',
+  path: '/sessions/',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
 const AdminCategoriesIndexRoute = AdminCategoriesIndexRouteImport.update({
   id: '/categories/',
   path: '/categories/',
@@ -166,6 +172,7 @@ export interface FileRoutesByFullPath {
   '/profile': typeof PublicProfileIndexRoute
   '/admin/banners': typeof AdminBannersIndexRoute
   '/admin/categories': typeof AdminCategoriesIndexRoute
+  '/admin/sessions': typeof AdminSessionsIndexRoute
   '/admin/settings/': typeof AdminSettingsIndexRoute
   '/admin/users': typeof AdminUsersIndexRoute
   '/auth/magic-link': typeof AuthMagicLinkIndexRoute
@@ -187,6 +194,7 @@ export interface FileRoutesByTo {
   '/profile': typeof PublicProfileIndexRoute
   '/admin/banners': typeof AdminBannersIndexRoute
   '/admin/categories': typeof AdminCategoriesIndexRoute
+  '/admin/sessions': typeof AdminSessionsIndexRoute
   '/admin/settings': typeof AdminSettingsIndexRoute
   '/admin/users': typeof AdminUsersIndexRoute
   '/auth/magic-link': typeof AuthMagicLinkIndexRoute
@@ -213,6 +221,7 @@ export interface FileRoutesById {
   '/_public/profile/': typeof PublicProfileIndexRoute
   '/admin/banners/': typeof AdminBannersIndexRoute
   '/admin/categories/': typeof AdminCategoriesIndexRoute
+  '/admin/sessions/': typeof AdminSessionsIndexRoute
   '/admin/settings/': typeof AdminSettingsIndexRoute
   '/admin/users/': typeof AdminUsersIndexRoute
   '/auth/magic-link/': typeof AuthMagicLinkIndexRoute
@@ -239,6 +248,7 @@ export interface FileRouteTypes {
     | '/profile'
     | '/admin/banners'
     | '/admin/categories'
+    | '/admin/sessions'
     | '/admin/settings/'
     | '/admin/users'
     | '/auth/magic-link'
@@ -260,6 +270,7 @@ export interface FileRouteTypes {
     | '/profile'
     | '/admin/banners'
     | '/admin/categories'
+    | '/admin/sessions'
     | '/admin/settings'
     | '/admin/users'
     | '/auth/magic-link'
@@ -285,6 +296,7 @@ export interface FileRouteTypes {
     | '/_public/profile/'
     | '/admin/banners/'
     | '/admin/categories/'
+    | '/admin/sessions/'
     | '/admin/settings/'
     | '/admin/users/'
     | '/auth/magic-link/'
@@ -408,6 +420,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminSettingsIndexRouteImport
       parentRoute: typeof AdminSettingsRouteRoute
     }
+    '/admin/sessions/': {
+      id: '/admin/sessions/'
+      path: '/sessions'
+      fullPath: '/admin/sessions'
+      preLoaderRoute: typeof AdminSessionsIndexRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
     '/admin/categories/': {
       id: '/admin/categories/'
       path: '/categories'
@@ -507,6 +526,7 @@ interface AdminRouteRouteChildren {
   AdminIndexRoute: typeof AdminIndexRoute
   AdminBannersIndexRoute: typeof AdminBannersIndexRoute
   AdminCategoriesIndexRoute: typeof AdminCategoriesIndexRoute
+  AdminSessionsIndexRoute: typeof AdminSessionsIndexRoute
   AdminUsersIndexRoute: typeof AdminUsersIndexRoute
 }
 
@@ -515,6 +535,7 @@ const AdminRouteRouteChildren: AdminRouteRouteChildren = {
   AdminIndexRoute: AdminIndexRoute,
   AdminBannersIndexRoute: AdminBannersIndexRoute,
   AdminCategoriesIndexRoute: AdminCategoriesIndexRoute,
+  AdminSessionsIndexRoute: AdminSessionsIndexRoute,
   AdminUsersIndexRoute: AdminUsersIndexRoute,
 }
 

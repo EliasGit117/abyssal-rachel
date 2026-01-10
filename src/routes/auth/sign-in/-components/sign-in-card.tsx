@@ -11,7 +11,7 @@ import { authClient } from '@/features/auth/lib/auth-client.ts';
 import { toast } from 'sonner';
 import { m } from '@/paraglide/messages';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { getSessionQueryOptions } from '@/features/auth/server-functions/get-session.ts';
+import { getSessionQueryOptions } from '@/features/auth/server-functions/public/get-session.ts';
 import { Button } from '@/components/ui/button.tsx';
 
 

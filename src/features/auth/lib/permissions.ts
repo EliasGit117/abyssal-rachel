@@ -2,7 +2,6 @@ import { createAccessControl } from 'better-auth/plugins/access';
 import { defaultStatements, adminAc } from 'better-auth/plugins/admin/access';
 
 
-
 export enum Permission {
   List = 'list',
   Get = 'get',

@@ -60,7 +60,7 @@ export function useDataTable<TData>(props: IUseDataTableProps<TData>) {
 
   useEffect(() => {
     setRowSelection({});
-  }, [page, limit, columnFiltersState, sortingState]);
+  }, [data]);
 
   const table = useReactTable({
     ...tableProps,

@@ -13,7 +13,7 @@ import { envConfig } from '@/lib/env-config.ts';
 import { getZodErrorMap } from '@/lib/get-zod-error-map.ts';
 import Providers from '@/providers.tsx';
 import z from 'zod';
-import { getSessionQueryOptions } from '@/features/auth/server-functions/get-session.ts';
+import { getSessionQueryOptions } from '@/features/auth/server-functions/public/get-session.ts';
 import { TSession, TUser } from '@/features/auth/lib/auth.ts';
 
 

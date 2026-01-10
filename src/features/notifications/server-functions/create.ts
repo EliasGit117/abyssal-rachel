@@ -2,29 +2,24 @@ import { createServerFn } from '@tanstack/react-start';
 import { useMutation, UseMutationOptions, useQueryClient } from '@tanstack/react-query';
 import { prisma } from '@/lib/prisma.ts';
 import { getLocale } from '@/paraglide/runtime';
-import { INotificationBriefDto, NotificationBriefDtoMapper } from '@/features/notifications/dtos/notification-dto.ts';
+import { INotificationBriefDto, NotificationBriefDtoFactory } from '@/features/notifications/dtos/notification-dto.ts';
 import { createNotificationSchema } from '@/features/notifications/schemas/create-notification.ts';
-import { requireAuth } from '@/middleware/require-auth.ts';
+import { authMiddleware } from '@/middleware/auth.ts';
 import { serverZodValidator } from '@/features/shared/utils/server-zod-validator.ts';
 import { auth } from '@/features/auth/lib/auth.ts';
 import { Permission } from '@/features/auth/lib/permissions.ts';
-import { throwForbiddenError, throwUnauthorizedError } from '@/features/shared/utils/throw-api-error.ts';
-import { getSessionServerFn } from '@/features/auth/server-functions/get-session.ts';
+import { throwForbiddenError } from '@/features/shared/utils/throw-api-error.ts';
 
 
 
 export const createNotificationServerFn = createServerFn({ method: 'POST' })
   .inputValidator(serverZodValidator(createNotificationSchema))
-  .middleware([requireAuth()])
-  .handler(async ({ data }) => {
+  .middleware([authMiddleware()])
+  .handler(async ({ data, context: { user } }) => {
     const locale = getLocale();
-    const session = await getSessionServerFn();
-    if (!session)
-      throwUnauthorizedError();
-
     const canCreate = await auth.api.userHasPermission({
       body: {
-        userId: session.user!.id,
+        userId: user!.id,
         permission: { "notifications": [Permission.Create] }
       },
     });
@@ -41,7 +36,7 @@ export const createNotificationServerFn = createServerFn({ method: 'POST' })
       }
     });
 
-    return NotificationBriefDtoMapper.fromEntity(createdEntity, locale);
+    return NotificationBriefDtoFactory.fromEntity(createdEntity, locale);
   });
 
 // React hook

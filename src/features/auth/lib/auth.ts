@@ -10,11 +10,6 @@ import { tanstackStartCookies } from 'better-auth/tanstack-start';
 
 
 export const auth = betterAuth({
-  // user: {
-  //   additionalFields: {
-  //     role: { type: "string", input: false, required: false, defaultValue: "user" }
-  //   },
-  // },
   session: {
     cookieCache: {
       enabled: true,

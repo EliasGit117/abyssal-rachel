@@ -16,14 +16,16 @@ import { envConfig } from '@/lib/env-config.ts';
 import Logo from '@/assets/icons/logo.svg?react';
 import { NavUser } from './nav-user.tsx';
 import { NavLinkGroup } from './nav-link-group.tsx';
-import { mainLinks } from './links.ts';
+import { getMainLinks, getUserLinks } from './links.ts';
 import { NavSettings } from './nav-settings.tsx';
 import { useSession } from '@/hooks/use-session.ts';
-import { IconBuildingStore } from '@tabler/icons-react';
+import {
+  IconBuildingStore,
+} from '@tabler/icons-react';
 
 
-interface IAdminSidebarProps extends ComponentProps<typeof Sidebar> {
-}
+
+interface IAdminSidebarProps extends ComponentProps<typeof Sidebar> {}
 
 export function AdminSidebar({ ...props }: IAdminSidebarProps) {
   const { user } = useSession();
@@ -50,21 +52,22 @@ export function AdminSidebar({ ...props }: IAdminSidebarProps) {
         <SidebarGroup>
           <SidebarGroupContent className="flex flex-col gap-2">
             <SidebarMenu>
-                <SidebarMenuItem>
-                  <SidebarMenuButton tooltip='Shop' asChild>
-                    <Link onClick={() => setOpenMobile(false)} to='/'>
-                      <IconBuildingStore/>
-                      <span>Store</span>
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton tooltip="Shop" asChild>
+                  <Link onClick={() => setOpenMobile(false)} to="/">
+                    <IconBuildingStore/>
+                    <span>Store</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
 
-        <NavLinkGroup label="Main" items={mainLinks({ role: user?.role })}/>
-        <div className="flex-1"/>
-        <NavSettings/>
+        <NavLinkGroup label="Main" items={getMainLinks({ role: user?.role })}/>
+        <NavLinkGroup label="Auth" items={getUserLinks({ role: user?.role })}/>
+
+        <NavSettings className='mt-auto'/>
       </SidebarContent>
       <SidebarFooter>
         <NavUser/>

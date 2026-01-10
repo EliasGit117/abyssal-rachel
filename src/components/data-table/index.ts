@@ -4,6 +4,7 @@ import { useDataTable } from './hooks/use-data-table';
 import { DataTableColumnHeader } from './column-header';
 import { DataTablePagination } from './pagination';
 import { useDataTableContext, DataTableProvider } from './context';
+import { DataTableActionBar } from './action-bar';
 import { ColumnFilterType } from './types/tanstack-table-meta';
 import { dateRangeSchema, numberRangeSchema } from './types/schemas';
 
@@ -12,6 +13,7 @@ export {
   DataTableToolbar,
   DataTableColumnHeader,
   DataTablePagination,
+  DataTableActionBar,
   useDataTable,
 
   DataTableProvider,

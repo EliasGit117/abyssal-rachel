@@ -116,6 +116,8 @@ const DIRECTION_KEY = 'dir';
 const ASC_KEY = 'asc';
 const DESC_KEY = 'desc';
 
+export const directionSchema = z.enum(['asc', 'desc']);
+
 const sortSchema = z.object({
   sort: z.string().optional(),
   dir: z.enum([ASC_KEY, DESC_KEY]).optional()

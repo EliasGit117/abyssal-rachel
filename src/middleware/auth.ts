@@ -3,7 +3,7 @@ import { auth } from '@/features/auth/lib/auth.ts';
 import { throwUnauthorizedError } from '@/features/shared/utils/throw-api-error.ts';
 
 
-export const requireAuth = () => createMiddleware().server(async ({ next, request: { headers } }) => {
+export const authMiddleware = () => createMiddleware().server(async ({ next, request: { headers } }) => {
     const authRes = await auth.api.getSession({ headers: headers });
     const { session, user } = authRes ?? {};
 
@@ -12,6 +12,7 @@ export const requireAuth = () => createMiddleware().server(async ({ next, reques
 
     return next({
       context: {
+        headers: headers,
         session: session,
         user: user
       }

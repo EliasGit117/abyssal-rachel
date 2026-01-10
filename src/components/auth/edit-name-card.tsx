@@ -25,7 +25,7 @@ import {
 import { Input } from '@/components/ui/input.tsx';
 import * as z from 'zod';
 import { useSession } from '@/hooks/use-session.ts';
-import { getSessionQueryOptions } from '@/features/auth/server-functions/get-session.ts';
+import { getSessionQueryOptions } from '@/features/auth/server-functions/public/get-session.ts';
 
 export const editNameSchema = z.object({
   fullName: z.string().min(3),

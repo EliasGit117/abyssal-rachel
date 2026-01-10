@@ -36,7 +36,7 @@ export function DataTableColumnHeader<TData, TValue>(props: DataTableColumnHeade
   if (!column.getCanSort()) {
     return (
       <div className={cn(className, 'flex items-center gap-2')}>
-        {Icon && <Icon className=" text-muted-foreground"/>}
+        {Icon && <Icon className="size-4 text-muted-foreground"/>}
         <span>{title}</span>
       </div>
     );

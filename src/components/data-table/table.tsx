@@ -17,6 +17,7 @@ interface DataTableProps<_> extends ComponentProps<'div'> {
   actionBar?: ReactNode;
   showSkeleton?: boolean;
   defaultSkeletonClassName?: string;
+  borderedPinnedColumns?: boolean;
 }
 
 export function DataTable<TData>(props: DataTableProps<TData>) {
@@ -30,6 +31,7 @@ export function DataTable<TData>(props: DataTableProps<TData>) {
     className,
     defaultSkeletonClassName,
     showSkeleton = true,
+    borderedPinnedColumns = false,
     ...restOfProps
   } = props;
 
@@ -46,11 +48,12 @@ export function DataTable<TData>(props: DataTableProps<TData>) {
           <TableHeader>
             {headerGroups.map((headerGroup) => (
               <TableRow key={headerGroup.id}>
-                {headerGroup.headers.map((header) => (
+                {headerGroup.headers.map((header, i) => (
                   <TableHead
                     key={header.id}
                     colSpan={header.colSpan}
-                    style={{ ...getCommonPinningStyles({ column: header.column }) }}
+                    style={{ ...getCommonPinningStyles({ column: header.column, withBorder: borderedPinnedColumns }) }}
+                    className={cn(i === 0)}
                   >
                     {header.isPlaceholder
                       ? null
@@ -69,7 +72,7 @@ export function DataTable<TData>(props: DataTableProps<TData>) {
                     <TableCell
                       key={`skeleton-cell-${rowIndex}-${colIndex}`}
                       className="h-10"
-                      style={{ ...getCommonPinningStyles({ column }) }}
+                      style={{ ...getCommonPinningStyles({ column, withBorder: borderedPinnedColumns }) }}
                     >
                       {column.columnDef.meta?.skeletonItem ?? (
                         <Skeleton
@@ -92,8 +95,10 @@ export function DataTable<TData>(props: DataTableProps<TData>) {
                     {row.getVisibleCells().map((cell) => (
                       <TableCell
                         key={cell.id}
-                        style={{ ...getCommonPinningStyles({ column: cell.column, row: row }) }}
-                        className={cn(!isSelected && 'group-hover:!bg-[var(--muted-generated-25)]')}
+                        style={{ ...getCommonPinningStyles({ column: cell.column, row: row, withBorder: borderedPinnedColumns }) }}
+                        className={cn(
+                          !isSelected && 'group-hover:bg-(--muted-generated-25)!'
+                        )}
                       >
                         {flexRender(cell.column.columnDef.cell, cell.getContext())}
                       </TableCell>

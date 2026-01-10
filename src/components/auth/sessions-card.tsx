@@ -28,7 +28,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { cn } from '@/lib/utils';
 import { authClient } from '@/features/auth/lib/auth-client.ts';
 import { useSession } from '@/hooks/use-session';
-import { getSessionQueryOptions } from '@/features/auth/server-functions/get-session.ts';
+import { getSessionQueryOptions } from '@/features/auth/server-functions/public/get-session.ts';
 import { m } from '@/paraglide/messages';
 
 const ENGLISH_MESSAGES = {
