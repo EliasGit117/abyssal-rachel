@@ -81,7 +81,7 @@ export const NavUser: FC<ComponentProps<typeof SidebarMenu>> = ({ ...props }) =>
             <DropdownMenuSeparator/>
             <DropdownMenuGroup>
               <DropdownMenuItem asChild>
-                <Link to=".">
+                <Link to="/admin/settings/profile">
                   <IconUserCircle/>
                   <span>Profile</span>
                 </Link>

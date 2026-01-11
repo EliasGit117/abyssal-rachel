@@ -3,13 +3,10 @@ import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
-  SidebarGroup,
-  SidebarGroupContent,
   SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-  useSidebar
 } from '@/components/ui/sidebar.tsx';
 import { Link } from '@tanstack/react-router';
 import { envConfig } from '@/lib/env-config.ts';
@@ -19,9 +16,6 @@ import { NavLinkGroup } from './nav-link-group.tsx';
 import { getMainLinks, getUserLinks } from './links.ts';
 import { NavSettings } from './nav-settings.tsx';
 import { useSession } from '@/hooks/use-session.ts';
-import {
-  IconBuildingStore,
-} from '@tabler/icons-react';
 
 
 
@@ -29,7 +23,6 @@ interface IAdminSidebarProps extends ComponentProps<typeof Sidebar> {}
 
 export function AdminSidebar({ ...props }: IAdminSidebarProps) {
   const { user } = useSession();
-  const { setOpenMobile } = useSidebar();
 
   return (
     <Sidebar {...props}>
@@ -37,7 +30,7 @@ export function AdminSidebar({ ...props }: IAdminSidebarProps) {
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton className="data-[slot=sidebar-menu-button]:p-1.5!" asChild>
-              <Link to="/admin">
+              <Link to="/">
                 <Logo className="h-4! w-full! max-w-20!"/>
                 <span className="sr-only">
                   {envConfig.appName}
@@ -49,20 +42,6 @@ export function AdminSidebar({ ...props }: IAdminSidebarProps) {
       </SidebarHeader>
 
       <SidebarContent>
-        <SidebarGroup>
-          <SidebarGroupContent className="flex flex-col gap-2">
-            <SidebarMenu>
-              <SidebarMenuItem>
-                <SidebarMenuButton tooltip="Shop" asChild>
-                  <Link onClick={() => setOpenMobile(false)} to="/">
-                    <IconBuildingStore/>
-                    <span>Store</span>
-                  </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
 
         <NavLinkGroup label="Main" items={getMainLinks({ role: user?.role })}/>
         <NavLinkGroup label="Auth" items={getUserLinks({ role: user?.role })}/>

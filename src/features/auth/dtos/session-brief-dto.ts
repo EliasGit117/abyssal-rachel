@@ -10,6 +10,7 @@ export interface ISessionBriefDto {
   expiresAt: Date;
   isCurrent?: boolean;
   isMine?: boolean;
+  expired?: boolean;
 }
 
 interface SessionBriefDtoOptions {
@@ -29,7 +30,8 @@ export class SessionBriefDtoFactory {
       updatedAt: entity.updatedAt,
       expiresAt: entity.expiresAt,
       isCurrent: options?.currentSessionId != null ? entity.id === options.currentSessionId : undefined,
-      isMine: options?.currentUserId != null ? entity.userId === options.currentUserId : undefined
+      isMine: options?.currentUserId != null ? entity.userId === options.currentUserId : undefined,
+      expired: entity.expiresAt < new Date(),
     };
   }
 

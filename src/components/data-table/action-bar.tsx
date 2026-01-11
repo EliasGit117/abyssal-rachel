@@ -13,9 +13,10 @@ const ActionBarContext = createContext<{ disabled?: boolean }>({});
 interface IProps {
   disabled?: boolean;
   children?: ReactNode;
+  className?: string;
 }
 
-export const DataTableActionBar: FC<IProps> = ({ children, disabled }) => {
+export const DataTableActionBar: FC<IProps> = ({ children, disabled, className }) => {
   // noinspection BadExpressionStatementJS
   'use no memo';
   const isMobile = useIsMobile();
@@ -27,7 +28,12 @@ export const DataTableActionBar: FC<IProps> = ({ children, disabled }) => {
   return (
     <ActionBarContext.Provider value={{ disabled }}>
       <div
-        className="fixed bottom-3 left-1/2 transform -translate-x-1/2 bg-background border p-1.5 z-50 rounded-xl shadow-md">
+        className={cn(
+          'absolute bottom-4 left-1/2 transform -translate-x-1/2',
+          'bg-background border p-1.5 z-50 rounded-xl shadow-sm',
+          className
+        )}
+      >
         <div className="max-w-7xl mx-auto flex items-center justify-between gap-1">
           <ButtonGroup>
             {!isMobile && (

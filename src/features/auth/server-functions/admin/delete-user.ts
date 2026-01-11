@@ -8,6 +8,7 @@ import { throwForbiddenError } from '@/features/shared/utils/throw-api-error.ts'
 import { useMutation, UseMutationOptions, useQueryClient } from '@tanstack/react-query';
 import { getSessionQueryOptions } from '@/features/auth/server-functions/public/get-session.ts';
 import { toast } from 'sonner';
+import { useConfirm } from '@/components/ui/confirm-dialog.tsx';
 
 
 export const deleteUserSchema = z.object({
@@ -36,16 +37,30 @@ export const deleteUserServerFn = createServerFn({ method: 'POST' })
 
 type TParams = Parameters<typeof deleteUserServerFn>[0];
 type TOptions = Omit<UseMutationOptions<void, Error, TParams>, 'mutationFn' | 'onMutate'> & {
-  withToastProgression: boolean
+  withConfirmation?: boolean;
+  withToastProgression?: boolean;
 };
 
 export const useDeleteUserMutation = (options?: TOptions) => {
   const queryClient = useQueryClient();
+  const confirm = useConfirm();
 
   return useMutation({
-    mutationKey: ['admin', 'news', 'delete'],
-    mutationFn: async (params) => { // Make async
-      const promise = deleteUserServerFn(params); // Get the promise
+    mutationFn: async (params) => {
+
+      if (options?.withConfirmation ?? true) {
+        const isConfirmed = await confirm({
+          title: 'Delete user',
+          description: 'Are you sure you want to delete user?',
+          confirmText: 'Delete',
+          cancelText: 'Cancel'
+        });
+
+        if (!isConfirmed)
+          return;
+      }
+
+      const promise = deleteUserServerFn(params);
 
       if (options?.withToastProgression ?? true) {
         toast.promise(promise, {
@@ -55,7 +70,6 @@ export const useDeleteUserMutation = (options?: TOptions) => {
         });
       }
 
-      // Return the original promise so React Query gets the data/void correctly
       return await promise;
     },
     ...options,

@@ -15,6 +15,7 @@ import { cn } from '@/lib/utils.ts';
 import { IconTrash } from '@tabler/icons-react';
 import { ActionBarButton } from '@/components/data-table/action-bar.tsx';
 import { AdaptiveButton } from '@/components/ui/adaptive-button.tsx';
+import { useRevokeSessionsMutation } from '@/features/auth/server-functions/admin/revoke-sessions.ts';
 
 
 interface IProps extends ComponentProps<'div'> {
@@ -32,7 +33,7 @@ export const SessionsTable: FC<IProps> = (props) => {
   });
 
   const columns = useMemo(() => sessionColumns({ disabled: isLoading }), [isLoading]);
-  const { table } = useDataTable({
+  const { table, selectedItems } = useDataTable({
     data: data?.items,
     page: data?.page,
     limit: search.limit,
@@ -51,6 +52,14 @@ export const SessionsTable: FC<IProps> = (props) => {
     }
   });
 
+  const { mutate: revokeSessions, isPending: isRevokingSession } = useRevokeSessionsMutation();
+  const revokeSelectedSession = () => {
+    if (selectedItems?.length <= 0)
+      return;
+
+    revokeSessions({ ids: selectedItems.map(item => item.id) });
+  }
+
   return (
     <div className={cn('space-y-2', className)} {...divProps}>
       <DataTableProvider table={table} isPending={isLoading}>
@@ -61,8 +70,8 @@ export const SessionsTable: FC<IProps> = (props) => {
         <DataTable />
         <DataTablePagination/>
 
-        <DataTableActionBar>
-          <ActionBarButton text="Delete" icon={IconTrash} variant="destructive"/>
+        <DataTableActionBar disabled={isRevokingSession}>
+          <ActionBarButton text="Delete" icon={IconTrash} variant="destructive" onClick={revokeSelectedSession}/>
         </DataTableActionBar>
       </DataTableProvider>
     </div>

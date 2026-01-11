@@ -90,7 +90,7 @@ function RouteComponent() {
               <MapLocateControl className="border border-border"/>
               <MapMarker
                 position={shop.coordinates}
-                icon={<IconMapPinFilled className="size-6 text-muted-foreground"/>}
+                icon={<IconMapPinFilled className="size-6 text-primary"/>}
               />
             </Map>
           </ClientOnly>

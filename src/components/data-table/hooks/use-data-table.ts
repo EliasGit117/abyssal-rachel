@@ -46,7 +46,8 @@ export function useDataTable<TData>(props: IUseDataTableProps<TData>) {
 
   const { columnFiltersState, setColumnFiltersState, sortingState, setSortingState } = useDataTableSearch({
     columns: columns,
-    pageOnSearchChange: pageOnSearchChange
+    pageOnSearchChange: pageOnSearchChange,
+    replace: history === 'replace'
   });
 
   const [columnPinning, setColumnPinning] = useState<ColumnPinningState>(initialState?.columnPinning ?? {

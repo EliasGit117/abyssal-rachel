@@ -20,6 +20,9 @@ import {
   IconSquareMinus,
   IconSquareCheck,
   IconSquare,
+  IconActivity,
+  IconCircleX,
+  IconCircleCheck
 } from '@tabler/icons-react';
 import {
   ColumnFilterType,
@@ -39,6 +42,7 @@ import { DropdownMenuTrigger } from '@/components/ui/dropdown-menu.tsx';
 import { Button } from '@/components/ui/button.tsx';
 import { Badge } from '@/components/ui/badge.tsx';
 import { cn } from '@/lib/utils.ts';
+import { useRevokeSessionsMutation } from '@/features/auth/server-functions/admin/revoke-sessions.ts';
 
 
 interface IOptions {
@@ -190,6 +194,27 @@ export const sessionColumns = (options?: IOptions) => {
       }
     }),
 
+    columnHelper.accessor('expired', {
+      size: 97,
+      enableSorting: false,
+      meta: {
+        icon: IconActivity,
+        label: 'Status',
+        skeletonClassName: 'h-4 w-16'
+      },
+      header: ({ column }) => (<DataTableColumnHeader column={column}/>),
+      cell: ({ cell }) => {
+        const value = cell.getValue();
+
+        return (
+          <Badge variant={value ? 'destructive' : 'outline'} className='rounded-sm min-h-6'>
+            {value ? (<IconCircleX/>) : (<IconCircleCheck/>)}
+            <span>{value ? 'Expired' : 'Alive'}</span>
+          </Badge>
+        );
+      }
+    }),
+
     columnHelper.display({
       id: 'type',
       size: 97,
@@ -206,9 +231,9 @@ export const sessionColumns = (options?: IOptions) => {
         return (
           <Badge
             variant={isMine ? (isCurrent ? 'default' : 'secondary') : 'outline'}
-            className={cn("rounded-sm min-h-6", (!isCurrent && isMine) && 'border border-border')}
+            className={cn('rounded-sm min-h-6', (!isCurrent && isMine) && 'border border-border')}
           >
-            {isMine ? (isCurrent ? (<IconSquareMinus/>): (<IconSquareCheck/>)): (<IconSquare/>)}
+            {isMine ? (isCurrent ? (<IconSquareCheck/>) : (<IconSquareMinus/>)) : (<IconSquare/>)}
             <span>{isMine ? (isCurrent ? 'Current' : 'Mine') : 'External'}</span>
           </Badge>
         );
@@ -223,32 +248,35 @@ export const sessionColumns = (options?: IOptions) => {
         label: 'Actions',
         skeletonClassName: 'size-6 ml-auto'
       },
-      cell: ({ row }) => (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button size="icon-xs" variant="ghost">
-              <IconDotsVertical/>
-            </Button>
-          </DropdownMenuTrigger>
+      cell: ({ row }) => {
+        const { mutate: revokeSessions, isPending } = useRevokeSessionsMutation();
 
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>
-              Actions
-            </DropdownMenuLabel>
-            <DropdownMenuSeparator/>
+        return (
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button size="icon-xs" variant="ghost">
+                <IconDotsVertical/>
+              </Button>
+            </DropdownMenuTrigger>
 
-            <DropdownMenuItem
-              variant='destructive'
-              onClick={() =>
-                console.log('Delete user', row.original.id)
-              }
-            >
-              <IconTrash className="mr-2 size-4"/>
-              <span>Delete</span>
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      )
+            <DropdownMenuContent align="end">
+              <DropdownMenuLabel>
+                Actions
+              </DropdownMenuLabel>
+              <DropdownMenuSeparator/>
+
+              <DropdownMenuItem
+                variant="destructive"
+                disabled={isPending}
+                onClick={() => revokeSessions({ ids: [row.original.id] })}
+              >
+                <IconTrash className="mr-2 size-4"/>
+                <span>Delete</span>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        )
+      }
     })
   ]);
 };
