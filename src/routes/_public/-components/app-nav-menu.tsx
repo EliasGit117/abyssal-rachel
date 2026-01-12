@@ -10,7 +10,7 @@ import {
 } from '@/components/ui/navigation-menu';
 import { cn } from '@/lib/utils';
 import { ComponentProps, FC } from 'react';
-import { getBaseLinks, ILinkItem, MenuItemType, TLinkItem } from '@/routes/_public/-consts';
+import { getBaseLinks, ILinkItem, MenuItemType } from '@/routes/_public/-consts';
 import { useSession } from '@/hooks/use-session.ts';
 import { getLocale } from '@/paraglide/runtime';
 
@@ -28,15 +28,9 @@ const triggerAltClassName = cn(
 const HeaderNavMenu: FC<IProps> = ({ transparent, ...props }) => {
   const { user } = useSession();
   const locale = getLocale();
-  const baseLinks = getBaseLinks(locale);
+  const links = getBaseLinks(user?.role, locale);
   const triggerClassName = cn('bg-transparent duration-0 [&_svg]:duration-0 [&_svg]:transition-none', transparent ? triggerAltClassName : '');
 
-  let links: TLinkItem[];
-  if (!user)
-    links = baseLinks.filter(link => !link.protected);
-  else
-    links = baseLinks.filter(link =>
-      !link.forRoles || link.forRoles?.includes((user?.role ?? '')));
 
   return (
     <NavigationMenu viewport={false} {...props}>

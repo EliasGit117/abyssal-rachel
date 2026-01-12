@@ -18,6 +18,8 @@ import { useDeleteUserMutation } from '@/features/auth/server-functions/admin/de
 import { ActionBarButton } from '@/components/data-table/action-bar.tsx';
 import { AdaptiveButton } from '@/components/ui/adaptive-button.tsx';
 import { exportToCsv } from '@/lib/csv.ts';
+import { Permission } from '@/features/auth/lib/permissions.ts';
+import { useHasPermission } from '@/hooks/use-has-permission.ts';
 
 
 interface IProps extends ComponentProps<'div'> {
@@ -29,6 +31,7 @@ export const UsersTable: FC<IProps> = (props) => {
   'use no memo';
 
   const { className, search = {}, ...divProps } = props;
+  const { canDelete } = useHasPermission({ canDelete: { user: [Permission.Delete] } });
   const { mutate: deleteUser, isPending: isDeletingUser } = useDeleteUserMutation();
   const { data, isLoading, refetch } = useQuery({
     ...getUsersPaginatedAdminQueryOptions(search),
@@ -36,7 +39,8 @@ export const UsersTable: FC<IProps> = (props) => {
   });
 
   const columns = useMemo(() => userColumns({
-    disabled: isLoading || isDeletingUser
+    disabled: isLoading || isDeletingUser,
+    canDelete: canDelete
   }), [isLoading, isDeletingUser]);
 
   const { table, selectedItems, setRowSelection } = useDataTable({
@@ -57,6 +61,7 @@ export const UsersTable: FC<IProps> = (props) => {
       }
     }
   });
+
 
   const deleteSelectedUser = () => {
     if (selectedItems[0] == null)
@@ -91,7 +96,9 @@ export const UsersTable: FC<IProps> = (props) => {
 
         <DataTableActionBar disabled={isDeletingUser}>
           <ActionBarButton text="CSV" icon={IconFileExport} onClick={onExportToCsvClick}/>
-          <ActionBarButton text="Delete" icon={IconTrash} variant="destructive" onClick={deleteSelectedUser}/>
+          {canDelete && (
+            <ActionBarButton text="Delete" icon={IconTrash} variant="destructive" onClick={deleteSelectedUser}/>
+          )}
         </DataTableActionBar>
       </DataTableProvider>
     </div>

@@ -17,8 +17,8 @@ import { UserBriefDtoFactory } from '@/features/auth/dtos/user-brief-dto.ts';
 const sortableFields: (keyof User)[] = ['id', 'name', 'banned', 'email', 'emailVerified', 'role', 'createdAt', 'updatedAt'];
 
 export const getUsersPaginatedAdminSchema = paginatedSchema.extend({
-  sort: z.enum(sortableFields).optional().catch(undefined),
   id: z.string().optional().catch(undefined),
+  sort: z.enum(sortableFields).optional().catch(undefined),
   name: z.string().optional().catch(undefined),
   email: z.string().optional().catch(undefined),
   emailVerified: z.boolean().optional().catch(undefined),
@@ -35,13 +35,16 @@ export const getUsersPaginatedAdminServerFn = createServerFn({ method: 'GET' })
   .middleware([authMiddleware()])
   .handler(async ({ data, context: { user } }) => {
     const canList = await auth.api.userHasPermission({
-      body: { userId: user!.id, permission: { 'users': [Permission.List] } }
+      body: { userId: user!.id, permission: { user: [Permission.List] } }
     });
 
     if (!canList)
       throwForbiddenError({ translated: false });
 
     const where: Prisma.UserWhereInput = {};
+
+    if (data.id != null)
+      where.id = { contains: data.id, mode: 'insensitive' };
 
     if (data.name != null)
       where.name = { contains: data.name, mode: 'insensitive' };

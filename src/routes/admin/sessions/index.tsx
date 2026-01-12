@@ -7,7 +7,6 @@ import {
 import { SessionsTable } from '@/routes/admin/sessions/-components/sessions-table/table.tsx';
 
 
-
 export const Route = createFileRoute('/admin/sessions/')({
   component: RouteComponent,
   staticData: { breadcrumbs: { title: 'Sessions' } },

@@ -13,7 +13,7 @@ import { envConfig } from '@/lib/env-config.ts';
 import Logo from '@/assets/icons/logo.svg?react';
 import { NavUser } from './nav-user.tsx';
 import { NavLinkGroup } from './nav-link-group.tsx';
-import { getMainLinks, getUserLinks } from './links.ts';
+import { getCatalogLinks, getMainLinks, getUserLinks } from './links.ts';
 import { NavSettings } from './nav-settings.tsx';
 import { useSession } from '@/hooks/use-session.ts';
 
@@ -44,6 +44,7 @@ export function AdminSidebar({ ...props }: IAdminSidebarProps) {
       <SidebarContent>
 
         <NavLinkGroup label="Main" items={getMainLinks({ role: user?.role })}/>
+        <NavLinkGroup label="Catalog" items={getCatalogLinks({ role: user?.role })}/>
         <NavLinkGroup label="Auth" items={getUserLinks({ role: user?.role })}/>
 
         <NavSettings className='mt-auto'/>

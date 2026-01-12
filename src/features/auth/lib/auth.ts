@@ -5,17 +5,17 @@ import { localization } from 'better-auth-localization';
 import { getLocale } from '@/paraglide/runtime';
 import { resend } from '@/lib/resend.ts';
 import { admin as adminPlugin, magicLink } from 'better-auth/plugins';
-import { accessControl, user, admin } from '@/features/auth/lib/permissions.ts';
+import { accessControl, roles } from '@/features/auth/lib/permissions.ts';
 import { tanstackStartCookies } from 'better-auth/tanstack-start';
 
 
 export const auth = betterAuth({
-  session: {
-    cookieCache: {
-      enabled: true,
-      maxAge: 5 * 60
-    },
-  },
+  // session: {
+  //   cookieCache: {
+  //     enabled: true,
+  //     maxAge: 5 * 60
+  //   },
+  // },
   database: prismaAdapter(prisma, {
     provider: 'postgresql',
   }),
@@ -66,10 +66,7 @@ export const auth = betterAuth({
     tanstackStartCookies(),
     adminPlugin({
       ac: accessControl,
-      roles: {
-        admin,
-        user
-      }
+      roles: roles
     }),
     magicLink({
       sendMagicLink: async ({ email, url }) => {

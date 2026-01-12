@@ -3,12 +3,13 @@ import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar.tsx';
 import { AdminHeader } from '@/routes/admin/-components/header';
 import { AdminSidebar } from '@/routes/admin/-components/sidebar';
 import { Bar, Progress } from '@bprogress/react';
+import { hasRoleAccessToAdmin } from '@/features/auth/lib/permissions.ts';
 
 
 export const Route = createFileRoute('/admin')({
   component: RouteComponent,
   beforeLoad: ({ context: { user } }) => {
-    if (!user || user.role !== 'admin')
+    if (!hasRoleAccessToAdmin(user?.role))
       throw redirect({ to: '/' });
   },
   staticData: {

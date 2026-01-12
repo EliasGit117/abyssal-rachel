@@ -12,15 +12,15 @@ import { IconPlus, IconProgressAlert, IconRefresh, IconTrash } from '@tabler/ico
 import { m } from '@/paraglide/messages';
 import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from '@/components/ui/empty.tsx';
 import { Button } from '@/components/ui/button.tsx';
-import { useSession } from '@/hooks/use-session.ts';
 import { Permission } from '@/features/auth/lib/permissions.ts';
-import { hasRolePermission } from '@/features/auth/lib/has-role-permission.ts';
+import { useHasPermission } from '@/hooks/use-has-permission.ts';
 
 
 export const NotificationListSection: FC<ComponentProps<'section'>> = ({ className, ...props }) => {
-  const { user } = useSession();
-  const canDelete = hasRolePermission({ role: user?.role, permission: { notifications: [Permission.Delete] } });
-  const canCreate = hasRolePermission({ role: user?.role, permission: { notifications: [Permission.Create] } });
+  const permissions = useHasPermission({
+    canCreate: { notification: [Permission.Create] },
+    canDelete: { notification: [Permission.Delete] },
+  });
 
   const [deletion, setDeletion] = useState<Record<number, boolean>>({});
   const { isLoading: isPendingNotifications, isFetching, data: notifications, refetch } = useQuery({
@@ -73,7 +73,7 @@ export const NotificationListSection: FC<ComponentProps<'section'>> = ({ classNa
                   {notification.text}
                 </ItemDescription>
               </ItemContent>
-              {canDelete && (
+              {permissions.canCreate && (
                 <ItemActions>
                   <Tooltip>
                     <TooltipTrigger asChild>
@@ -107,7 +107,7 @@ export const NotificationListSection: FC<ComponentProps<'section'>> = ({ classNa
                 <EmptyTitle>
                   {m['pages.notifications.empty.title']()}
                 </EmptyTitle>
-                {canCreate && (
+                {permissions.canCreate && (
                   <EmptyDescription>
                     {m['pages.notifications.empty.description']()}
                   </EmptyDescription>
@@ -115,7 +115,7 @@ export const NotificationListSection: FC<ComponentProps<'section'>> = ({ classNa
               </EmptyHeader>
               <EmptyContent>
                 <div className="flex gap-2">
-                  {canCreate && (
+                  {permissions.canCreate && (
                     <Button
                       onClick={() => {
                         const el = document.getElementById('name-ro-input');

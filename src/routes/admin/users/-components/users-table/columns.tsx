@@ -1,21 +1,21 @@
 import { createColumnHelper } from '@tanstack/react-table';
 import { format } from 'date-fns';
 import {
-  IconHash,
-  IconMail,
-  IconUser,
+  IconBan,
   IconCalendarPlus,
-  IconDotsVertical,
-  IconTrash,
-  IconMailCheck,
   IconCircleCheck,
   IconCircleX,
-  IconShield,
-  IconBan,
   IconClock,
+  IconDotsVertical,
+  IconHash,
+  IconMail,
+  IconMailCheck,
   IconMailX,
+  IconNetwork,
   IconPolaroid,
-  IconNetwork
+  IconShield,
+  IconTrash,
+  IconUser
 } from '@tabler/icons-react';
 
 import { Badge } from '@/components/ui/badge';
@@ -23,29 +23,28 @@ import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu';
-import {
-  ColumnFilterType,
-  DataTableColumnHeader
-} from '@/components/data-table';
+import { ColumnFilterType, DataTableColumnHeader } from '@/components/data-table';
 import { Skeleton } from '@/components/ui/skeleton';
 import { IUserBriefDto } from '@/features/auth/dtos/user-brief-dto.ts';
-import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage
-} from '@/components/ui/avatar.tsx';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar.tsx';
 import { Link } from '@tanstack/react-router';
 import { useDeleteUserMutation } from '@/features/auth/server-functions/admin/delete-user.ts';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group.tsx';
 
 
-const columnHelper = createColumnHelper<IUserBriefDto>();
+interface IOptions {
+  disabled?: boolean;
+  canDelete?: boolean;
+}
 
-export const userColumns = (options?: { disabled?: boolean }) => {
-  const { disabled } = options ?? {};
+const columnHelper = createColumnHelper<IUserBriefDto>();
+export const userColumns = (options?: IOptions) => {
+  const { disabled, canDelete } = options ?? {};
 
   return [
     // Select
@@ -103,8 +102,12 @@ export const userColumns = (options?: { disabled?: boolean }) => {
       meta: {
         label: 'ID',
         icon: IconHash,
-        skeletonClassName: 'h-6 w-10'
-      }
+        skeletonClassName: 'h-6 w-10',
+        filter: {
+          type: ColumnFilterType.Text,
+          placeholder: 'Search by id',
+        }
+      },
     }),
 
     // Avatar
@@ -344,14 +347,16 @@ export const userColumns = (options?: { disabled?: boolean }) => {
                 </Link>
               </DropdownMenuItem>
 
-              <DropdownMenuItem
-                variant="destructive"
-                disabled={isPending}
-                onClick={() => deleteUser({ data: { id: row.getValue<string>('id') } })}
-              >
-                <IconTrash className="mr-2 size-4"/>
-                <span>Delete</span>
-              </DropdownMenuItem>
+              {canDelete && (
+                <DropdownMenuItem
+                  variant="destructive"
+                  disabled={isPending}
+                  onClick={() => deleteUser({ data: { id: row.getValue<string>('id') } })}
+                >
+                  <IconTrash className="mr-2 size-4"/>
+                  <span>Delete</span>
+                </DropdownMenuItem>
+              )}
             </DropdownMenuContent>
           </DropdownMenu>
         );

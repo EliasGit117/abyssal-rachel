@@ -20,7 +20,7 @@ export const createNotificationServerFn = createServerFn({ method: 'POST' })
     const canCreate = await auth.api.userHasPermission({
       body: {
         userId: user!.id,
-        permission: { "notifications": [Permission.Create] }
+        permission: { notification: [Permission.Create] }
       },
     });
 

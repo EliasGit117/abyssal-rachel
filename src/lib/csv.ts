@@ -1,5 +1,3 @@
-
-
 export function exportToCsv<T extends Record<string, unknown>>(filename: string, rows: T[]) {
   if (!rows.length)
     return;
@@ -14,9 +12,7 @@ export function exportToCsv<T extends Record<string, unknown>>(filename: string,
 
   const csv = [
     headers.join(','),
-    ...rows.map((row) =>
-      headers.map((header) => escape(row[header])).join(',')
-    )
+    ...rows.map((row) => headers.map((header) => escape(row[header])).join(','))
   ].join('\n');
 
   const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });

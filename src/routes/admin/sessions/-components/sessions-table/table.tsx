@@ -12,10 +12,14 @@ import {
 } from '@/features/auth/server-functions/admin/sessions-paginated.ts';
 import { ComponentProps, FC, useMemo } from 'react';
 import { cn } from '@/lib/utils.ts';
-import { IconTrash } from '@tabler/icons-react';
+import { IconFileExport, IconTrash } from '@tabler/icons-react';
 import { ActionBarButton } from '@/components/data-table/action-bar.tsx';
 import { AdaptiveButton } from '@/components/ui/adaptive-button.tsx';
 import { useRevokeSessionsMutation } from '@/features/auth/server-functions/admin/revoke-sessions.ts';
+import { exportToCsv } from '@/lib/csv.ts';
+import { Permission } from '@/features/auth/lib/permissions.ts';
+import { useHasPermission } from '@/hooks/use-has-permission.ts';
+
 
 
 interface IProps extends ComponentProps<'div'> {
@@ -24,16 +28,21 @@ interface IProps extends ComponentProps<'div'> {
 
 export const SessionsTable: FC<IProps> = (props) => {
   // noinspection BadExpressionStatementJS
-  "use no memo";
+  'use no memo';
 
   const { className, search = {}, ...divProps } = props;
+  const { canDelete } = useHasPermission({ canDelete: { user: [Permission.Delete] } });
   const { data, isLoading, refetch } = useQuery({
     ...getSessionsPaginatedAdminQueryOptions(search),
     placeholderData: keepPreviousData
   });
 
-  const columns = useMemo(() => sessionColumns({ disabled: isLoading }), [isLoading]);
-  const { table, selectedItems } = useDataTable({
+  const columns = useMemo(() => sessionColumns({
+    disabled: isLoading,
+    canDelete: canDelete
+  }), [isLoading]);
+
+  const { table, selectedItems, setRowSelection } = useDataTable({
     data: data?.items,
     page: data?.page,
     limit: search.limit,
@@ -52,13 +61,28 @@ export const SessionsTable: FC<IProps> = (props) => {
     }
   });
 
+
+  const onExportToCsvClick = () => {
+    if (!selectedItems.length)
+      return;
+
+    setRowSelection({});
+    exportToCsv('sessions.csv', selectedItems.map((session) => ({
+      id: session.id,
+      userId: session.userId,
+      expiresAt: session.expiresAt,
+      createdAt: session.createdAt
+    })));
+  };
+
+
   const { mutate: revokeSessions, isPending: isRevokingSession } = useRevokeSessionsMutation();
   const revokeSelectedSession = () => {
     if (selectedItems?.length <= 0)
       return;
 
     revokeSessions({ ids: selectedItems.map(item => item.id) });
-  }
+  };
 
   return (
     <div className={cn('space-y-2', className)} {...divProps}>
@@ -67,11 +91,14 @@ export const SessionsTable: FC<IProps> = (props) => {
           <AdaptiveButton text="Refresh" size="sm" variant="ghost" onClick={() => refetch()}/>
         </DataTableToolbar>
 
-        <DataTable />
+        <DataTable/>
         <DataTablePagination/>
 
         <DataTableActionBar disabled={isRevokingSession}>
-          <ActionBarButton text="Delete" icon={IconTrash} variant="destructive" onClick={revokeSelectedSession}/>
+          <ActionBarButton text="CSV" icon={IconFileExport} onClick={onExportToCsvClick}/>
+          {canDelete && (
+            <ActionBarButton text="Delete" icon={IconTrash} variant="destructive" onClick={revokeSelectedSession}/>
+          )}
         </DataTableActionBar>
       </DataTableProvider>
     </div>

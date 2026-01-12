@@ -43,16 +43,18 @@ import { Button } from '@/components/ui/button.tsx';
 import { Badge } from '@/components/ui/badge.tsx';
 import { cn } from '@/lib/utils.ts';
 import { useRevokeSessionsMutation } from '@/features/auth/server-functions/admin/revoke-sessions.ts';
+import { Link } from '@tanstack/react-router';
 
 
 interface IOptions {
   disabled?: boolean;
+  canDelete?: boolean;
 }
 
 const columnHelper = createColumnHelper<ISessionBriefDto>();
 
 export const sessionColumns = (options?: IOptions) => {
-  const { disabled } = options ?? {};
+  const { disabled, canDelete } = options ?? {};
 
   return ([
     columnHelper.display({
@@ -207,7 +209,7 @@ export const sessionColumns = (options?: IOptions) => {
         const value = cell.getValue();
 
         return (
-          <Badge variant={value ? 'destructive' : 'outline'} className='rounded-sm min-h-6'>
+          <Badge variant={value ? 'destructive' : 'outline'} className="rounded-sm min-h-6">
             {value ? (<IconCircleX/>) : (<IconCircleCheck/>)}
             <span>{value ? 'Expired' : 'Alive'}</span>
           </Badge>
@@ -265,33 +267,48 @@ export const sessionColumns = (options?: IOptions) => {
               </DropdownMenuLabel>
               <DropdownMenuSeparator/>
 
-              <DropdownMenuItem
-                variant="destructive"
-                disabled={isPending}
-                onClick={() => revokeSessions({ ids: [row.original.id] })}
-              >
-                <IconTrash className="mr-2 size-4"/>
-                <span>Delete</span>
+              <DropdownMenuItem asChild>
+                <Link to='/admin/users' search={{ id: row.original.userId }}>
+                  <IconUser className="mr-2 size-4"/>
+                  <span>User</span>
+                </Link>
               </DropdownMenuItem>
+
+              {canDelete && (
+                <DropdownMenuItem
+                  variant="destructive"
+                  disabled={isPending}
+                  onClick={() => revokeSessions({ ids: [row.original.id] })}
+                >
+                  <IconTrash className="mr-2 size-4"/>
+                  <span>Delete</span>
+                </DropdownMenuItem>
+              )}
             </DropdownMenuContent>
           </DropdownMenu>
-        )
+        );
       }
     })
   ]);
 };
 
 function getBrowserIcon(name?: string) {
+  console.log(name)
+
   switch (name?.toLowerCase()) {
     case 'chrome':
+    case 'mobile chrome':
       return IconBrandChrome;
     case 'firefox':
+    case 'mobile firefox':
       return IconBrandFirefox;
     case 'safari':
+    case 'mobile safari':
       return IconBrandSafari;
     case 'edge':
       return IconBrandEdge;
     case 'opera':
+    case 'mobile opera':
       return IconBrandOpera;
     default:
       return IconQuestionMark;

@@ -33,11 +33,10 @@ export const revokeSessionsServerFn = createServerFn({ method: 'POST' })
         body: { userId: user!.id, permission: { session: [Permission.List, Permission.Delete] } }
       });
 
-      if (!canRevoke) throwForbiddenError({ translated: false });
+      if (!canRevoke)
+        throwForbiddenError({ translated: false });
 
-      const sessions = await prisma.session.findMany({
-        where: { id: { in: data.ids } }
-      });
+      const sessions = await prisma.session.findMany({ where: { id: { in: data.ids } } });
 
       if (sessions.length === 0) throwBadRequest({ translated: false });
 
@@ -55,9 +54,8 @@ export const revokeSessionsServerFn = createServerFn({ method: 'POST' })
       }
 
       // Sign out current session last if included
-      if (currentSessionIncluded) {
+      if (currentSessionIncluded)
         await auth.api.signOut({ headers: headers });
-      }
 
       return { revokedCount: sessions.length };
     }

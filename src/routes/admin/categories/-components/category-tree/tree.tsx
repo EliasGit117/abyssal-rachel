@@ -27,8 +27,6 @@ import { useCreateCategorySheet } from '@/routes/admin/categories/-components/cr
 import { useEditCategorySheet } from '@/routes/admin/categories/-components/edit-category-sheet';
 import { useConfirm } from '@/components/ui/confirm-dialog.tsx';
 import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from '@/components/ui/empty.tsx';
-import { hasRolePermission } from '@/features/auth/lib/has-role-permission.ts';
-import { useSession } from '@/hooks/use-session.ts';
 import { Permission } from '@/features/auth/lib/permissions.ts';
 import {
   InputGroup,
@@ -40,6 +38,7 @@ import {
 import { IAdminCategoryDto } from '@/features/categories/admin/dtos/admin-category-dto.ts';
 import { ItemInstance } from '@headless-tree/core';
 import { CategoryStatus } from '~/prisma/generated/prisma/enums.ts';
+import { useHasPermission } from '@/hooks/use-has-permission.ts';
 
 
 interface ICategoryTreeProps {
@@ -50,15 +49,16 @@ export const CategoryTree: FC<ICategoryTreeProps> = ({ className }) => {
   // noinspection BadExpressionStatementJS
   'use no memo';
 
-  const { user } = useSession();
   const { open: openCreateSheet } = useCreateCategorySheet();
   const { open: openEditSheet } = useEditCategorySheet();
   const { tree, disabled, deleteCategory, isPendingCategories, indent, isEmpty, searchValue } = useCategoryTree();
   const confirm = useConfirm();
 
-  const canCreate = hasRolePermission({ role: user?.role, permissions: { categories: [Permission.Create] } });
-  const canEdit = hasRolePermission({ role: user?.role, permissions: { categories: [Permission.Create] } });
-  const canDelete = hasRolePermission({ role: user?.role, permissions: { categories: [Permission.Delete] } });
+  const { canCreate, canEdit, canDelete } = useHasPermission({
+    canCreate: { category: [Permission.Create] },
+    canEdit: { category: [Permission.Update] },
+    canDelete: { category: [Permission.Delete] }
+  });
 
   const deleteWithConfirm = async (id: number) => {
     const isConfirmed = await confirm({
@@ -164,7 +164,7 @@ export const CategoryTree: FC<ICategoryTreeProps> = ({ className }) => {
             <DropdownMenu>
               <DropdownMenuTrigger disabled={disabled} asChild>
                 <Button size="icon-sm" variant="ghost">
-                  <IconDots className='size-4 text-muted-foreground'/>
+                  <IconDots className="size-4 text-muted-foreground"/>
                 </Button>
               </DropdownMenuTrigger>
 
@@ -225,7 +225,7 @@ export const CategoryTree: FC<ICategoryTreeProps> = ({ className }) => {
             <TreeItem className="flex-1 not-last:pb-0" item={item}>
               <TreeItemLabel
                 className={cn(
-                  "before:-inset-y-0.5 before:-z-10 relative before:absolute before:inset-x-0 before:bg-background",
+                  'before:-inset-y-0.5 before:-z-10 relative before:absolute before:inset-x-0 before:bg-background',
                   data.status === CategoryStatus.INACTIVE && 'text-muted-foreground'
                 )}
               >
@@ -252,10 +252,11 @@ interface ICategoryTreeToolbarProps extends ComponentProps<'div'> {
 }
 
 export const CategoryTreeToolbar: FC<ICategoryTreeToolbarProps> = ({ disabled, className, children, ...divProps }) => {
-  const { user } = useSession();
-  const canCreate = hasRolePermission({ role: user?.role, permissions: { categories: [Permission.Create] } });
-  const canEdit = hasRolePermission({ role: user?.role, permissions: { categories: [Permission.Create] } });
   const { tree, disabled: isTreeDisabled, searchValue, setSearchValue } = useCategoryTree();
+  const { canCreate, canEdit } = useHasPermission({
+    canCreate: { category: [Permission.Create] },
+    canEdit: { category: [Permission.Update] }
+  });
 
   const isToolbarDisabled = isTreeDisabled || disabled;
 

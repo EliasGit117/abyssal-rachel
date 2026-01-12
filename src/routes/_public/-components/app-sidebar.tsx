@@ -25,14 +25,11 @@ import Logo from '@/assets/icons/logo.svg?react';
 
 
 export const AppSidebar = () => {
+  const { user } = useSession();
   const locale = getLocale();
-  const baseLinks = getBaseLinks(locale);
+  const links = getBaseLinks(user?.role, locale);
   const isOpen = useAppSidebar((s) => s.isOpen);
   const setOpen = useAppSidebar((s) => s.setOpen);
-  const { session } = useSession();
-  let links = baseLinks;
-  if (!session)
-    links = baseLinks.filter(link => !link.protected);
 
   const handleClick = () => setOpen(false);
 

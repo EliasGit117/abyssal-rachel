@@ -7,7 +7,8 @@ import {
 import {
   CategoryTree,
   CategoryTreeProvider,
-  CategoryTreeToolbar, useCategoryTree
+  CategoryTreeToolbar,
+  useCategoryTree
 } from '@/routes/admin/categories/-components/category-tree';
 import { FC } from 'react';
 import { Button } from '@/components/ui/button.tsx';
@@ -19,6 +20,8 @@ import {
 } from '@/routes/admin/categories/-components/edit-category-sheet';
 import { getCategoryTreeForAdminQueryOptions } from '@/features/categories/admin/server-functions/get-tree.ts';
 import { useIsMobile } from '@/hooks/use-mobile.ts';
+import { useHasPermission } from '@/hooks/use-has-permission.ts';
+import { Permission } from '@/features/auth/lib/permissions.ts';
 
 
 export const Route = createFileRoute('/admin/categories/')({
@@ -35,6 +38,7 @@ export const Route = createFileRoute('/admin/categories/')({
 });
 
 function RouteComponent() {
+
   return (
     <CreateCategorySheetProvider>
       <EditCategorySheetProvider>
@@ -61,6 +65,9 @@ function RouteComponent() {
 const ToolbarAdditionalButtons: FC<{ disabled?: boolean }> = ({ disabled }) => {
   const { disabled: isTreeDisabled, refetch } = useCategoryTree();
   const isMobile = useIsMobile();
+  const { canCreate } = useHasPermission({
+    canCreate: { category: [Permission.Create] }
+  });
 
   const isDisabled = isTreeDisabled || disabled;
 
@@ -72,14 +79,14 @@ const ToolbarAdditionalButtons: FC<{ disabled?: boolean }> = ({ disabled }) => {
       onClick={() => refetch()}
       disabled={isDisabled}
     >
-      <IconRefresh />
+      <IconRefresh/>
       <span className="sr-only sm:not-sr-only">Refresh</span>
     </Button>
   );
 
   return (
     <>
-      <div className="flex-1" />
+      <div className="flex-1"/>
 
       {isMobile ? (
         <Tooltip delayDuration={500}>
@@ -90,12 +97,14 @@ const ToolbarAdditionalButtons: FC<{ disabled?: boolean }> = ({ disabled }) => {
         </Tooltip>
       ) : (refreshButton)}
 
-      <CreateCategorySheetTrigger
-        size="sm"
-        variant="ghost"
-        disabled={isDisabled}
-        className="w-8 sm:w-fit"
-      />
+      {canCreate && (
+        <CreateCategorySheetTrigger
+          size="sm"
+          variant="ghost"
+          disabled={isDisabled}
+          className="w-8 sm:w-fit"
+        />
+      )}
     </>
   );
 };

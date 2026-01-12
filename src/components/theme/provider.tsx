@@ -92,7 +92,10 @@ export function ThemeProvider({
   );
 }
 
-// eslint-disable-next-line react-refresh/only-export-components
+export function isTheme(value: string): value is TTheme {
+  return ['light', 'dark', 'system'].includes(value);
+}
+
 export function useTheme() {
   const context = use(ThemeProviderContext);
 

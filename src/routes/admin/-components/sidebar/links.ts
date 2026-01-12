@@ -7,7 +7,7 @@ import {
   IconSettings,
   IconUsers
 } from '@tabler/icons-react';
-import { hasRolePermission } from '@/features/auth/lib/has-role-permission.ts';
+import { hasPermissionForRole } from '@/features/auth/lib/has-permission-for-role.ts';
 import { Permission } from '@/features/auth/lib/permissions.ts';
 
 export interface INavItem {
@@ -26,38 +26,38 @@ interface NavConfig extends INavItem {
 
 const mainLinks: NavConfig[] = [
   {
-    title: 'Dashboard',
+    title: "Dashboard",
     icon: IconDashboard,
-    linkOptions: { to: '/admin', activeOptions: { exact: true } }
+    linkOptions: { to: "/admin", activeOptions: { exact: true } },
   },
   {
-    title: 'Categories',
-    icon: IconCategory,
-    linkOptions: { to: '/admin/categories' },
-    can: (role) =>
-      hasRolePermission({ role, permissions: { categories: [Permission.List] } })
-  },
-  {
-    title: 'Settings',
+    title: "Settings",
     icon: IconSettings,
-    linkOptions: { to: '/admin/settings' }
-  }
+    linkOptions: { to: "/admin/settings" },
+  },
+];
+
+const catalogLinks: NavConfig[] = [
+  {
+    title: "Categories",
+    icon: IconCategory,
+    linkOptions: { to: "/admin/categories" },
+    can: (role) => hasPermissionForRole(role, { canListCategory: { category: [Permission.List] } }).canListCategory,
+  },
 ];
 
 const userLinks: NavConfig[] = [
   {
-    title: 'Users',
+    title: "Users",
     icon: IconUsers,
-    linkOptions: { to: '/admin/users' },
-    can: (role) =>
-      hasRolePermission({ role, permissions: { user: [Permission.List] } })
+    linkOptions: { to: "/admin/users" },
+    can: (role) => hasPermissionForRole(role, { canListUsers: { user: [Permission.List] } }).canListUsers,
   },
   {
-    title: 'Sessions',
+    title: "Sessions",
     icon: IconNetwork,
-    linkOptions: { to: '/admin/sessions' },
-    can: (role) =>
-      hasRolePermission({ role, permissions: { session: [Permission.List] } })
+    linkOptions: { to: "/admin/sessions" },
+    can: (role) => hasPermissionForRole(role, { canListSessions: { session: [Permission.List] } }).canListSessions,
   },
 ];
 
@@ -65,4 +65,7 @@ export const getMainLinks = ({ role }: ILiknOptions = {}): INavItem[] => mainLin
   .filter(({ can }) => !can || can(role));
 
 export const getUserLinks = ({ role }: ILiknOptions = {}): INavItem[] => userLinks
+  .filter(({ can }) => !can || can(role));
+
+export const getCatalogLinks = ({ role }: ILiknOptions = {}): INavItem[] => catalogLinks
   .filter(({ can }) => !can || can(role));
