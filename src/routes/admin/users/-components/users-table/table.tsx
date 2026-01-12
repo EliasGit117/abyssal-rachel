@@ -93,7 +93,8 @@ export const UsersTable: FC<IProps> = (props) => {
             text="Refresh"
             size="sm"
             variant="ghost"
-            icon={IconRefresh} className="ml-auto"
+            icon={IconRefresh}
+            className="ml-auto"
             onClick={() => refetch()}
           />
         </DataTableToolbar>
