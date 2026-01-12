@@ -39,7 +39,7 @@ export const SessionsTable: FC<IProps> = (props) => {
   const columns = useMemo(() => sessionColumns({
     disabled: isLoading,
     canDelete: canDelete
-  }), [isLoading]);
+  }), [isLoading, canDelete])
 
   const { table, selectedItems, setRowSelection } = useDataTable({
     data: data?.items,

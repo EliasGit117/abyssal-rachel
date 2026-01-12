@@ -15,7 +15,6 @@ import {
   IconBrandOpera,
   IconQuestionMark,
   IconDotsVertical,
-  IconTrash,
   IconInfoCircle,
   IconSquareMinus,
   IconSquareCheck,
@@ -42,7 +41,6 @@ import { DropdownMenuTrigger } from '@/components/ui/dropdown-menu.tsx';
 import { Button } from '@/components/ui/button.tsx';
 import { Badge } from '@/components/ui/badge.tsx';
 import { cn } from '@/lib/utils.ts';
-import { useRevokeSessionsMutation } from '@/features/auth/server-functions/admin/revoke-sessions.ts';
 import { Link } from '@tanstack/react-router';
 
 
@@ -54,7 +52,7 @@ interface IOptions {
 const columnHelper = createColumnHelper<ISessionBriefDto>();
 
 export const sessionColumns = (options?: IOptions) => {
-  const { disabled, canDelete } = options ?? {};
+  const { disabled } = options ?? {};
 
   return ([
     columnHelper.display({
@@ -251,7 +249,7 @@ export const sessionColumns = (options?: IOptions) => {
         skeletonClassName: 'size-6 ml-auto'
       },
       cell: ({ row }) => {
-        const { mutate: revokeSessions, isPending } = useRevokeSessionsMutation();
+        // const { mutate: revokeSessions, isPending } = useRevokeSessionsMutation();
 
         return (
           <DropdownMenu>
@@ -274,16 +272,16 @@ export const sessionColumns = (options?: IOptions) => {
                 </Link>
               </DropdownMenuItem>
 
-              {canDelete && (
-                <DropdownMenuItem
-                  variant="destructive"
-                  disabled={isPending}
-                  onClick={() => revokeSessions({ ids: [row.original.id] })}
-                >
-                  <IconTrash className="mr-2 size-4"/>
-                  <span>Revoke</span>
-                </DropdownMenuItem>
-              )}
+              {/*{canDelete && (*/}
+              {/*  <DropdownMenuItem*/}
+              {/*    variant="destructive"*/}
+              {/*    disabled={isPending}*/}
+              {/*    onClick={() => revokeSessions({ ids: [row.original.id] })}*/}
+              {/*  >*/}
+              {/*    <IconTrash className="mr-2 size-4"/>*/}
+              {/*    <span>Revoke</span>*/}
+              {/*  </DropdownMenuItem>*/}
+              {/*)}*/}
             </DropdownMenuContent>
           </DropdownMenu>
         );
