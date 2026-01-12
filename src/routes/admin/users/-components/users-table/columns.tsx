@@ -33,18 +33,18 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { IUserBriefDto } from '@/features/auth/dtos/user-brief-dto.ts';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar.tsx';
 import { Link } from '@tanstack/react-router';
-import { useDeleteUserMutation } from '@/features/auth/server-functions/admin/delete-user.ts';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group.tsx';
 
 
 interface IOptions {
   disabled?: boolean;
   canDelete?: boolean;
+  onDeleteClick?: (id: string) => void;
 }
 
 const columnHelper = createColumnHelper<IUserBriefDto>();
 export const userColumns = (options?: IOptions) => {
-  const { disabled, canDelete } = options ?? {};
+  const { disabled, canDelete, onDeleteClick } = options ?? {};
 
   return [
     // Select
@@ -326,8 +326,6 @@ export const userColumns = (options?: IOptions) => {
         skeletonClassName: 'size-6 ml-auto'
       },
       cell: ({ row }) => {
-        const { mutate: deleteUser, isPending } = useDeleteUserMutation();
-
         return (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -347,11 +345,11 @@ export const userColumns = (options?: IOptions) => {
                 </Link>
               </DropdownMenuItem>
 
-              {canDelete && (
+              {(!!onDeleteClick && canDelete) && (
                 <DropdownMenuItem
                   variant="destructive"
-                  disabled={isPending}
-                  onClick={() => deleteUser({ data: { id: row.getValue<string>('id') } })}
+                  disabled={disabled}
+                  onClick={() => onDeleteClick?.(row.getValue<string>('id'))}
                 >
                   <IconTrash className="mr-2 size-4"/>
                   <span>Delete</span>

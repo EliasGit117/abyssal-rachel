@@ -40,8 +40,9 @@ export const UsersTable: FC<IProps> = (props) => {
 
   const columns = useMemo(() => userColumns({
     disabled: isLoading || isDeletingUser,
-    canDelete: canDelete
-  }), [isLoading, isDeletingUser]);
+    canDelete: canDelete,
+    onDeleteClick: (id) => deleteUser({ data: { id: id } })
+  }), [isLoading, isDeletingUser, deleteUser]);
 
   const { table, selectedItems, setRowSelection } = useDataTable({
     data: data?.items,

@@ -21,7 +21,7 @@ import {
   IconSquare,
   IconActivity,
   IconCircleX,
-  IconCircleCheck
+  IconCircleCheck, IconTrash
 } from '@tabler/icons-react';
 import {
   ColumnFilterType,
@@ -47,12 +47,13 @@ import { Link } from '@tanstack/react-router';
 interface IOptions {
   disabled?: boolean;
   canDelete?: boolean;
+  onRevokeClick?: (id: string) => void;
 }
 
 const columnHelper = createColumnHelper<ISessionBriefDto>();
 
 export const sessionColumns = (options?: IOptions) => {
-  const { disabled } = options ?? {};
+  const { disabled, canDelete, onRevokeClick } = options ?? {};
 
   return ([
     columnHelper.display({
@@ -249,7 +250,6 @@ export const sessionColumns = (options?: IOptions) => {
         skeletonClassName: 'size-6 ml-auto'
       },
       cell: ({ row }) => {
-        // const { mutate: revokeSessions, isPending } = useRevokeSessionsMutation();
 
         return (
           <DropdownMenu>
@@ -266,22 +266,22 @@ export const sessionColumns = (options?: IOptions) => {
               <DropdownMenuSeparator/>
 
               <DropdownMenuItem asChild>
-                <Link to='/admin/users' search={{ id: row.original.userId }}>
+                <Link to="/admin/users" search={{ id: row.original.userId }}>
                   <IconUser className="mr-2 size-4"/>
                   <span>User</span>
                 </Link>
               </DropdownMenuItem>
 
-              {/*{canDelete && (*/}
-              {/*  <DropdownMenuItem*/}
-              {/*    variant="destructive"*/}
-              {/*    disabled={isPending}*/}
-              {/*    onClick={() => revokeSessions({ ids: [row.original.id] })}*/}
-              {/*  >*/}
-              {/*    <IconTrash className="mr-2 size-4"/>*/}
-              {/*    <span>Revoke</span>*/}
-              {/*  </DropdownMenuItem>*/}
-              {/*)}*/}
+              {(!!onRevokeClick && canDelete) && (
+                <DropdownMenuItem
+                  variant="destructive"
+                  disabled={disabled}
+                  onClick={() => onRevokeClick?.(row.original.id)}
+                >
+                  <IconTrash className="mr-2 size-4"/>
+                  <span>Revoke</span>
+                </DropdownMenuItem>
+              )}
             </DropdownMenuContent>
           </DropdownMenu>
         );
