@@ -1,4 +1,4 @@
-import { Button } from '@/components/ui/button';
+import { Button } from '@/components/ui/button.tsx';
 import { ComponentProps, FC } from 'react';
 import { IconSquareRoundedPlus } from '@tabler/icons-react';
 import { useEditCategorySheet } from './provider.tsx';

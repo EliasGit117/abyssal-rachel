@@ -1,4 +1,4 @@
-import { Button } from '@/components/ui/button';
+import { Button } from '@/components/ui/button.tsx';
 import { ComponentProps, FC } from 'react';
 import { IconFilePlus } from '@tabler/icons-react';
 import { useCreateCategorySheet } from './provider.tsx';

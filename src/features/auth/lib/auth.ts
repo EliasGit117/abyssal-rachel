@@ -10,16 +10,11 @@ import { tanstackStartCookies } from 'better-auth/tanstack-start';
 
 
 export const auth = betterAuth({
-  // session: {
-  //   cookieCache: {
-  //     enabled: true,
-  //     maxAge: 5 * 60
-  //   },
-  // },
-  database: prismaAdapter(prisma, {
-    provider: 'postgresql',
-  }),
+  database: prismaAdapter(prisma, { provider: 'postgresql' }),
   trustedOrigins: [process.env.VITE_BETTER_AUTH_URL!],
+  advanced: {
+    cookiePrefix: "app"
+  },
   emailAndPassword: {
     enabled: true,
     requireEmailVerification: true,

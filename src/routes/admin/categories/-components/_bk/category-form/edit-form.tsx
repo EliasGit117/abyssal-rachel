@@ -9,7 +9,7 @@ import { CategoryStatus } from '~/prisma/generated/prisma/enums.ts';
 import { IconCircleCheck, IconCircleMinus } from '@tabler/icons-react';
 import {
   SelectCategoryCombobox
-} from '@/routes/admin/categories/-components/category-form/select-category-combobox.tsx';
+} from '@/routes/admin/categories/-components/_bk/category-form/select-category-combobox.tsx';
 import {
   Combobox,
   ComboboxContent,

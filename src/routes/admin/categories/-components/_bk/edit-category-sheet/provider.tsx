@@ -1,5 +1,5 @@
 import { useState, ReactNode } from 'react';
-import { contextFactory } from '@/lib/context-factory';
+import { contextFactory } from '@/lib/context-factory.ts';
 
 
 

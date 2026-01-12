@@ -7,7 +7,7 @@ import {
   useDataTable
 } from '@/components/data-table';
 import { userColumns } from './columns.tsx';
-import { IconFileExport, IconTrash } from '@tabler/icons-react';
+import { IconFileExport, IconRefresh, IconTrash } from '@tabler/icons-react';
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import {
   getUsersPaginatedAdminQueryOptions,
@@ -88,7 +88,13 @@ export const UsersTable: FC<IProps> = (props) => {
     <div className={cn('space-y-2', className)} {...divProps}>
       <DataTableProvider table={table} isPending={isLoading}>
         <DataTableToolbar>
-          <AdaptiveButton text="Refresh" size="sm" variant="ghost" onClick={() => refetch()}/>
+          <AdaptiveButton
+            text="Refresh"
+            size="sm"
+            variant="ghost"
+            icon={IconRefresh} className="ml-auto"
+            onClick={() => refetch()}
+          />
         </DataTableToolbar>
 
         <DataTable/>

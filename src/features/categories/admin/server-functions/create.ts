@@ -29,7 +29,7 @@ export const createCategoryServerFn = createServerFn({ method: 'POST' })
     const canCreate = await auth.api.userHasPermission({
       body: {
         userId: session.user!.id,
-        permission: { categories: [Permission.Create] }
+        permission: { category: [Permission.Create] }
       }
     });
 
@@ -38,6 +38,7 @@ export const createCategoryServerFn = createServerFn({ method: 'POST' })
 
     return CategoryService.create(data);
   });
+
 
 
 type TParams = Parameters<typeof createCategoryServerFn>[0]['data'];

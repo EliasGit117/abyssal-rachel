@@ -1,10 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router';
 import {
-  CreateCategorySheet,
-  CreateCategorySheetProvider,
-  CreateCategorySheetTrigger
-} from '@/routes/admin/categories/-components/create-category-sheet';
-import {
   CategoryTree,
   CategoryTreeProvider,
   CategoryTreeToolbar,
@@ -14,14 +9,15 @@ import { FC } from 'react';
 import { Button } from '@/components/ui/button.tsx';
 import { IconRefresh } from '@tabler/icons-react';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip.tsx';
-import {
-  EditCategorySheet,
-  EditCategorySheetProvider
-} from '@/routes/admin/categories/-components/edit-category-sheet';
 import { getCategoryTreeForAdminQueryOptions } from '@/features/categories/admin/server-functions/get-tree.ts';
 import { useIsMobile } from '@/hooks/use-mobile.ts';
 import { useHasPermission } from '@/hooks/use-has-permission.ts';
 import { Permission } from '@/features/auth/lib/permissions.ts';
+import {
+  CategorySheet,
+  CategorySheetTrigger,
+  CategorySheetProvider
+} from '@/routes/admin/categories/-components/category-sheet';
 
 
 export const Route = createFileRoute('/admin/categories/')({
@@ -32,32 +28,27 @@ export const Route = createFileRoute('/admin/categories/')({
 
     void queryClient.prefetchQuery(getCategoryTreeForAdminQueryOptions());
   },
-  staticData: {
-    breadcrumbs: { title: 'Categories' }
-  }
+  head: () => ({ meta: [{ title: 'Categories' }] }),
+  staticData: { breadcrumbs: { title: 'Categories' } }
 });
 
 function RouteComponent() {
 
   return (
-    <CreateCategorySheetProvider>
-      <EditCategorySheetProvider>
-        <CategoryTreeProvider>
+    <CategorySheetProvider>
+      <CategoryTreeProvider>
 
-          <main className="container mx-auto p-4 space-y-4">
-            <CategoryTreeToolbar>
-              <ToolbarAdditionalButtons/>
-            </CategoryTreeToolbar>
+        <main className="container mx-auto p-4 space-y-4">
+          <CategoryTreeToolbar>
+            <ToolbarAdditionalButtons/>
+          </CategoryTreeToolbar>
 
-            <CategoryTree/>
-          </main>
+          <CategoryTree/>
+        </main>
 
-          <CreateCategorySheet/>
-          <EditCategorySheet/>
-
-        </CategoryTreeProvider>
-      </EditCategorySheetProvider>
-    </CreateCategorySheetProvider>
+        <CategorySheet/>
+      </CategoryTreeProvider>
+    </CategorySheetProvider>
   );
 }
 
@@ -98,7 +89,8 @@ const ToolbarAdditionalButtons: FC<{ disabled?: boolean }> = ({ disabled }) => {
       ) : (refreshButton)}
 
       {canCreate && (
-        <CreateCategorySheetTrigger
+        <CategorySheetTrigger
+          options={{ mode: 'create' }}
           size="sm"
           variant="ghost"
           disabled={isDisabled}

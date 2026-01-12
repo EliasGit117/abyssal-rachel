@@ -110,15 +110,12 @@ export const useRevokeSessionsMutation = (options?: TOptions) => {
     },
     ...options,
     onSuccess: (data, variables, onMutateResult, context) => {
-      void queryClient.invalidateQueries({
-        predicate: (query) =>
-          query.queryKey[0] === 'admin' && query.queryKey[1] === 'sessions'
-      });
+      if (data.revokedCount === 0)
+        return;
 
+      void queryClient.invalidateQueries({ predicate: (query) => query.queryKey[0] === 'admin' && query.queryKey[1] === 'sessions' });
       if (variables.ids.includes(session?.id ?? ''))
-        void queryClient.invalidateQueries({
-          queryKey: getSessionQueryOptions().queryKey
-        });
+        void queryClient.invalidateQueries({ queryKey: getSessionQueryOptions().queryKey });
 
       options?.onSuccess?.(data, variables, onMutateResult, context);
     }

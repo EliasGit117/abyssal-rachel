@@ -23,12 +23,11 @@ export const updateCategoryServerFn = createServerFn({ method: 'POST' })
       throwUnauthorizedError({ translated: false });
 
     const canUpdate = await auth.api.userHasPermission({
-      body: { userId: session.user!.id, permission: { categories: [Permission.Update] } }
+      body: { userId: session.user!.id, permission: { category: [Permission.Update] } }
     });
 
     if (!canUpdate.success)
       throwForbiddenError({ translated: false });
-
 
     return CategoryService.update(data);
   });

@@ -12,14 +12,13 @@ import {
 } from '@/features/auth/server-functions/admin/sessions-paginated.ts';
 import { ComponentProps, FC, useMemo } from 'react';
 import { cn } from '@/lib/utils.ts';
-import { IconFileExport, IconTrash } from '@tabler/icons-react';
+import { IconFileExport, IconRefresh, IconTrash } from '@tabler/icons-react';
 import { ActionBarButton } from '@/components/data-table/action-bar.tsx';
 import { AdaptiveButton } from '@/components/ui/adaptive-button.tsx';
 import { useRevokeSessionsMutation } from '@/features/auth/server-functions/admin/revoke-sessions.ts';
 import { exportToCsv } from '@/lib/csv.ts';
 import { Permission } from '@/features/auth/lib/permissions.ts';
 import { useHasPermission } from '@/hooks/use-has-permission.ts';
-
 
 
 interface IProps extends ComponentProps<'div'> {
@@ -88,7 +87,13 @@ export const SessionsTable: FC<IProps> = (props) => {
     <div className={cn('space-y-2', className)} {...divProps}>
       <DataTableProvider table={table} isPending={isLoading}>
         <DataTableToolbar>
-          <AdaptiveButton text="Refresh" size="sm" variant="ghost" onClick={() => refetch()}/>
+          <AdaptiveButton
+            text="Refresh"
+            size="sm"
+            variant="ghost"
+            icon={IconRefresh} className="ml-auto"
+            onClick={() => refetch()}
+          />
         </DataTableToolbar>
 
         <DataTable/>
@@ -97,7 +102,7 @@ export const SessionsTable: FC<IProps> = (props) => {
         <DataTableActionBar disabled={isRevokingSession}>
           <ActionBarButton text="CSV" icon={IconFileExport} onClick={onExportToCsvClick}/>
           {canDelete && (
-            <ActionBarButton text="Delete" icon={IconTrash} variant="destructive" onClick={revokeSelectedSession}/>
+            <ActionBarButton text="Revoke" icon={IconTrash} variant="destructive" onClick={revokeSelectedSession}/>
           )}
         </DataTableActionBar>
       </DataTableProvider>

@@ -47,6 +47,7 @@ export const SignInForm: FC<IProps> = ({ form, id, onSubmit, disabled, ...props 
                   {...field}
                   id="email-input"
                   type="email"
+                  autoComplete="email"
                   aria-invalid={fieldState.invalid}
                   placeholder="johndoe@yahoo.com"
                 />
@@ -65,7 +66,7 @@ export const SignInForm: FC<IProps> = ({ form, id, onSubmit, disabled, ...props 
                     {m['common.password']()}
                   </FieldLabel>
 
-                  <Link to="/auth/reset-password" className='text-muted-foreground' replace>
+                  <Link to="/auth/reset-password" className="text-muted-foreground" replace>
                     {m['pages.auth.sign_in.forgot_password']()}
                   </Link>
                 </div>
@@ -74,6 +75,7 @@ export const SignInForm: FC<IProps> = ({ form, id, onSubmit, disabled, ...props 
                   <InputGroupInput
                     {...field}
                     id="password-input"
+                    autoComplete="current-password"
                     type={isPasswordVisible ? 'text' : 'password'}
                     aria-invalid={fieldState.invalid}
                     placeholder="*********"

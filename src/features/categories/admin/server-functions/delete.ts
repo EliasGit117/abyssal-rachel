@@ -25,7 +25,7 @@ export const deleteCategoryServerFn = createServerFn({ method: 'POST' })
     const canDelete = await auth.api.userHasPermission({
       body: {
         userId: session.user!.id,
-        permission: { categories: [Permission.Delete] }
+        permission: { category: [Permission.Delete] }
       }
     });
 

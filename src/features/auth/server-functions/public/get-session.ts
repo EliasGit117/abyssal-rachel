@@ -24,6 +24,6 @@ export const getSessionServerFn = createServerFn()
 export function getSessionQueryOptions() {
   return queryOptions({
     queryKey: ['session'],
-    queryFn: getSessionServerFn,
+    queryFn: () => getSessionServerFn(),
   });
 }

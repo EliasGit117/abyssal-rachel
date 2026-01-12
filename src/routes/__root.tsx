@@ -17,7 +17,6 @@ import { getSessionQueryOptions } from '@/features/auth/server-functions/public/
 import { TSession, TUser } from '@/features/auth/lib/auth.ts';
 
 
-
 interface IRouterContext {
   queryClient: QueryClient;
   session?: TSession | null;
@@ -27,11 +26,7 @@ interface IRouterContext {
 export const Route = createRootRouteWithContext<IRouterContext>()({
   beforeLoad: async ({ context: { queryClient } }) => {
     const res = await queryClient.ensureQueryData(getSessionQueryOptions());
-
-    return {
-      session: res?.session,
-      user: res?.user,
-    };
+    return { session: res?.session, user: res?.user };
   },
   shellComponent: RootDocument,
   head: () => ({
@@ -70,14 +65,14 @@ function RootDocument({ children }: { children: ReactNode }) {
   return (
     <Providers>
       <html lang={locale} suppressHydrationWarning>
-        <head>
-          <title/>
-          <HeadContent/>
-        </head>
-        <body className="flex flex-col">
-          {children}
-          <Scripts/>
-        </body>
+      <head>
+        <title/>
+        <HeadContent/>
+      </head>
+      <body className="flex flex-col">
+      {children}
+      <Scripts/>
+      </body>
       </html>
     </Providers>
   );

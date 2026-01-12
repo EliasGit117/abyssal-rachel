@@ -281,7 +281,7 @@ export const sessionColumns = (options?: IOptions) => {
                   onClick={() => revokeSessions({ ids: [row.original.id] })}
                 >
                   <IconTrash className="mr-2 size-4"/>
-                  <span>Delete</span>
+                  <span>Revoke</span>
                 </DropdownMenuItem>
               )}
             </DropdownMenuContent>
@@ -293,8 +293,6 @@ export const sessionColumns = (options?: IOptions) => {
 };
 
 function getBrowserIcon(name?: string) {
-  console.log(name)
-
   switch (name?.toLowerCase()) {
     case 'chrome':
     case 'mobile chrome':

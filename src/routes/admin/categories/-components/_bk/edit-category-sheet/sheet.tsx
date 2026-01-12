@@ -17,13 +17,13 @@ import { CategoryStatus } from '~/prisma/generated/prisma/enums.ts';
 import { IconAlertTriangle, IconSend, IconX } from '@tabler/icons-react';
 import { LoadingButton } from '@/components/ui/loading-button.tsx';
 import { toast } from 'sonner';
-import { EditCategoryForm } from '@/routes/admin/categories/-components/category-form';
+import { EditCategoryForm } from '@/routes/admin/categories/-components/_bk/category-form';
 import {
   TUpdateCategory,
   updateCategorySchema
 } from '@/features/categories/admin/schemas';
 import { useUpdateCategoryMutation } from '@/features/categories/admin/server-functions/update.ts';
-import { useEditCategorySheet } from './provider';
+import { useEditCategorySheet } from './provider.tsx';
 import { useQuery } from '@tanstack/react-query';
 import { getCategoryByIdForAdminQueryOptions } from '@/features/categories/admin/server-functions/get-by-id.ts';
 

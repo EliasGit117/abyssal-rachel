@@ -23,8 +23,6 @@ import { cn } from '@/lib/utils.ts';
 import { toast } from 'sonner';
 import { useCategoryTree } from '@/routes/admin/categories/-components/category-tree/provider.tsx';
 import { Skeleton } from '@/components/ui/skeleton.tsx';
-import { useCreateCategorySheet } from '@/routes/admin/categories/-components/create-category-sheet';
-import { useEditCategorySheet } from '@/routes/admin/categories/-components/edit-category-sheet';
 import { useConfirm } from '@/components/ui/confirm-dialog.tsx';
 import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from '@/components/ui/empty.tsx';
 import { Permission } from '@/features/auth/lib/permissions.ts';
@@ -39,6 +37,8 @@ import { IAdminCategoryDto } from '@/features/categories/admin/dtos/admin-catego
 import { ItemInstance } from '@headless-tree/core';
 import { CategoryStatus } from '~/prisma/generated/prisma/enums.ts';
 import { useHasPermission } from '@/hooks/use-has-permission.ts';
+import { AdaptiveButton } from '@/components/ui/adaptive-button.tsx';
+import { useCategorySheet } from '@/routes/admin/categories/-components/category-sheet';
 
 
 interface ICategoryTreeProps {
@@ -49,8 +49,7 @@ export const CategoryTree: FC<ICategoryTreeProps> = ({ className }) => {
   // noinspection BadExpressionStatementJS
   'use no memo';
 
-  const { open: openCreateSheet } = useCreateCategorySheet();
-  const { open: openEditSheet } = useEditCategorySheet();
+  const { open: openCtgSheet } = useCategorySheet();
   const { tree, disabled, deleteCategory, isPendingCategories, indent, isEmpty, searchValue } = useCategoryTree();
   const confirm = useConfirm();
 
@@ -177,14 +176,14 @@ export const CategoryTree: FC<ICategoryTreeProps> = ({ className }) => {
 
                 <DropdownMenuGroup>
                   {canCreate && (
-                    <DropdownMenuItem onClick={() => openCreateSheet({ parentId: Number(item.getId()) })}>
+                    <DropdownMenuItem onClick={() => openCtgSheet({ mode: 'create', parentId: Number(item.getId()) })}>
                       <IconFolderPlus className="text-muted-foreground"/>
                       <span>Add child</span>
                     </DropdownMenuItem>
                   )}
 
                   {canEdit && (
-                    <DropdownMenuItem onClick={() => openEditSheet(Number(item.getId()))}>
+                    <DropdownMenuItem onClick={() => openCtgSheet({ mode: 'edit', categoryId: Number(item.getId()) })}>
                       <IconPencil className="text-muted-foreground"/>
                       <span>Edit</span>
                     </DropdownMenuItem>
@@ -267,31 +266,29 @@ export const CategoryTreeToolbar: FC<ICategoryTreeToolbarProps> = ({ disabled, c
       className={cn('flex items-center gap-2', className)}
       {...divProps}
     >
+
       {canCreate && (
-        <Button
+        <AdaptiveButton
           size="sm"
           variant="outline"
-          className="w-8 lg:w-fit"
+          text="Collapse"
           onClick={() => tree.collapseAll()}
           disabled={isToolbarDisabled}
-        >
-          <IconFolderMinus/>
-          <span className="sr-only lg:not-sr-only">Collapse all</span>
-        </Button>
+          icon={IconFolderMinus}
+        />
       )}
 
       {canEdit && (
-        <Button
+        <AdaptiveButton
           size="sm"
+          text='Expand'
+          icon={IconFolderPlus}
           variant="outline"
-          className="w-8 lg:w-fit"
-          onClick={() => tree.expandAll()}
           disabled={isToolbarDisabled}
-        >
-          <IconFolderPlus/>
-          <span className="sr-only lg:not-sr-only">Expand all</span>
-        </Button>
+          onClick={() => tree.expandAll()}
+        />
       )}
+
 
       <InputGroup className="max-w-64 h-8">
         <InputGroupAddon align="inline-start">
