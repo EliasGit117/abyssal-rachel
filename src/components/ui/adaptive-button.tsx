@@ -6,33 +6,30 @@ import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip
 import { cn } from '@/lib/utils.ts';
 
 
-
 interface IAdaptiveButtonProps extends ComponentProps<typeof Button> {
   text: string;
   tooltipDelay?: number;
   icon?: Icon;
 }
 
-export const AdaptiveButton: FC<IAdaptiveButtonProps> = ({ icon: Icon, className, text, tooltipDelay = 500, ...btnProps }) => {
+export const AdaptiveButton: FC<IAdaptiveButtonProps> = (props) => {
+  const { icon: Icon, className, text, tooltipDelay = 500, ...btnProps } = props;
   const isMobile = useIsMobile();
 
-  const button = (
-    <Button className={cn(isMobile && 'aspect-square w-fit', className)} {...btnProps}>
-      {Icon && <Icon/>}
-      {!isMobile && <span>{text}</span>}
-    </Button>
-  );
-
   return (
-    <>
-      {isMobile ? (
-        <Tooltip delayDuration={tooltipDelay}>
-          <TooltipTrigger asChild>{button}</TooltipTrigger>
-          <TooltipContent>
-            <p>{text}</p>
-          </TooltipContent>
-        </Tooltip>
-      ) : (button)}
-    </>
+    <Tooltip delayDuration={tooltipDelay}>
+      <TooltipTrigger asChild>
+        <Button className={cn(isMobile && 'aspect-square w-fit', className)} {...btnProps}>
+          {Icon && <Icon/>}
+          {!isMobile && <span>{text}</span>}
+        </Button>
+      </TooltipTrigger>
+
+      {isMobile && (
+        <TooltipContent>
+          <p>{text}</p>
+        </TooltipContent>
+      )}
+    </Tooltip>
   );
 };
