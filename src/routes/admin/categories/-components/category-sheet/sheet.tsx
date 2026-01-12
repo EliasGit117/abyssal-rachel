@@ -155,8 +155,9 @@ export const CategorySheet: FC = () => {
         <ScrollArea className="flex-1 overflow-y-auto mr-2 my-2">
           <CategoryForm
             form={form}
-            onSubmit={onSubmit}
             className="px-4"
+            onSubmit={onSubmit}
+            loading={isLoadingCategory}
             disabled={creating || updating || (mode === 'edit' && (!category || isLoadingCategory))}
             disabledIds={mode === 'edit' && options?.categoryId ? [options.categoryId] : []}
           />

@@ -12,7 +12,15 @@ interface IGetSessionResponse {
 export const getSessionServerFn = createServerFn()
   .handler(async (): Promise<IGetSessionResponse | null> => {
     const headers = getRequestHeaders();
+    const cookies = headers.get('cookie') as string | undefined;
+    const sessionToken = cookies
+      ?.split('; ')
+      .find(row => row.startsWith('app.session_token='))
+      ?.split('=')[1]
+
     const res = await auth.api.getSession({ headers });
+    if (!!sessionToken && !res)
+      console.error(`ERROR: Request had cookies but session was not found`);
 
     return {
       session: res?.session,

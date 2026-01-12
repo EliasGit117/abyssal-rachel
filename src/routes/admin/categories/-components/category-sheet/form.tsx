@@ -4,43 +4,101 @@ import {
   Field,
   FieldError,
   FieldGroup,
-  FieldLabel,
+  FieldLabel
 } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
+import { Skeleton } from '@/components/ui/skeleton';
 import { CategoryStatus } from '~/prisma/generated/prisma/enums';
-import {
-  IconCircleCheck,
-  IconCircleMinus,
-} from '@tabler/icons-react';
+import { IconCircleCheck, IconCircleMinus } from '@tabler/icons-react';
 import {
   Combobox,
   ComboboxContent,
   ComboboxGroup,
   ComboboxItem,
   ComboboxList,
-  ComboboxTrigger,
+  ComboboxTrigger
 } from '@/components/ui/combobox';
-import { TCreateCategory, TUpdateCategory } from '@/features/categories/admin/schemas';
+import {
+  TCreateCategory,
+  TUpdateCategory
+} from '@/features/categories/admin/schemas';
 import { SelectCategoryCombobox } from './select-category-combobox';
 
-interface Props
-  extends Omit<ComponentProps<'form'>, 'onSubmit'> {
+interface Props extends Omit<ComponentProps<'form'>, 'onSubmit'> {
   id?: string;
   form: UseFormReturn<TUpdateCategory | TCreateCategory>;
   onSubmit: (data: TUpdateCategory | TCreateCategory) => void;
   disabled?: boolean;
   disabledIds?: number[];
+  loading?: boolean;
 }
 
-export const CategoryForm: FC<Props> = ({ form, onSubmit, id, disabled, disabledIds, ...props
+export const CategoryForm: FC<Props> = (props) => {
+  const {
+    form,
+    onSubmit,
+    id,
+    disabled,
+    disabledIds,
+    loading,
+    ...formProps
+  } = props;
 
-}) => {
+  if (loading) {
+    return (
+      <form id={id ?? 'category-form'} {...formProps}>
+        <FieldGroup>
+          <Field>
+            <Skeleton className="h-5 w-full max-w-20"/>
+            <Skeleton className="h-10 w-full"/>
+          </Field>
+
+          <div className="grid sm:grid-cols-2 gap-7">
+            <Field>
+              <Skeleton className="h-5 w-full max-w-20"/>
+              <Skeleton className="h-9 w-full"/>
+            </Field>
+
+            <Field>
+              <Skeleton className="h-5 w-full max-w-20"/>
+              <Skeleton className="h-9 w-full"/>
+            </Field>
+          </div>
+
+          <div className="grid sm:grid-cols-2 gap-7">
+            <Field>
+              <Skeleton className="h-5 w-full max-w-20"/>
+              <Skeleton className="h-9 w-full"/>
+            </Field>
+
+            <Field>
+              <Skeleton className="h-5 w-full max-w-20"/>
+              <Skeleton className="h-9 w-full"/>
+            </Field>
+          </div>
+
+          <div className="grid sm:grid-cols-2 gap-4">
+            <Field>
+              <Skeleton className="h-5 w-full max-w-32"/>
+              <Skeleton className="h-16 w-full"/>
+            </Field>
+
+            <Field>
+              <Skeleton className="h-5 w-full max-w-32"/>
+              <Skeleton className="h-16 w-full"/>
+            </Field>
+          </div>
+        </FieldGroup>
+      </form>
+    );
+  }
+
   return (
     <form
       id={id ?? 'category-form'}
       onSubmit={form.handleSubmit(onSubmit)}
-      {...props}
+      {...formProps}
     >
       <fieldset disabled={disabled}>
         <FieldGroup>
@@ -58,7 +116,9 @@ export const CategoryForm: FC<Props> = ({ form, onSubmit, id, disabled, disabled
                   disabled={disabled}
                   disabledIds={disabledIds}
                 />
-                {fieldState.invalid && (<FieldError errors={[fieldState.error]} />)}
+                {fieldState.invalid && (
+                  <FieldError errors={[fieldState.error]}/>
+                )}
               </Field>
             )}
           />
@@ -71,7 +131,9 @@ export const CategoryForm: FC<Props> = ({ form, onSubmit, id, disabled, disabled
                 <Field data-invalid={fieldState.invalid}>
                   <FieldLabel>Slug</FieldLabel>
                   <Input {...field} />
-                  {fieldState.invalid && (<FieldError errors={[fieldState.error]} />)}
+                  {fieldState.invalid && (
+                    <FieldError errors={[fieldState.error]}/>
+                  )}
                 </Field>
               )}
             />
@@ -84,13 +146,13 @@ export const CategoryForm: FC<Props> = ({ form, onSubmit, id, disabled, disabled
                   {
                     value: CategoryStatus.ACTIVE,
                     label: 'Active',
-                    icon: IconCircleCheck,
+                    icon: IconCircleCheck
                   },
                   {
                     value: CategoryStatus.INACTIVE,
                     label: 'Inactive',
-                    icon: IconCircleMinus,
-                  },
+                    icon: IconCircleMinus
+                  }
                 ];
 
                 const selected = options.find(
@@ -108,7 +170,7 @@ export const CategoryForm: FC<Props> = ({ form, onSubmit, id, disabled, disabled
                     >
                       <ComboboxTrigger className="justify-start">
                         {selected && (
-                          <selected.icon className="opacity-50" />
+                          <selected.icon className="opacity-50"/>
                         )}
                         <span>{selected?.label}</span>
                       </ComboboxTrigger>
@@ -116,11 +178,8 @@ export const CategoryForm: FC<Props> = ({ form, onSubmit, id, disabled, disabled
                         <ComboboxList>
                           <ComboboxGroup>
                             {options.map((o) => (
-                              <ComboboxItem
-                                key={o.value}
-                                value={o.value}
-                              >
-                                <o.icon className="opacity-50" />
+                              <ComboboxItem key={o.value} value={o.value}>
+                                <o.icon className="opacity-50"/>
                                 <span>{o.label}</span>
                               </ComboboxItem>
                             ))}
@@ -128,7 +187,9 @@ export const CategoryForm: FC<Props> = ({ form, onSubmit, id, disabled, disabled
                         </ComboboxList>
                       </ComboboxContent>
                     </Combobox>
-                    {fieldState.invalid && (<FieldError errors={[fieldState.error]} />)}
+                    {fieldState.invalid && (
+                      <FieldError errors={[fieldState.error]}/>
+                    )}
                   </Field>
                 );
               }}
@@ -143,7 +204,9 @@ export const CategoryForm: FC<Props> = ({ form, onSubmit, id, disabled, disabled
                 <Field>
                   <FieldLabel>Name RO</FieldLabel>
                   <Input {...field} />
-                  {fieldState.invalid && (<FieldError errors={[fieldState.error]} />)}
+                  {fieldState.invalid && (
+                    <FieldError errors={[fieldState.error]}/>
+                  )}
                 </Field>
               )}
             />
@@ -155,7 +218,9 @@ export const CategoryForm: FC<Props> = ({ form, onSubmit, id, disabled, disabled
                 <Field>
                   <FieldLabel>Name RU</FieldLabel>
                   <Input {...field} />
-                  {fieldState.invalid && (<FieldError errors={[fieldState.error]} />)}
+                  {fieldState.invalid && (
+                    <FieldError errors={[fieldState.error]}/>
+                  )}
                 </Field>
               )}
             />
@@ -169,7 +234,9 @@ export const CategoryForm: FC<Props> = ({ form, onSubmit, id, disabled, disabled
                 <Field>
                   <FieldLabel>Description RO</FieldLabel>
                   <Textarea {...field} value={field.value ?? ''}/>
-                  {fieldState.invalid && (<FieldError errors={[fieldState.error]} />)}
+                  {fieldState.invalid && (
+                    <FieldError errors={[fieldState.error]}/>
+                  )}
                 </Field>
               )}
             />
@@ -181,7 +248,9 @@ export const CategoryForm: FC<Props> = ({ form, onSubmit, id, disabled, disabled
                 <Field>
                   <FieldLabel>Description RU</FieldLabel>
                   <Textarea {...field} value={field.value ?? ''}/>
-                  {fieldState.invalid && (<FieldError errors={[fieldState.error]} />)}
+                  {fieldState.invalid && (
+                    <FieldError errors={[fieldState.error]}/>
+                  )}
                 </Field>
               )}
             />
