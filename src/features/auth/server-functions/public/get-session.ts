@@ -20,7 +20,10 @@ export const getSessionServerFn = createServerFn()
 
     const res = await auth.api.getSession({ headers });
     if (!!sessionToken && !res)
-      console.error(`ERROR: Request had cookies but session was not found`);
+      console.error(`ERROR: Request had cookies but session was not found`, {
+        sessionToken: sessionToken,
+        res: res
+      });
 
     return {
       session: res?.session,

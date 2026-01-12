@@ -1,11 +1,7 @@
-type AwaitedResult<T> = { res: T; awaited: true };
-type PromiseResult<T> = { promise: Promise<T>; awaited: false };
 
-export async function awaitIfServer<T>(promise: Promise<T>): Promise<AwaitedResult<T> | PromiseResult<T>> {
-  if (typeof window === "undefined") {
-    const res = await promise;
-    return { res, awaited: true };
-  }
+export async function awaitIfServer(promise: Promise<unknown>): Promise<void> {
+  if (typeof window !== 'undefined')
+    return;
 
-  return { promise, awaited: false };
+  await promise;
 }
