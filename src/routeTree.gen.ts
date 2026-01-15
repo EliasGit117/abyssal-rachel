@@ -15,6 +15,7 @@ import { Route as PublicRouteRouteImport } from './routes/_public/route'
 import { Route as AuthIndexRouteImport } from './routes/auth/index'
 import { Route as AdminIndexRouteImport } from './routes/admin/index'
 import { Route as PublicIndexRouteImport } from './routes/_public/index'
+import { Route as ApiSplatRouteImport } from './routes/api/$'
 import { Route as PublicContactsRouteImport } from './routes/_public/contacts'
 import { Route as AdminSettingsRouteRouteImport } from './routes/admin/settings/route'
 import { Route as AuthSignUpIndexRouteImport } from './routes/auth/sign-up/index'
@@ -28,6 +29,7 @@ import { Route as AdminSessionsIndexRouteImport } from './routes/admin/sessions/
 import { Route as AdminCategoriesIndexRouteImport } from './routes/admin/categories/index'
 import { Route as PublicProfileIndexRouteImport } from './routes/_public/profile/index'
 import { Route as PublicNotificationsIndexRouteImport } from './routes/_public/notifications/index'
+import { Route as ApiRpcSplatRouteImport } from './routes/api/rpc.$'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
 import { Route as AdminSettingsSecurityRouteImport } from './routes/admin/settings/security'
 import { Route as AdminSettingsProfileRouteImport } from './routes/admin/settings/profile'
@@ -61,6 +63,11 @@ const PublicIndexRoute = PublicIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => PublicRouteRoute,
+} as any)
+const ApiSplatRoute = ApiSplatRouteImport.update({
+  id: '/api/$',
+  path: '/api/$',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const PublicContactsRoute = PublicContactsRouteImport.update({
   id: '/contacts',
@@ -128,6 +135,11 @@ const PublicNotificationsIndexRoute =
     path: '/notifications/',
     getParentRoute: () => PublicRouteRoute,
   } as any)
+const ApiRpcSplatRoute = ApiRpcSplatRouteImport.update({
+  id: '/api/rpc/$',
+  path: '/api/rpc/$',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
   id: '/api/auth/$',
   path: '/api/auth/$',
@@ -155,6 +167,7 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRouteRouteWithChildren
   '/admin/settings': typeof AdminSettingsRouteRouteWithChildren
   '/contacts': typeof PublicContactsRoute
+  '/api/$': typeof ApiSplatRoute
   '/': typeof PublicIndexRoute
   '/admin/': typeof AdminIndexRoute
   '/auth/': typeof AuthIndexRoute
@@ -162,6 +175,7 @@ export interface FileRoutesByFullPath {
   '/admin/settings/profile': typeof AdminSettingsProfileRoute
   '/admin/settings/security': typeof AdminSettingsSecurityRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
+  '/api/rpc/$': typeof ApiRpcSplatRoute
   '/notifications': typeof PublicNotificationsIndexRoute
   '/profile': typeof PublicProfileIndexRoute
   '/admin/categories': typeof AdminCategoriesIndexRoute
@@ -176,6 +190,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/contacts': typeof PublicContactsRoute
+  '/api/$': typeof ApiSplatRoute
   '/': typeof PublicIndexRoute
   '/admin': typeof AdminIndexRoute
   '/auth': typeof AuthIndexRoute
@@ -183,6 +198,7 @@ export interface FileRoutesByTo {
   '/admin/settings/profile': typeof AdminSettingsProfileRoute
   '/admin/settings/security': typeof AdminSettingsSecurityRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
+  '/api/rpc/$': typeof ApiRpcSplatRoute
   '/notifications': typeof PublicNotificationsIndexRoute
   '/profile': typeof PublicProfileIndexRoute
   '/admin/categories': typeof AdminCategoriesIndexRoute
@@ -202,6 +218,7 @@ export interface FileRoutesById {
   '/auth': typeof AuthRouteRouteWithChildren
   '/admin/settings': typeof AdminSettingsRouteRouteWithChildren
   '/_public/contacts': typeof PublicContactsRoute
+  '/api/$': typeof ApiSplatRoute
   '/_public/': typeof PublicIndexRoute
   '/admin/': typeof AdminIndexRoute
   '/auth/': typeof AuthIndexRoute
@@ -209,6 +226,7 @@ export interface FileRoutesById {
   '/admin/settings/profile': typeof AdminSettingsProfileRoute
   '/admin/settings/security': typeof AdminSettingsSecurityRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
+  '/api/rpc/$': typeof ApiRpcSplatRoute
   '/_public/notifications/': typeof PublicNotificationsIndexRoute
   '/_public/profile/': typeof PublicProfileIndexRoute
   '/admin/categories/': typeof AdminCategoriesIndexRoute
@@ -228,6 +246,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/admin/settings'
     | '/contacts'
+    | '/api/$'
     | '/'
     | '/admin/'
     | '/auth/'
@@ -235,6 +254,7 @@ export interface FileRouteTypes {
     | '/admin/settings/profile'
     | '/admin/settings/security'
     | '/api/auth/$'
+    | '/api/rpc/$'
     | '/notifications'
     | '/profile'
     | '/admin/categories'
@@ -249,6 +269,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/contacts'
+    | '/api/$'
     | '/'
     | '/admin'
     | '/auth'
@@ -256,6 +277,7 @@ export interface FileRouteTypes {
     | '/admin/settings/profile'
     | '/admin/settings/security'
     | '/api/auth/$'
+    | '/api/rpc/$'
     | '/notifications'
     | '/profile'
     | '/admin/categories'
@@ -274,6 +296,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/admin/settings'
     | '/_public/contacts'
+    | '/api/$'
     | '/_public/'
     | '/admin/'
     | '/auth/'
@@ -281,6 +304,7 @@ export interface FileRouteTypes {
     | '/admin/settings/profile'
     | '/admin/settings/security'
     | '/api/auth/$'
+    | '/api/rpc/$'
     | '/_public/notifications/'
     | '/_public/profile/'
     | '/admin/categories/'
@@ -298,7 +322,9 @@ export interface RootRouteChildren {
   PublicRouteRoute: typeof PublicRouteRouteWithChildren
   AdminRouteRoute: typeof AdminRouteRouteWithChildren
   AuthRouteRoute: typeof AuthRouteRouteWithChildren
+  ApiSplatRoute: typeof ApiSplatRoute
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
+  ApiRpcSplatRoute: typeof ApiRpcSplatRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -344,6 +370,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/'
       preLoaderRoute: typeof PublicIndexRouteImport
       parentRoute: typeof PublicRouteRoute
+    }
+    '/api/$': {
+      id: '/api/$'
+      path: '/api/$'
+      fullPath: '/api/$'
+      preLoaderRoute: typeof ApiSplatRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/_public/contacts': {
       id: '/_public/contacts'
@@ -435,6 +468,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/notifications'
       preLoaderRoute: typeof PublicNotificationsIndexRouteImport
       parentRoute: typeof PublicRouteRoute
+    }
+    '/api/rpc/$': {
+      id: '/api/rpc/$'
+      path: '/api/rpc/$'
+      fullPath: '/api/rpc/$'
+      preLoaderRoute: typeof ApiRpcSplatRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/api/auth/$': {
       id: '/api/auth/$'
@@ -548,7 +588,9 @@ const rootRouteChildren: RootRouteChildren = {
   PublicRouteRoute: PublicRouteRouteWithChildren,
   AdminRouteRoute: AdminRouteRouteWithChildren,
   AuthRouteRoute: AuthRouteRouteWithChildren,
+  ApiSplatRoute: ApiSplatRoute,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
+  ApiRpcSplatRoute: ApiRpcSplatRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

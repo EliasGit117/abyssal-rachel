@@ -28,14 +28,13 @@ export const getRouter = () => {
     context: {
       queryClient: queryClient
     },
-    defaultPreload: 'intent',
+    defaultPreload: 'intent'
   });
 
   setupRouterSsrQueryIntegration({ router, queryClient: queryClient });
 
   return router;
 };
-
 
 
 declare module '@tanstack/react-router' {
