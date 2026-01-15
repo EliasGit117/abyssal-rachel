@@ -9,7 +9,6 @@ import svgr from 'vite-plugin-svgr';
 
 
 
-
 const config = defineConfig({
   build: {
     cssCodeSplit: true,
@@ -32,7 +31,7 @@ const config = defineConfig({
     paraglideVitePlugin({
       project: './project.inlang',
       outdir: './src/paraglide',
-      strategy: ['custom-api-exclusion', 'cookie', 'preferredLanguage', 'url', 'baseLocale'],
+      strategy: ['cookie', 'preferredLanguage', 'url', 'baseLocale'],
       cookieName: 'lang',
     }),
   ]
