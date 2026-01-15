@@ -3,7 +3,7 @@ import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar.tsx';
 import { AdminHeader } from '@/routes/admin/-components/header';
 import { AdminSidebar } from '@/routes/admin/-components/sidebar';
 import { Bar, Progress } from '@bprogress/react';
-import { hasRoleAccessToAdmin } from '@/features/auth/lib/permissions.ts';
+import { hasRoleAccessToAdmin } from '@/lib/auth/permissions.ts';
 
 
 export const Route = createFileRoute('/admin')({

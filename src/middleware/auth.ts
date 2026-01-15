@@ -1,7 +1,7 @@
 import { createMiddleware } from '@tanstack/react-start';
-import { auth } from '@/features/auth/lib/auth.ts';
-import { throwUnauthorizedError } from '@/features/shared/utils/throw-api-error.ts';
-import { Permission } from '@/features/auth/lib/permissions.ts';
+import { auth } from '@/lib/auth/auth.ts';
+import { throwUnauthorizedError } from '@/lib/errors/throw-api-error.ts';
+import { Permission } from '@/lib/auth/permissions.ts';
 
 
 interface BaseOptions {

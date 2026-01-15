@@ -1,7 +1,7 @@
 import { setResponseStatus } from '@tanstack/start-server-core';
 import { StatusCodes } from 'http-status-codes';
 import { getLocale, type Locale } from '@/paraglide/runtime';
-import { ApiError, IApiErrorOptions } from '@/features/shared/utils/api-error.ts';
+import { ApiError, IApiErrorOptions } from '@/lib/errors/api-error.ts';
 
 type ErrorLocale = Locale | 'en';
 

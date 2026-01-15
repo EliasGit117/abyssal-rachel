@@ -2,7 +2,7 @@ import { createServerFn } from '@tanstack/react-start';
 import { AdminCategoryDtoMapper, IAdminCategoryDto } from '@/features/categories/admin/dtos/admin-category-dto.ts';
 import { queryOptions } from '@tanstack/react-query';
 import { CategoryService } from '@/features/categories/admin/services/category-service.ts';
-import { serverZodValidator } from '@/features/shared/utils/server-zod-validator.ts';
+import { serverZodValidator } from '@/lib/zod/server-zod-validator.ts';
 import { getCategoryByIdSchema } from '@/features/categories/admin/schemas/get-by-id.ts';
 
 

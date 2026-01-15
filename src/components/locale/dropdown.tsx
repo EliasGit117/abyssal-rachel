@@ -13,7 +13,7 @@ import type { VariantProps } from 'class-variance-authority';
 import { IconLanguage, IconSelector } from '@tabler/icons-react';
 import { getLocale, setLocale, Locale } from '@/paraglide/runtime';
 import { m } from '@/paraglide/messages';
-import { cn } from '@/lib/utils.ts';
+import { cn } from '@/lib/utils';
 
 
 interface IProps extends ComponentProps<typeof DropdownMenuTrigger> {

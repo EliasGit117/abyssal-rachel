@@ -10,7 +10,7 @@ import { IconBuildingStore, IconClipboardCheck, IconCopy, IconMapPinFilled } fro
 import GoogleMapsLogo from '@/assets/icons/google-maps.svg?react';
 import { ButtonGroup } from '@/components/ui/button-group.tsx';
 import { Button } from '@/components/ui/button.tsx';
-import { cn } from '@/lib/utils.ts';
+import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
 import { TBreadcrumbData } from '@/components/layout';
 import { m } from '@/paraglide/messages';

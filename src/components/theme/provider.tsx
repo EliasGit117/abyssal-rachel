@@ -1,4 +1,4 @@
-import { FunctionOnce } from '@/lib/function-once';
+import { FunctionOnce } from '@/lib/utils/function-once.tsx';
 import { createContext, ReactNode, use, useEffect, useMemo, useState } from 'react';
 
 

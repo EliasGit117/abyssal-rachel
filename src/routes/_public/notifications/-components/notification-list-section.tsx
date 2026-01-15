@@ -4,7 +4,7 @@ import { useDeleteNotificationByIdMutation } from '@/features/notifications/serv
 import { toast } from 'sonner';
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import { Item, ItemActions, ItemContent, ItemDescription, ItemTitle } from '@/components/ui/item.tsx';
-import { cn } from '@/lib/utils.ts';
+import { cn } from '@/lib/utils';
 import { Skeleton } from '@/components/ui/skeleton.tsx';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip.tsx';
 import { LoadingButton } from '@/components/ui/loading-button.tsx';
@@ -12,7 +12,7 @@ import { IconPlus, IconProgressAlert, IconRefresh, IconTrash } from '@tabler/ico
 import { m } from '@/paraglide/messages';
 import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from '@/components/ui/empty.tsx';
 import { Button } from '@/components/ui/button.tsx';
-import { Permission } from '@/features/auth/lib/permissions.ts';
+import { Permission } from '@/lib/auth/permissions.ts';
 import { useHasPermission } from '@/hooks/use-has-permission.ts';
 
 

@@ -1,6 +1,6 @@
 import { createServerFn } from '@tanstack/react-start';
 import { useMutation, UseMutationOptions, useQueryClient } from '@tanstack/react-query';
-import { prisma } from '@/lib/prisma.ts';
+import { prisma } from '@/lib/db/prisma.ts';
 import { deleteNotificationByIdSchema } from '@/features/notifications/schemas/delete-notification-by-id.ts';
 import { INotificationBriefDto } from '@/features/notifications/dtos/notification-dto.ts';
 

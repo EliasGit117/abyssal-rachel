@@ -1,13 +1,13 @@
 import { ComponentProps, FC } from 'react';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card.tsx';
-import { cn } from '@/lib/utils.ts';
+import { cn } from '@/lib/utils';
 import { IconMail, IconSend } from '@tabler/icons-react';
 import { Link } from '@tanstack/react-router';
 import { SignInForm, signInSchema, TSignInSchema } from '@/routes/auth/sign-in/-components/sign-in-form.tsx';
 import { useForm } from 'react-hook-form';
 import { LoadingButton } from '@/components/ui/loading-button.tsx';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { authClient } from '@/features/auth/lib/auth-client.ts';
+import { authClient } from '@/lib/auth/auth-client.ts';
 import { toast } from 'sonner';
 import { m } from '@/paraglide/messages';
 import { zodResolver } from '@hookform/resolvers/zod';

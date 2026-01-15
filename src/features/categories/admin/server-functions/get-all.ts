@@ -1,5 +1,5 @@
 import { createServerFn } from '@tanstack/react-start';
-import { prisma } from '@/lib/prisma.ts';
+import { prisma } from '@/lib/db/prisma.ts';
 import { AdminCategoryDtoMapper, IAdminCategoryDto } from '@/features/categories/admin/dtos/admin-category-dto.ts';
 import { queryOptions } from '@tanstack/react-query';
 

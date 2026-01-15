@@ -9,12 +9,12 @@ import leafletDrawCss from 'leaflet-draw/dist/leaflet.draw.css?url';
 import leafletCss from 'leaflet/dist/leaflet.css?url';
 import { ReactNode, useEffect, useRef } from 'react';
 import { getLocale } from '@/paraglide/runtime';
-import { envConfig } from '@/lib/env-config.ts';
-import { getZodErrorMap } from '@/lib/get-zod-error-map.ts';
+import { envConfig } from '@/lib/config/env-config.ts';
+import { getZodErrorMap } from '@/lib/zod/get-zod-error-map.ts';
 import Providers from '@/providers.tsx';
 import z from 'zod';
 import { getSessionQueryOptions } from '@/features/auth/server-functions/public/get-session.ts';
-import { TSession, TUser } from '@/features/auth/lib/auth.ts';
+import { TSession, TUser } from '@/lib/auth/auth.ts';
 
 
 interface IRouterContext {

@@ -1,5 +1,9 @@
-import { util, $ZodStringFormats, $ZodErrorMap, $ZodStringFormatIssues } from 'zod/v4/core';
-
+import type {
+  $ZodStringFormats,
+  $ZodErrorMap,
+  $ZodStringFormatIssues,
+} from "zod/v4/core";
+import { util } from "zod/v4/core";
 
 function getRomanianPlural(
   count: number,
@@ -65,31 +69,35 @@ const error: () => $ZodErrorMap = () => {
     },
   };
 
-  function getSizing(origin: string): RomanianSizable | null {
+  const OriginNames: Record<string, string> = {
+    string: "text",
+    array: "listă",
+    file: "fișier",
+    set: "set",
+    number: "număr",
+  };
+
+  function getSizing(origin?: string): RomanianSizable | null {
+    if (!origin) return null;
     return Sizable[origin] ?? null;
   }
 
-  const parsedType = (data: any): string => {
+  const parsedType = (data: unknown): string => {
     const t = typeof data;
 
     switch (t) {
       case "number":
         return Number.isNaN(data) ? "NaN" : "număr";
-      case "object": {
-        if (Array.isArray(data)) {
-          return "listă";
-        }
-        if (data === null) {
-          return "null";
-        }
+      case "object":
+        if (Array.isArray(data)) return "listă";
+        if (data === null) return "null";
         if (
           Object.getPrototypeOf(data) !== Object.prototype &&
-          data.constructor
+          (data as any).constructor
         ) {
-          return data.constructor.name;
+          return (data as any).constructor.name;
         }
         return "obiect";
-      }
       case "string":
         return "șir";
       case "boolean":
@@ -133,46 +141,58 @@ const error: () => $ZodErrorMap = () => {
   };
 
   return (issue) => {
+    const subject =
+      typeof issue.origin === "string"
+        ? OriginNames[issue.origin] ?? "valoarea"
+        : "valoarea";
+
     switch (issue.code) {
       case "invalid_type":
-        return `Tip de date invalid: se aștepta ${issue.expected}, dar s-a primit ${parsedType(issue.input)}`;
+        return `Tip de date invalid: se aștepta ${issue.expected}, dar s-a primit ${parsedType(
+          issue.input,
+        )}`;
 
       case "invalid_value":
         if (issue.values.length === 1) {
-          return `Valoare invalidă: se aștepta ${util.stringifyPrimitive(issue.values[0])}`;
+          return `Valoare invalidă: se aștepta ${util.stringifyPrimitive(
+            issue.values[0],
+          )}`;
         }
-        return `Valoare invalidă: se aștepta una dintre ${util.joinValues(issue.values, " | ")}`;
+        return `Valoare invalidă: se aștepta una dintre ${util.joinValues(
+          issue.values,
+          " | ",
+        )}`;
 
       case "too_big": {
         const adj = issue.inclusive ? "<=" : "<";
         const sizing = getSizing(issue.origin);
         if (sizing) {
-          const maxValue = Number(issue.maximum);
+          const max = Number(issue.maximum);
           const unit = getRomanianPlural(
-            maxValue,
+            max,
             sizing.unit.one,
             sizing.unit.few,
             sizing.unit.many,
           );
-          return `Valoare prea mare: se aștepta ca ${issue.origin ?? "valoarea"} să fie ${adj}${issue.maximum.toString()} ${unit}`;
+          return `Valoare prea mare: se aștepta ca ${subject} să fie ${adj}${issue.maximum.toString()} ${unit}`;
         }
-        return `Valoare prea mare: se aștepta ca ${issue.origin ?? "valoarea"} să fie ${adj}${issue.maximum.toString()}`;
+        return `Valoare prea mare: se aștepta ca ${subject} să fie ${adj}${issue.maximum.toString()}`;
       }
 
       case "too_small": {
         const adj = issue.inclusive ? ">=" : ">";
         const sizing = getSizing(issue.origin);
         if (sizing) {
-          const minValue = Number(issue.minimum);
+          const min = Number(issue.minimum);
           const unit = getRomanianPlural(
-            minValue,
+            min,
             sizing.unit.one,
             sizing.unit.few,
             sizing.unit.many,
           );
-          return `Valoare prea mică: se aștepta ca ${issue.origin} să fie ${adj}${issue.minimum.toString()} ${unit}`;
+          return `Valoare prea mică: se aștepta ca ${subject} să fie ${adj}${issue.minimum.toString()} ${unit}`;
         }
-        return `Valoare prea mică: se aștepta ca ${issue.origin} să fie ${adj}${issue.minimum.toString()}`;
+        return `Valoare prea mică: se aștepta ca ${subject} să fie ${adj}${issue.minimum.toString()}`;
       }
 
       case "invalid_format": {
@@ -196,7 +216,10 @@ const error: () => $ZodErrorMap = () => {
         return `Număr invalid: trebuie să fie multiplu de ${issue.divisor}`;
 
       case "unrecognized_keys":
-        return `Che${issue.keys.length > 1 ? "i" : "ie"} necunoscut${issue.keys.length > 1 ? "e" : "ă"}: ${util.joinValues(issue.keys, ", ")}`;
+        return `Che${issue.keys.length > 1 ? "i" : "ie"} necunoscut${issue.keys.length > 1 ? "e" : "ă"}: ${util.joinValues(
+          issue.keys,
+          ", ",
+        )}`;
 
       case "invalid_key":
         return `Cheie invalidă în ${issue.origin}`;

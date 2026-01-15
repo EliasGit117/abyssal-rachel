@@ -7,8 +7,8 @@ import {
   IconSettings,
   IconUsers
 } from '@tabler/icons-react';
-import { hasPermissionForRole } from '@/features/auth/lib/has-permission-for-role.ts';
-import { Permission } from '@/features/auth/lib/permissions.ts';
+import { hasPermissionForRole } from '@/lib/auth/has-permission-for-role.ts';
+import { Permission } from '@/lib/auth/permissions.ts';
 
 export interface INavItem {
   title: string;

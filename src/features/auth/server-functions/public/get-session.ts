@@ -1,6 +1,6 @@
 import { createServerFn } from '@tanstack/react-start';
 import { getRequestHeaders } from '@tanstack/react-start/server';
-import { auth, TSession, TUser } from '@/features/auth/lib/auth.ts';
+import { auth, TSession, TUser } from '@/lib/auth/auth.ts';
 import { queryOptions } from '@tanstack/react-query';
 
 

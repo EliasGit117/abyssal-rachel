@@ -1,5 +1,5 @@
 import { createStart } from '@tanstack/react-start'
-import { customErrorAdapter } from '@/features/shared/utils/api-error.ts';
+import { customErrorAdapter } from '@/lib/errors/api-error.ts';
 import { functionLoggingMiddleware } from '@/middleware/logging.ts';
 
 

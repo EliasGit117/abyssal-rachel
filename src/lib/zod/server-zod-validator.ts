@@ -1,5 +1,5 @@
 import { z, ZodType } from "zod";
-import { throwBadRequest } from '@/features/shared/utils/throw-api-error.ts';
+import { throwBadRequest } from '@/lib/errors/throw-api-error.ts';
 
 
 export function serverZodValidator<TSchema extends ZodType>(schema: TSchema,) {

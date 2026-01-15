@@ -11,13 +11,13 @@ import {
   TGetSessionsPaginatedAdmin
 } from '@/features/auth/server-functions/admin/sessions-paginated.ts';
 import { ComponentProps, FC, useMemo } from 'react';
-import { cn } from '@/lib/utils.ts';
+import { cn } from '@/lib/utils';
 import { IconFileExport, IconRefresh, IconTrash } from '@tabler/icons-react';
 import { ActionBarButton } from '@/components/data-table/action-bar.tsx';
 import { AdaptiveButton } from '@/components/ui/adaptive-button.tsx';
 import { useRevokeSessionsMutation } from '@/features/auth/server-functions/admin/revoke-sessions.ts';
-import { exportToCsv } from '@/lib/csv.ts';
-import { Permission } from '@/features/auth/lib/permissions.ts';
+import { exportToCsv } from '@/lib/utils/csv.ts';
+import { Permission } from '@/lib/auth/permissions.ts';
 import { useHasPermission } from '@/hooks/use-has-permission.ts';
 
 
@@ -56,7 +56,7 @@ export const SessionsTable: FC<IProps> = (props) => {
       },
       columnPinning: {
         left: ['select'],
-        right: ['type', 'actions']
+        right: ['actions']
       }
     }
   });

@@ -2,7 +2,7 @@ import { paraglideMiddleware } from './paraglide/server.js';
 import handler from '@tanstack/react-start/server-entry';
 import { getLocale } from '@/paraglide/runtime';
 import z from 'zod';
-import { getZodErrorMap } from '@/lib/get-zod-error-map.ts';
+import { getZodErrorMap } from '@/lib/zod/get-zod-error-map.ts';
 
 
 export default {

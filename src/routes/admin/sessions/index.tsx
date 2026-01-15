@@ -1,5 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { awaitIfServer } from '@/lib/await-if-server.ts';
+import { awaitIfServer } from '@/lib/server/await-if-server.ts';
 import {
   getSessionsPaginatedAdminQueryOptions,
   getSessionsPaginatedAdminSchema

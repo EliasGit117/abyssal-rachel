@@ -5,7 +5,7 @@ import { useDataTableContext } from '@/components/data-table/context.tsx';
 import { ButtonGroup } from '@/components/ui/button-group.tsx';
 import { Separator } from '@/components/ui/separator.tsx';
 import { useIsMobile } from '@/hooks/use-mobile.ts';
-import { cn } from '@/lib/utils.ts';
+import { cn } from '@/lib/utils';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip.tsx';
 
 const ActionBarContext = createContext<{ disabled?: boolean }>({});

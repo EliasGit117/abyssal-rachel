@@ -1,6 +1,6 @@
 import { TCreateCategory } from '@/features/categories/admin/schemas/create.ts';
-import { prisma } from '@/lib/prisma.ts';
-import { throwBadRequest } from '@/features/shared/utils/throw-api-error.ts';
+import { prisma } from '@/lib/db/prisma.ts';
+import { throwBadRequest } from '@/lib/errors/throw-api-error.ts';
 import { CategoryPathService } from '@/features/categories/admin/services/category-path-service.ts';
 import { TDeleteCategory, TUpdateCategory } from '@/features/categories/admin/schemas';
 import { Category, Prisma } from '~/prisma/generated/prisma/client.ts';

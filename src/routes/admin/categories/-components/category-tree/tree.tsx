@@ -19,13 +19,13 @@ import {
   DropdownMenuSubContent, DropdownMenuSubTrigger,
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu.tsx';
-import { cn } from '@/lib/utils.ts';
+import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
 import { useCategoryTree } from '@/routes/admin/categories/-components/category-tree/provider.tsx';
 import { Skeleton } from '@/components/ui/skeleton.tsx';
 import { useConfirm } from '@/components/ui/confirm-dialog.tsx';
 import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from '@/components/ui/empty.tsx';
-import { Permission } from '@/features/auth/lib/permissions.ts';
+import { Permission } from '@/lib/auth/permissions.ts';
 import {
   InputGroup,
   InputGroupAddon,

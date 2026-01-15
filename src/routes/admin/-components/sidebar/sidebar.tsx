@@ -9,7 +9,7 @@ import {
   SidebarMenuItem,
 } from '@/components/ui/sidebar.tsx';
 import { Link } from '@tanstack/react-router';
-import { envConfig } from '@/lib/env-config.ts';
+import { envConfig } from '@/lib/config/env-config.ts';
 import Logo from '@/assets/icons/logo.svg?react';
 import { NavUser } from './nav-user.tsx';
 import { NavLinkGroup } from './nav-link-group.tsx';

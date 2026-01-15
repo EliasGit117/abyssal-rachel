@@ -1,5 +1,5 @@
 import { createServerFn } from '@tanstack/react-start';
-import { prisma } from '@/lib/prisma.ts';
+import { prisma } from '@/lib/db/prisma.ts';
 import { getLocale } from '@/paraglide/runtime';
 import { queryOptions } from '@tanstack/react-query';
 import { NotificationBriefDtoFactory } from '@/features/notifications/dtos/notification-dto.ts';

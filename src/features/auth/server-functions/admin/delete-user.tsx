@@ -1,10 +1,10 @@
 import * as z from 'zod';
 import { createServerFn } from '@tanstack/react-start';
-import { serverZodValidator } from '@/features/shared/utils/server-zod-validator.ts';
+import { serverZodValidator } from '@/lib/zod/server-zod-validator.ts';
 import { authMiddleware } from '@/middleware/auth.ts';
-import { auth } from '@/features/auth/lib/auth.ts';
-import { Permission } from '@/features/auth/lib/permissions.ts';
-import { throwForbiddenError } from '@/features/shared/utils/throw-api-error.ts';
+import { auth } from '@/lib/auth/auth.ts';
+import { Permission } from '@/lib/auth/permissions.ts';
+import { throwForbiddenError } from '@/lib/errors/throw-api-error.ts';
 import { useMutation, UseMutationOptions, useQueryClient } from '@tanstack/react-query';
 import { getSessionQueryOptions } from '@/features/auth/server-functions/public/get-session.ts';
 import { toast } from 'sonner';

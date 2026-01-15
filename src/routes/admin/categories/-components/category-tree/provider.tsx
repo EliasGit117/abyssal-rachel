@@ -1,5 +1,5 @@
 import { useMemo, PropsWithChildren, useEffect, useState } from 'react';
-import { contextFactory } from '@/lib/context-factory';
+import { contextFactory } from '@/lib/utils/context-factory.ts';
 import { useQuery } from '@tanstack/react-query';
 import { getCategoryTreeForAdminQueryOptions } from '@/features/categories/admin/server-functions/get-tree.ts';
 import { useDeleteCategoryMutation } from '@/features/categories/admin/server-functions/delete.ts';

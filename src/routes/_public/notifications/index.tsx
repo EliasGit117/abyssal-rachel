@@ -1,12 +1,12 @@
 import { createFileRoute } from '@tanstack/react-router';
-import { awaitIfServer } from '@/lib/await-if-server.ts';
+import { awaitIfServer } from '@/lib/server/await-if-server.ts';
 import { getAllNotificationsQueryOptions } from '@/features/notifications/server-functions/get-all.ts';
 import { TBreadcrumbData } from '@/components/layout';
 import { m } from '@/paraglide/messages';
 import { CreateNotificationCard, NotificationListSection } from '@/routes/_public/notifications/-components';
-import { Permission } from '@/features/auth/lib/permissions.ts';
+import { Permission } from '@/lib/auth/permissions.ts';
 import { useHasPermission } from '@/hooks/use-has-permission.ts';
-import { cn } from '@/lib/utils.ts';
+import { cn } from '@/lib/utils';
 
 
 

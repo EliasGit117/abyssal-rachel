@@ -1,11 +1,11 @@
 import { betterAuth } from "better-auth/minimal";
 import { prismaAdapter } from 'better-auth/adapters/prisma';
-import { prisma } from '@/lib/prisma.ts';
+import { prisma } from '@/lib/db/prisma.ts';
 import { localization } from 'better-auth-localization';
 import { getLocale } from '@/paraglide/runtime';
-import { resend } from '@/lib/resend.ts';
+import { resend } from '@/lib/emails/resend.ts';
 import { admin as adminPlugin, magicLink } from 'better-auth/plugins';
-import { accessControl, roles } from '@/features/auth/lib/permissions.ts';
+import { accessControl, roles } from '@/lib/auth/permissions.ts';
 import { tanstackStartCookies } from 'better-auth/tanstack-start';
 
 

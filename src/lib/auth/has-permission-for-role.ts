@@ -1,5 +1,5 @@
-import { TPermissionsInput } from "@/features/auth/lib/permissions.ts";
-import { authClient } from "@/features/auth/lib/auth-client.ts";
+import { TPermissionsInput } from "@/lib/auth/permissions.ts";
+import { authClient } from "@/lib/auth/auth-client.ts";
 
 type TPermissionConfig = Record<string, TPermissionsInput>;
 type TPermissionResult<T extends TPermissionConfig> = { [K in keyof T]: boolean; };

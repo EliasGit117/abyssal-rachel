@@ -4,7 +4,7 @@ import {
   getUsersPaginatedAdminQueryOptions,
   getUsersPaginatedAdminSchema
 } from '@/features/auth/server-functions/admin/users-paginated.ts';
-import { awaitIfServer } from '@/lib/await-if-server.ts';
+import { awaitIfServer } from '@/lib/server/await-if-server.ts';
 
 
 export const Route = createFileRoute('/admin/users/')({

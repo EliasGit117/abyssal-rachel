@@ -1,14 +1,14 @@
 import { createServerFn } from '@tanstack/react-start';
 import { useMutation, UseMutationOptions, useQueryClient } from '@tanstack/react-query';
-import { prisma } from '@/lib/prisma.ts';
+import { prisma } from '@/lib/db/prisma.ts';
 import { getLocale } from '@/paraglide/runtime';
 import { INotificationBriefDto, NotificationBriefDtoFactory } from '@/features/notifications/dtos/notification-dto.ts';
 import { createNotificationSchema } from '@/features/notifications/schemas/create-notification.ts';
 import { authMiddleware } from '@/middleware/auth.ts';
-import { serverZodValidator } from '@/features/shared/utils/server-zod-validator.ts';
-import { auth } from '@/features/auth/lib/auth.ts';
-import { Permission } from '@/features/auth/lib/permissions.ts';
-import { throwForbiddenError } from '@/features/shared/utils/throw-api-error.ts';
+import { serverZodValidator } from '@/lib/zod/server-zod-validator.ts';
+import { auth } from '@/lib/auth/auth.ts';
+import { Permission } from '@/lib/auth/permissions.ts';
+import { throwForbiddenError } from '@/lib/errors/throw-api-error.ts';
 
 
 

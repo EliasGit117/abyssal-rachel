@@ -13,12 +13,12 @@ import {
   getUsersPaginatedAdminQueryOptions,
   TGetUsersPaginatedAdmin
 } from '@/features/auth/server-functions/admin/users-paginated.ts';
-import { cn } from '@/lib/utils.ts';
+import { cn } from '@/lib/utils';
 import { useDeleteUserMutation } from '@/features/auth/server-functions/admin/delete-user.tsx';
 import { ActionBarButton } from '@/components/data-table/action-bar.tsx';
 import { AdaptiveButton } from '@/components/ui/adaptive-button.tsx';
-import { exportToCsv } from '@/lib/csv.ts';
-import { Permission } from '@/features/auth/lib/permissions.ts';
+import { exportToCsv } from '@/lib/utils/csv.ts';
+import { Permission } from '@/lib/auth/permissions.ts';
 import { useHasPermission } from '@/hooks/use-has-permission.ts';
 
 

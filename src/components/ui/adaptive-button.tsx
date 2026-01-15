@@ -1,7 +1,7 @@
 import { ComponentProps, FC } from 'react';
 import { Button } from '@/components/ui/button.tsx';
 import { Icon } from '@tabler/icons-react';
-import { cn } from '@/lib/utils.ts';
+import { cn } from '@/lib/utils';
 import { VariantProps } from 'class-variance-authority';
 
 

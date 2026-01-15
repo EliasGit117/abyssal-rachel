@@ -1,5 +1,5 @@
 import { ReactNode, useState } from 'react';
-import { contextFactory } from '@/lib/context-factory';
+import { contextFactory } from '@/lib/utils/context-factory.ts';
 
 export type CategorySheetMode = 'create' | 'edit';
 

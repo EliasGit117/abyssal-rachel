@@ -12,7 +12,7 @@ import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip
 import { getCategoryTreeForAdminQueryOptions } from '@/features/categories/admin/server-functions/get-tree.ts';
 import { useIsMobile } from '@/hooks/use-mobile.ts';
 import { useHasPermission } from '@/hooks/use-has-permission.ts';
-import { Permission } from '@/features/auth/lib/permissions.ts';
+import { Permission } from '@/lib/auth/permissions.ts';
 import {
   CategorySheet,
   CategorySheetTrigger,

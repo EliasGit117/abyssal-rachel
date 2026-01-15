@@ -1,6 +1,6 @@
 import { LinkOptions } from '@tanstack/react-router';
 import { baseLocale, type Locale } from '@/paraglide/runtime';
-import { hasRoleAccessToAdmin } from '@/features/auth/lib/permissions.ts';
+import { hasRoleAccessToAdmin } from '@/lib/auth/permissions.ts';
 
 
 export interface ILinkItem {

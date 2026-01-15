@@ -10,7 +10,7 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar.tsx';
 import { useSession } from '@/hooks/use-session.ts';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { authClient } from '@/features/auth/lib/auth-client.ts';
+import { authClient } from '@/lib/auth/auth-client.ts';
 import { Spinner } from '@/components/ui/spinner.tsx';
 import { SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar } from '@/components/ui/sidebar.tsx';
 import { ComponentProps, FC } from 'react';

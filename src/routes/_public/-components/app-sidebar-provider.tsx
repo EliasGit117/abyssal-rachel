@@ -1,7 +1,7 @@
 import { ReactNode, useState } from 'react';
 import { createStore, StoreApi } from 'zustand/vanilla';
 import { useStore } from 'zustand/react';
-import { contextFactory } from '@/lib/context-factory.ts';
+import { contextFactory } from '@/lib/utils/context-factory.ts';
 
 interface IAppSidebarStore {
   isOpen: boolean;

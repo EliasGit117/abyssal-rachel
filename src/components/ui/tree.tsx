@@ -4,7 +4,7 @@ import type { ItemInstance } from "@headless-tree/core";
 import { Slot } from "radix-ui";
 import * as React from "react";
 
-import { cn } from "@/lib/utils.ts";
+import { cn } from "@/lib/utils";
 import { IconChevronDown } from '@tabler/icons-react';
 
 interface TreeContextValue<T = any> {

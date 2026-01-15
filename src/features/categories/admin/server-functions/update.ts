@@ -1,14 +1,14 @@
 import { createServerFn } from '@tanstack/react-start';
 import { authMiddleware } from '@/middleware/auth.ts';
-import { serverZodValidator } from '@/features/shared/utils/server-zod-validator.ts';
+import { serverZodValidator } from '@/lib/zod/server-zod-validator.ts';
 import { updateCategorySchema } from '@/features/categories/admin/schemas/update.ts';
 import { CategoryService } from '@/features/categories/admin/services/category-service.ts';
-import { auth } from '@/features/auth/lib/auth.ts';
-import { Permission } from '@/features/auth/lib/permissions.ts';
+import { auth } from '@/lib/auth/auth.ts';
+import { Permission } from '@/lib/auth/permissions.ts';
 import {
   throwForbiddenError,
   throwUnauthorizedError
-} from '@/features/shared/utils/throw-api-error.ts';
+} from '@/lib/errors/throw-api-error.ts';
 import { getSessionServerFn } from '@/features/auth/server-functions/public/get-session.ts';
 import { useMutation, UseMutationOptions, useQueryClient } from '@tanstack/react-query';
 

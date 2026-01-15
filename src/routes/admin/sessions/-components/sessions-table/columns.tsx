@@ -40,7 +40,7 @@ import {
 import { DropdownMenuTrigger } from '@/components/ui/dropdown-menu.tsx';
 import { Button } from '@/components/ui/button.tsx';
 import { Badge } from '@/components/ui/badge.tsx';
-import { cn } from '@/lib/utils.ts';
+import { cn } from '@/lib/utils';
 import { Link } from '@tanstack/react-router';
 
 

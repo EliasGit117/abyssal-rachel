@@ -4,7 +4,7 @@ import TwitterLogo from '@/assets/icons/socials/twitter.svg?react';
 import YoutubeLogo from '@/assets/icons/socials/youtube.svg?react';
 import Logo from '@/assets/icons/logo.svg?react';
 import { Button } from '@/components/ui/button';
-import { envConfig } from '@/lib/env-config.ts';
+import { envConfig } from '@/lib/config/env-config.ts';
 
 
 interface IProps extends ComponentProps<'footer'> {

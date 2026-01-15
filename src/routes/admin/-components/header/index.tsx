@@ -1,7 +1,7 @@
 import { ComponentProps, FC, useEffect, useRef } from 'react';
 import { Separator } from '@/components/ui/separator.tsx';
 import { SidebarTrigger, } from '@/components/ui/sidebar.tsx';
-import { cn } from '@/lib/utils.ts';
+import { cn } from '@/lib/utils';
 import { BreadcrumbsNavigation } from '@/components/layout';
 
 

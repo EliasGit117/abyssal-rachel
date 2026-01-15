@@ -1,6 +1,6 @@
 import { useSession } from "@/hooks/use-session.ts";
-import { TPermissionsInput } from "@/features/auth/lib/permissions.ts";
-import { hasPermissionForRole } from "@/features/auth/lib/has-permission-for-role.ts";
+import { TPermissionsInput } from "@/lib/auth/permissions.ts";
+import { hasPermissionForRole } from "@/lib/auth/has-permission-for-role.ts";
 
 type TPermissionConfig = Record<string, TPermissionsInput>;
 type TPermissionResult<T extends TPermissionConfig> = { [K in keyof T]: boolean; };
