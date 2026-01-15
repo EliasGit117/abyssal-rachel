@@ -5,9 +5,9 @@ export interface ISessionBriefDto {
   userId: string;
   ipAddress: string | null;
   userAgent: string | null;
-  createdAt: Date;
-  updatedAt: Date;
-  expiresAt: Date;
+  createdAt: string;
+  updatedAt: string;
+  expiresAt: string;
   isCurrent?: boolean;
   isMine?: boolean;
   expired?: boolean;
@@ -26,9 +26,9 @@ export class SessionBriefDtoFactory {
       userId: entity.userId,
       ipAddress: entity.ipAddress,
       userAgent: entity.userAgent,
-      createdAt: entity.createdAt,
-      updatedAt: entity.updatedAt,
-      expiresAt: entity.expiresAt,
+      createdAt: entity.createdAt.toISOString(),
+      updatedAt: entity.updatedAt.toISOString(),
+      expiresAt: entity.expiresAt.toISOString(),
       isCurrent: options?.currentSessionId != null ? entity.id === options.currentSessionId : undefined,
       isMine: options?.currentUserId != null ? entity.userId === options.currentUserId : undefined,
       expired: entity.expiresAt < new Date(),

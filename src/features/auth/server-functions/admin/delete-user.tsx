@@ -9,6 +9,7 @@ import { useMutation, UseMutationOptions, useQueryClient } from '@tanstack/react
 import { getSessionQueryOptions } from '@/features/auth/server-functions/public/get-session.ts';
 import { toast } from 'sonner';
 import { useConfirm } from '@/components/ui/confirm-dialog.tsx';
+import { IconTrash } from '@tabler/icons-react';
 
 
 export const deleteUserSchema = z.object({
@@ -53,7 +54,11 @@ export const useDeleteUserMutation = (options?: TOptions) => {
           title: 'Delete user',
           description: 'Are you sure you want to delete user?',
           confirmText: 'Delete',
-          cancelText: 'Cancel'
+          cancelText: 'Cancel',
+          icon: <IconTrash className='size-5 text-destructive'/>,
+          alertDialogTitle: { className: 'flex items-center gap-2' },
+          cancelButton: { variant: 'outline' },
+          confirmButton: { variant: 'destructive' }
         });
 
         if (!isConfirmed)

@@ -3,7 +3,7 @@ import { Table } from '@tanstack/react-table';
 
 export interface IDataTableContext<TData> {
   table: Table<TData>;
-  isPending?: boolean;
+  loading?: boolean;
 }
 
 export interface IDataTableProviderProps<TData> extends IDataTableContext<TData> {

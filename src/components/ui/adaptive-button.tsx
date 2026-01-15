@@ -1,7 +1,6 @@
 import { ComponentProps, FC } from 'react';
 import { Button } from '@/components/ui/button.tsx';
 import { Icon } from '@tabler/icons-react';
-import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip.tsx';
 import { cn } from '@/lib/utils.ts';
 import { VariantProps } from 'class-variance-authority';
 
@@ -11,30 +10,26 @@ interface IAdaptiveButtonProps extends Pick<ComponentProps<typeof Button>, 'vari
   tooltipDelay?: number;
   icon?: Icon;
   className?: string;
+  disabled?: boolean;
 }
 
 export const AdaptiveButton: FC<IAdaptiveButtonProps> = (props) => {
-  const { icon: Icon, className, text, tooltipDelay = 500, size, variant } = props;
-  return (
-    <Tooltip delayDuration={tooltipDelay}>
-      <TooltipTrigger
-        className={cn(
-          'aspect-square sm:aspect-auto w-fit',
-          widthBySize[size ?? 'default'],
-          className
-        )}
-        asChild
-      >
-        <Button size={size} variant={variant}>
-          {Icon && <Icon/>}
-          <span className="sr-only sm:not-sr-only">{text}</span>
-        </Button>
-      </TooltipTrigger>
+  const { icon: Icon, className, text, size, variant, disabled, onClick } = props;
+  const widthClass = widthBySize[size ?? 'default'] ?? 'default';
 
-      <TooltipContent className="sm:hidden">
-        <p>{text}</p>
-      </TooltipContent>
-    </Tooltip>
+  return (
+    <Button
+      size={size}
+      title={text}
+      aria-label={text}
+      variant={variant}
+      disabled={disabled}
+      onClick={(e) => onClick?.(e)}
+      className={cn(widthClass, 'sm:w-fit', className)}
+    >
+      {Icon && <Icon/>}
+      <span className="sr-only sm:not-sr-only">{text}</span>
+    </Button>
   );
 };
 

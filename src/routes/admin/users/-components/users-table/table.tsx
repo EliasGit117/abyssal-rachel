@@ -14,7 +14,7 @@ import {
   TGetUsersPaginatedAdmin
 } from '@/features/auth/server-functions/admin/users-paginated.ts';
 import { cn } from '@/lib/utils.ts';
-import { useDeleteUserMutation } from '@/features/auth/server-functions/admin/delete-user.ts';
+import { useDeleteUserMutation } from '@/features/auth/server-functions/admin/delete-user.tsx';
 import { ActionBarButton } from '@/components/data-table/action-bar.tsx';
 import { AdaptiveButton } from '@/components/ui/adaptive-button.tsx';
 import { exportToCsv } from '@/lib/csv.ts';
@@ -33,16 +33,17 @@ export const UsersTable: FC<IProps> = (props) => {
   const { className, search = {}, ...divProps } = props;
   const { canDelete } = useHasPermission({ canDelete: { user: [Permission.Delete] } });
   const { mutate: deleteUser, isPending: isDeletingUser } = useDeleteUserMutation();
-  const { data, isLoading, refetch } = useQuery({
+  const { data, isPending: isPendingData, isFetching: isFetchingData, refetch } = useQuery({
     ...getUsersPaginatedAdminQueryOptions(search),
-    placeholderData: keepPreviousData
+    placeholderData: keepPreviousData,
+    structuralSharing: false
   });
 
   const columns = useMemo(() => userColumns({
-    disabled: isLoading || isDeletingUser,
+    disabled: isFetchingData || isDeletingUser,
     canDelete: canDelete,
     onDeleteClick: (id) => deleteUser({ data: { id: id } })
-  }), [isLoading, isDeletingUser, deleteUser]);
+  }), [isFetchingData, isDeletingUser, deleteUser]);
 
   const { table, selectedItems, setRowSelection } = useDataTable({
     data: data?.items,
@@ -87,7 +88,7 @@ export const UsersTable: FC<IProps> = (props) => {
 
   return (
     <div className={cn('space-y-2', className)} {...divProps}>
-      <DataTableProvider table={table} isPending={isLoading}>
+      <DataTableProvider table={table} loading={isPendingData}>
         <DataTableToolbar>
           <AdaptiveButton
             text="Refresh"
@@ -95,14 +96,14 @@ export const UsersTable: FC<IProps> = (props) => {
             variant="ghost"
             icon={IconRefresh}
             className="ml-auto"
-            onClick={() => refetch()}
+            onClick={() => refetch({ throwOnError: true })}
           />
         </DataTableToolbar>
 
         <DataTable/>
         <DataTablePagination/>
 
-        <DataTableActionBar disabled={isDeletingUser}>
+        <DataTableActionBar disabled={isFetchingData || isDeletingUser}>
           <ActionBarButton text="CSV" icon={IconFileExport} onClick={onExportToCsvClick}/>
           {canDelete && (
             <ActionBarButton text="Delete" icon={IconTrash} variant="destructive" onClick={deleteSelectedUser}/>

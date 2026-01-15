@@ -24,6 +24,7 @@ interface IUseDataTableProps<TData> extends Omit<TableOptions<TData>,
   totalPages?: number;
   history?: 'push' | 'replace';
   pageOnSearchChange?: number | 'none';
+  dataCompareStrategy?: 'ref' | 'stringify';
 }
 
 

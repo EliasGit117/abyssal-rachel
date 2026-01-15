@@ -24,7 +24,7 @@ export function DataTable<TData>(props: DataTableProps<TData>) {
   // noinspection BadExpressionStatementJS
   'use no memo';
 
-  const { table, isPending } = useDataTableContext();
+  const { table, loading } = useDataTableContext();
   const {
     actionBar,
     children,
@@ -65,7 +65,7 @@ export function DataTable<TData>(props: DataTableProps<TData>) {
           </TableHeader>
 
           <TableBody>
-            {(showSkeleton && isPending) ? (
+            {(showSkeleton && loading) ? (
               Array.from({ length: pageSize }).map((_, rowIndex) => (
                 <TableRow key={`skeleton-${rowIndex}`}>
                   {visibleColumns.map((column, colIndex) => (

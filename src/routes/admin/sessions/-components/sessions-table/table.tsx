@@ -32,15 +32,15 @@ export const SessionsTable: FC<IProps> = (props) => {
   const { className, search = {}, ...divProps } = props;
   const { canDelete } = useHasPermission({ canDelete: { user: [Permission.Delete] } });
   const { mutate: revokeSessions, isPending: isRevokingSession } = useRevokeSessionsMutation();
-  const { data, isLoading, refetch } = useQuery({
-    ...getSessionsPaginatedAdminQueryOptions(search), placeholderData: keepPreviousData
+  const { data, isPending: isPendingData, isFetching: isFetchingData, refetch } = useQuery({
+    ...getSessionsPaginatedAdminQueryOptions(search), placeholderData: keepPreviousData,
   });
 
   const columns = useMemo(() => sessionColumns({
-    disabled: isLoading,
+    disabled: isFetchingData,
     canDelete: canDelete,
     onRevokeClick: (id) => revokeSessions({ ids: [id] })
-  }), [isLoading, canDelete, revokeSessions]);
+  }), [isFetchingData, canDelete, revokeSessions]);
 
   const { table, selectedItems, setRowSelection } = useDataTable({
     data: data?.items,
@@ -85,7 +85,7 @@ export const SessionsTable: FC<IProps> = (props) => {
 
   return (
     <div className={cn('space-y-2', className)} {...divProps}>
-      <DataTableProvider table={table} isPending={isLoading}>
+      <DataTableProvider table={table} loading={isPendingData}>
         <DataTableToolbar>
           <AdaptiveButton
             text="Refresh"
@@ -99,7 +99,7 @@ export const SessionsTable: FC<IProps> = (props) => {
         <DataTable/>
         <DataTablePagination/>
 
-        <DataTableActionBar disabled={isRevokingSession}>
+        <DataTableActionBar disabled={isFetchingData || isRevokingSession}>
           <ActionBarButton text="CSV" icon={IconFileExport} onClick={onExportToCsvClick}/>
           {canDelete && (
             <ActionBarButton text="Revoke" icon={IconTrash} variant="destructive" onClick={revokeSelectedSession}/>

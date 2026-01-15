@@ -20,6 +20,7 @@ import {
   AlertDialogPortal,
   AlertDialogTitle
 } from '@/components/ui/alert-dialog'
+import { Icon, IconCheck, IconX } from '@tabler/icons-react';
 
 export interface CustomActionsProps {
   confirm: () => void
@@ -47,7 +48,9 @@ export interface ConfirmOptions {
   cancelText?: string
   icon?: ReactNode
   customActions?: LegacyCustomActions | EnhancedCustomActions
+  cancelIcon?: Icon;
   confirmButton?: ComponentPropsWithRef<typeof AlertDialogAction>
+  confirmIcon?: Icon;
   cancelButton?: ComponentPropsWithRef<typeof AlertDialogCancel> | null
   alertDialogOverlay?: ComponentPropsWithRef<typeof AlertDialogOverlay>
   alertDialogContent?: ComponentPropsWithRef<typeof AlertDialogContent>
@@ -124,7 +127,7 @@ const ConfirmDialogContent = memo(
       alertDialogHeader,
       alertDialogTitle,
       alertDialogDescription,
-      alertDialogFooter
+      alertDialogFooter,
     } = config
 
     const renderActions = () => {
@@ -133,11 +136,13 @@ const ConfirmDialogContent = memo(
           <>
             {cancelButton !== null && (
               <AlertDialogCancel onClick={onCancel} {...cancelButton}>
-                {cancelText}
+                {config.confirmIcon ? <config.confirmIcon/> : <IconX/>}
+                <span>{cancelText}</span>
               </AlertDialogCancel>
             )}
             <AlertDialogAction onClick={onConfirm} {...confirmButton}>
-              {confirmText}
+              {config.confirmIcon ? <config.confirmIcon/> : <IconCheck/>}
+              <span>{confirmText}</span>
             </AlertDialogAction>
           </>
         )
