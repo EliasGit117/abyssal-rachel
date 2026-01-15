@@ -9,6 +9,9 @@ import { TodoSchema } from '@/features/shared/orpc/todos.ts';
 import { getRequestHeaders } from '@tanstack/react-start/server';
 
 
+
+const LOCALE_PATTERN = /^\/[a-z]{2}(\/.*)$/;
+
 const handler = new OpenAPIHandler(orpcRouter, {
   interceptors: [
     onError((error) => {
@@ -33,10 +36,7 @@ const handler = new OpenAPIHandler(orpcRouter, {
         security: [{ bearerAuth: [] }],
         components: {
           securitySchemes: {
-            bearerAuth: {
-              type: 'http',
-              scheme: 'bearer',
-            },
+            bearerAuth: { type: 'http', scheme: 'bearer' }
           },
         },
       },
@@ -53,15 +53,24 @@ const handler = new OpenAPIHandler(orpcRouter, {
   ],
 })
 
+
 async function handle({ request }: { request: Request }) {
-  const { response } = await handler.handle(request, {
+  // A trick to handle paraglide url strategy
+  const url = new URL(request.url);
+  const pathWithoutLocale = url.pathname.replace(LOCALE_PATTERN, '$1');
+  const newUrl = new URL(request.url);
+  newUrl.pathname = pathWithoutLocale;
+
+  const newRequest = new Request(newUrl, request);
+
+  const { response } = await handler.handle(newRequest, {
     prefix: '/api',
     context: {
       headers: getRequestHeaders()
     },
-  })
+  });
 
-  return response ?? new Response('Not Found', { status: 404 })
+  return response ?? new Response('Not Found', { status: 404 });
 }
 
 export const Route = createFileRoute('/api/$')({
