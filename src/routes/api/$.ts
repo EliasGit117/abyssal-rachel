@@ -2,11 +2,11 @@ import { OpenAPIHandler } from '@orpc/openapi/fetch'
 import { ZodToJsonSchemaConverter } from '@orpc/zod/zod4'
 import { SmartCoercionPlugin } from '@orpc/json-schema'
 import { createFileRoute } from '@tanstack/react-router'
-import { onError } from '@orpc/server'
+import { onError } from '@orpc/server';
 import { OpenAPIReferencePlugin } from '@orpc/openapi/plugins'
 import { orpcRouter } from '@/features/shared/orpc/router.ts';
-import { TodoSchema } from '@/features/shared/orpc/todos.ts';
 import { getRequestHeaders } from '@tanstack/react-start/server';
+import { NotificationBriefDtoSchema } from '@/features/notifications/dtos/notification-dto.ts';
 
 
 const handler = new OpenAPIHandler(orpcRouter, {
@@ -27,7 +27,7 @@ const handler = new OpenAPIHandler(orpcRouter, {
           version: '1.0.0',
         },
         commonSchemas: {
-          Todo: { schema: TodoSchema },
+          NotificationBriefDto: { schema: NotificationBriefDtoSchema },
           UndefinedError: { error: 'UndefinedError' },
         },
         security: [{ bearerAuth: [] }],

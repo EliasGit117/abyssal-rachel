@@ -1,29 +1,28 @@
-import { notificationsBase } from './base';
 import {
   NotificationBriefDtoFactory,
-  INotificationBriefDto
-} from '@/features/notifications/dtos/notification-dto';
+  TNotificationBriefDto
+} from '@/features/notifications/dtos/notification-dto.ts';
 import { type } from '@orpc/server';
 import {
   createNotificationSchema,
-} from '@/features/notifications/schemas/create-notification';
+} from '@/features/notifications/schemas/create-notification.ts';
 import { getLocale } from '@/paraglide/runtime';
-import { prisma } from '@/lib/db/prisma';
-import { auth } from '@/lib/auth/auth';
-import { Permission } from '@/lib/auth/permissions';
+import { prisma } from '@/lib/db/prisma.ts';
+import { auth } from '@/lib/auth/auth.ts';
+import { Permission } from '@/lib/auth/permissions.ts';
 import { authMiddleware } from '@/features/shared/orpc/middlewares/auth.ts';
+import { notificationsAdminBase } from '@/features/notifications/routes/admin/base.ts';
 
 
-export const createNotification = notificationsBase
+export const createNotification = notificationsAdminBase
   .route({
     method: 'POST',
-    path: '/notifications',
     summary: 'Create notification',
     description: 'Create a new notification',
   })
   .use(authMiddleware)
   .input(createNotificationSchema)
-  .output(type<INotificationBriefDto>())
+  .output(type<TNotificationBriefDto>())
   .errors({
     FORBIDDEN: { message: 'User does not have permission to create notifications' }
   })

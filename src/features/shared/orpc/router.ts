@@ -1,12 +1,14 @@
 import { base } from '@/features/shared/orpc/base.ts';
-import { todosRoutes } from '@/features/shared/orpc/todos.ts';
-import { notificationsRoutes } from '@/features/notifications/routes';
+import { notificationsPublicRoutes } from '@/features/notifications/routes/public';
+import { notificationsAdminRoutes } from '@/features/notifications/routes/admin';
 import { InferRouterInputs, InferRouterOutputs } from '@orpc/server';
 
 
 export const orpcRouter = base.router({
-  todos: todosRoutes,
-  notifications: notificationsRoutes,
+  notifications: notificationsPublicRoutes,
+  admin: {
+    notifications: notificationsAdminRoutes,
+  }
 });
 
 export type TOrpcRouter = typeof orpcRouter;

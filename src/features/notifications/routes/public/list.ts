@@ -1,21 +1,16 @@
-import { notificationsBase } from './base';
-import {
-  NotificationBriefDtoFactory,
-  INotificationBriefDto
-} from '@/features/notifications/dtos/notification-dto.ts';
-import { type } from '@orpc/server';
+import { notificationsPublicBase } from './base.ts';
+import { NotificationBriefDtoFactory, NotificationBriefDtoSchema, } from '@/features/notifications/dtos/notification-dto.ts';
 import { getLocale } from '@/paraglide/runtime';
 import { prisma } from '@/lib/db/prisma.ts';
 
 
-export const listNotifications = notificationsBase
+export const listNotifications = notificationsPublicBase
   .route({
     method: 'GET',
-    path: '/notifications',
     summary: 'List notifications',
     description: 'Get all notifications',
   })
-  .output(type<INotificationBriefDto[]>())
+  .output(NotificationBriefDtoSchema.array())
   .handler(async () => {
     const locale = getLocale();
     const notifications = await prisma.notification.findMany();

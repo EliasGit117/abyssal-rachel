@@ -1,14 +1,15 @@
-import { notificationsBase } from './base';
 import * as z from 'zod';
 import { prisma } from '@/lib/db/prisma.ts';
-import { auth } from '@/lib/auth/auth';
-import { Permission } from '@/lib/auth/permissions';
+import { auth } from '@/lib/auth/auth.ts';
+import { Permission } from '@/lib/auth/permissions.ts';
 import { authMiddleware } from '@/features/shared/orpc/middlewares/auth.ts';
+import { notificationAdminPath, notificationsAdminBase } from '@/features/notifications/routes/admin/base.ts';
 
-export const deleteNotification = notificationsBase
+
+export const deleteNotification = notificationsAdminBase
   .route({
     method: 'DELETE',
-    path: '/notifications/{id}',
+    path: `${notificationAdminPath}/{id}`,
     summary: 'Delete notification',
     description: 'Delete notification by id'
   })
