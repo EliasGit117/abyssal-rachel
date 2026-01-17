@@ -1,11 +1,12 @@
-import { TCreateNotificationSchema } from '@/features/notifications/schemas/create-notification.ts';
 import { useMutation, UseMutationOptions, useQueryClient } from '@tanstack/react-query';
-import { TNotificationBriefDto } from '@/features/notifications/dtos/notification-dto.ts';
 import { orpc } from '@/lib/orpc/client.ts';
+import { TOrpcInputs, TOrpcOutputs } from '@/features/shared/orpc/router.ts';
 
 
-type TParams = TCreateNotificationSchema;
-type TOptions = Omit<UseMutationOptions<TNotificationBriefDto, Error, TParams>, 'mutationFn' | 'onMutate'>;
+type TParams = TOrpcInputs['notifications']['create'];
+type TData = TOrpcOutputs['notifications']['create'];
+
+type TOptions = Omit<UseMutationOptions<TData, Error, TParams>, 'mutationFn' | 'onMutate'>;
 
 export const useCreateNotificationMutation = (options?: TOptions) => {
   const queryClient = useQueryClient();

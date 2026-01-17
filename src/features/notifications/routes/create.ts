@@ -1,8 +1,9 @@
 import { notificationsBase } from './base';
 import {
   NotificationBriefDtoFactory,
-  NotificationBriefDtoSchema,
+  INotificationBriefDto
 } from '@/features/notifications/dtos/notification-dto';
+import { type } from '@orpc/server';
 import {
   createNotificationSchema,
 } from '@/features/notifications/schemas/create-notification';
@@ -22,7 +23,7 @@ export const createNotification = notificationsBase
   })
   .use(authMiddleware)
   .input(createNotificationSchema)
-  .output(NotificationBriefDtoSchema)
+  .output(type<INotificationBriefDto>())
   .errors({
     FORBIDDEN: { message: 'User does not have permission to create notifications' }
   })

@@ -1,5 +1,4 @@
 import { ComponentProps, FC, useState } from 'react';
-import { useDeleteNotificationByIdMutation } from '@/features/notifications/server-functions/delete-by-id.ts';
 import { toast } from 'sonner';
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import { Item, ItemActions, ItemContent, ItemDescription, ItemTitle } from '@/components/ui/item.tsx';
@@ -14,6 +13,7 @@ import { Button } from '@/components/ui/button.tsx';
 import { Permission } from '@/lib/auth/permissions.ts';
 import { useHasPermission } from '@/hooks/use-has-permission.ts';
 import { orpc } from '@/lib/orpc/client.ts';
+import { useDeleteNotification } from '@/features/notifications/hooks/delete-notification.ts';
 
 
 export const NotificationListSection: FC<ComponentProps<'section'>> = ({ className, ...props }) => {
@@ -29,7 +29,7 @@ export const NotificationListSection: FC<ComponentProps<'section'>> = ({ classNa
     placeholderData: keepPreviousData
   });
 
-  const { mutateAsync: deleteNotification } = useDeleteNotificationByIdMutation({
+  const { mutateAsync: deleteNotification } = useDeleteNotification({
     onError: (e) => toast.error(e.name, { description: e.message })
   });
 

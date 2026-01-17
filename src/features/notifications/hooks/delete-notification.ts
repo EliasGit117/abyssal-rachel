@@ -1,0 +1,47 @@
+import { useMutation, UseMutationOptions, useQueryClient } from '@tanstack/react-query';
+import { orpc } from '@/lib/orpc/client.ts';
+import { INotificationBriefDto } from '@/features/notifications/dtos/notification-dto.ts';
+import { TOrpcInputs, TOrpcOutputs } from '@/features/shared/orpc/router.ts';
+
+type TParams = TOrpcInputs['notifications']['delete'];
+type TData = TOrpcOutputs['notifications']['delete'];
+type TContext = { previousNotifications?: INotificationBriefDto[] };
+type TOptions = Omit<UseMutationOptions<TData, Error, TParams, TContext>, 'mutationFn'>;
+
+
+
+export const useDeleteNotification = (options?: TOptions) => {
+  const queryClient = useQueryClient();
+
+  const listQueryOptions = orpc.notifications.list.queryOptions();
+  const listKey = listQueryOptions.queryKey;
+
+  return useMutation<TData, Error, TParams, TContext>({
+    mutationFn: (values) => orpc.notifications.delete.call(values),
+
+    onMutate: async (variables) => {
+      await queryClient.cancelQueries({ queryKey: listKey });
+
+      const previousNotifications =
+        queryClient.getQueryData<INotificationBriefDto[]>(listKey);
+
+      queryClient.setQueryData<INotificationBriefDto[]>(listKey,
+        (old) => old?.filter((n) => n.id !== variables.id) ?? [],
+      );
+
+      return { previousNotifications };
+    },
+
+    onError: (_error, _variables, context) => {
+      if (context?.previousNotifications) {
+        queryClient.setQueryData(listKey, context.previousNotifications);
+      }
+    },
+
+    onSettled: () => {
+      void queryClient.invalidateQueries({ queryKey: listKey });
+    },
+
+    ...options,
+  });
+};

@@ -97,7 +97,7 @@ function RouteComponent() {
                 { value: 'ro', name: 'Romanian' },
                 { value: 'ru', name: 'Russian' }
               ].map((item) => (
-                <Field orientation="horizontal">
+                <Field orientation="horizontal" key={item.value}>
                   <RadioGroupItem value={item.value} id={`locale-${item.value}`}/>
                   <FieldLabel htmlFor={`locale-${item.value}`} className="font-normal">
                     {item.name}
@@ -121,9 +121,9 @@ function RouteComponent() {
               </InputGroupAddon>
               <InputGroupInput placeholder={user?.name ?? "John Doe"}/>
               <InputGroupAddon align="inline-end">
-                <InputGroupButton variant='secondary' size='xs'>
+                <InputGroupButton variant='ghost' size='icon-xs'>
                   <IconSend/>
-                  <span>Update</span>
+                  <span className='sr-only'>Update</span>
                 </InputGroupButton>
               </InputGroupAddon>
             </InputGroup>
@@ -143,9 +143,9 @@ function RouteComponent() {
               </InputGroupAddon>
               <InputGroupInput placeholder={user?.email ?? "johndoe@yahoo.com"}/>
               <InputGroupAddon align="inline-end">
-                <InputGroupButton variant='secondary' size='xs'>
+                <InputGroupButton variant='ghost' size='icon-xs'>
                   <IconSend/>
-                  <span>Update</span>
+                  <span className='sr-only'>Update</span>
                 </InputGroupButton>
               </InputGroupAddon>
             </InputGroup>
@@ -159,7 +159,7 @@ function RouteComponent() {
               <FieldDescription>Send email to reset password</FieldDescription>
             </FieldContent>
 
-            <Button variant='outline' size='sm' className=''>
+            <Button variant='outline' className=''>
               <IconMailForward/>
               <span>Send email</span>
             </Button>

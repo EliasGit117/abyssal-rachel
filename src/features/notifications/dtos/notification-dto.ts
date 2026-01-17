@@ -1,19 +1,16 @@
 import { Notification } from '~/prisma/generated/prisma/client';
 import { type Locale } from '@/paraglide/runtime';
-import * as z from 'zod';
 
 
-export const NotificationBriefDtoSchema = z.object({
-  id: z.number(),
-  name: z.string(),
-  text: z.string(),
-  createdAt: z.string(),
-});
-
-export type TNotificationBriefDto = z.infer<typeof NotificationBriefDtoSchema>;
+export interface INotificationBriefDto {
+  id: number;
+  name: string;
+  text: string;
+  createdAt: string;
+}
 
 export class NotificationBriefDtoFactory {
-  private static baseFromEntity(entity: Notification, locale: Locale): TNotificationBriefDto {
+  private static baseFromEntity(entity: Notification, locale: Locale): INotificationBriefDto {
 
     return {
       id: entity.id,
@@ -23,11 +20,11 @@ export class NotificationBriefDtoFactory {
     };
   }
 
-  static fromEntity<T extends Notification>(entity: T, locale: Locale): TNotificationBriefDto {
+  static fromEntity<T extends Notification>(entity: T, locale: Locale): INotificationBriefDto {
     return { ...this.baseFromEntity(entity, locale) };
   }
 
-  static fromEntities<T extends Notification>(entities: T[], locale: Locale): TNotificationBriefDto[] {
+  static fromEntities<T extends Notification>(entities: T[], locale: Locale): INotificationBriefDto[] {
     return entities.map(entity => this.fromEntity(entity, locale));
   }
 }
