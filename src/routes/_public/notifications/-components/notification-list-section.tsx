@@ -1,5 +1,4 @@
 import { ComponentProps, FC, useState } from 'react';
-import { getAllNotificationsQueryOptions } from '@/features/notifications/server-functions/get-all.ts';
 import { useDeleteNotificationByIdMutation } from '@/features/notifications/server-functions/delete-by-id.ts';
 import { toast } from 'sonner';
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
@@ -14,6 +13,7 @@ import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTi
 import { Button } from '@/components/ui/button.tsx';
 import { Permission } from '@/lib/auth/permissions.ts';
 import { useHasPermission } from '@/hooks/use-has-permission.ts';
+import { orpc } from '@/orpc/client.ts';
 
 
 export const NotificationListSection: FC<ComponentProps<'section'>> = ({ className, ...props }) => {
@@ -22,9 +22,10 @@ export const NotificationListSection: FC<ComponentProps<'section'>> = ({ classNa
     canDelete: { notification: [Permission.Delete] },
   });
 
+
   const [deletion, setDeletion] = useState<Record<number, boolean>>({});
   const { isLoading: isPendingNotifications, isFetching, data: notifications, refetch } = useQuery({
-    ...getAllNotificationsQueryOptions(),
+    ...orpc.notifications.list.queryOptions(),
     placeholderData: keepPreviousData
   });
 

@@ -65,7 +65,7 @@ export const AppHeader: FC<IAppHeader> = ({ className, ...props }) => {
         'sticky top-0 flex h-16 shrink-0 items-center gap-2 z-20',
         'bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/90',
         'dark:supports-backdrop-filter:bg-background/75 border-b',
-        'transition-opacity duration-100 ease-out',
+        'transition-opacity duration-250 ease-out',
         type === 'fixed' && 'fixed left-0 right-0',
         entered ? 'opacity-150 translate-y-0' : 'opacity-0 -translate-y-4',
         isAtTop && 'bg-transparent! border-b-transparent backdrop-blur-none',

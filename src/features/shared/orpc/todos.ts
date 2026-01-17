@@ -14,20 +14,22 @@ export const TodoSchema = z.object({
   name: z.string()
 });
 
-const todosBase = base.route({ tags: ['todos'] });
+const todosBase = base.route({
+  tags: ['Todos'],
+});
 
 export const listTodos = todosBase
-  .route({ method: 'GET', path: '/todos', description: 'List todos' })
+  .route({ method: 'GET', path: '/todos', description: 'List todos', summary: 'Get todos' })
   .input(z.object({}))
   .output(z.array(TodoSchema))
   .handler(() => todos.map(item => ({ ...item, name: getLocale() })));
 
-export const addTodo = todosBase
+export const createTodo = todosBase
   .use(authMiddleware)
   .route({
     method: 'POST',
     path: '/todos',
-    description: 'Create todo',
+    summary: 'Create todo',
     successStatus: 201
   })
   .input(z.object({ name: z.string() }))
@@ -42,7 +44,7 @@ export const deleteTodo = todosBase
   .route({
     method: 'DELETE',
     path: '/todos/{id}',
-    description: 'Delete todo by id'
+    summary: 'Delete todo',
   })
   .input(z.object({ id: z.coerce.number().int().min(1) }))
   .output(TodoSchema)
@@ -55,6 +57,6 @@ export const deleteTodo = todosBase
 
 export const todosRoutes = {
   list: listTodos,
-  add: addTodo,
+  create: createTodo,
   delete: deleteTodo
 };

@@ -9,9 +9,6 @@ import { TodoSchema } from '@/features/shared/orpc/todos.ts';
 import { getRequestHeaders } from '@tanstack/react-start/server';
 
 
-
-const LOCALE_PATTERN = /^\/[a-z]{2}(\/.*)$/;
-
 const handler = new OpenAPIHandler(orpcRouter, {
   interceptors: [
     onError((error) => {
@@ -53,6 +50,8 @@ const handler = new OpenAPIHandler(orpcRouter, {
   ],
 })
 
+
+const LOCALE_PATTERN = /^\/[a-z]{2}(\/.*)$/;
 
 async function handle({ request }: { request: Request }) {
   // A trick to handle paraglide url strategy

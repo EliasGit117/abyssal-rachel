@@ -7,7 +7,7 @@ const handler = new RPCHandler(orpcRouter);
 
 async function handle({ request }: { request: Request }) {
   const { response } = await handler.handle(request, {
-    prefix: '/__rpc',
+    prefix: '/api/rpc',
     context: {
       headers: getRequestHeaders()
     }

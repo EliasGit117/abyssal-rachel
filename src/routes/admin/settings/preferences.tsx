@@ -62,7 +62,7 @@ function RouteComponent() {
               </FieldDescription>
             </FieldContent>
 
-            <RadioGroup value={theme} onValueChange={onThemeChange} className="grid sm:grid-cols-3 gap-2 max-w-xl">
+            <RadioGroup value={theme} onValueChange={onThemeChange} className="grid sm:grid-cols-3 gap-2 max-w-lg">
               {themeOptions.map((option) => (
                 <FieldLabel key={option.value} htmlFor={`theme-${option.value}`}>
                   <Field orientation="horizontal">
@@ -174,7 +174,7 @@ const themeOptions = [
   {
     value: 'system',
     label: 'System',
-    description: 'Match your system theme automatically.',
+    description: 'Match your system theme..',
     icon: IconDeviceImac
   },
   {
