@@ -1,7 +1,6 @@
-import { ORPCError, os } from '@orpc/server';
+import { base } from '@/features/shared/orpc/base.ts';
 import { auth } from '@/lib/auth';
-
-export const base = os.$context<{ headers: Headers }>();
+import { ORPCError } from '@orpc/server';
 
 export const authMiddleware = base.middleware(async ({ context, next }) => {
   const sessionData = await auth.api.getSession({
@@ -19,4 +18,3 @@ export const authMiddleware = base.middleware(async ({ context, next }) => {
   })
 })
 
-export const authorized = base.use(authMiddleware);

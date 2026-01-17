@@ -144,15 +144,13 @@ export function getBaseLinks(role: string | undefined | null, locale: Locale): T
     },
     {
       type: MenuItemType.Single,
+      item: { label: dict['notifications'], linkOpt: { to: '/notifications' } }
+    },
+    {
+      type: MenuItemType.Single,
       item: { label: dict['contacts'], linkOpt: { to: '/contacts' } }
     }
   ];
-
-  if (role != null)
-    res.push({
-      type: MenuItemType.Single,
-      item: { label: dict['notifications'], linkOpt: { to: '/notifications' } }
-    });
 
   if (hasRoleAccessToAdmin(role))
     res.push({

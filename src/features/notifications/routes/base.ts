@@ -1,4 +1,4 @@
-import { base } from '@/orpc/base.ts';
+import { base } from '@/features/shared/orpc/base.ts';
 
 
 export const notificationsBase = base.route({

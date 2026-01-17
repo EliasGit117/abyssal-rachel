@@ -1,7 +1,8 @@
 import { ORPCError } from '@orpc/server';
 import * as z from 'zod';
-import { authMiddleware, base } from '@/orpc/base.ts';
+import { base } from '@/features/shared/orpc/base.ts';
 import { getLocale } from '@/paraglide/runtime';
+import { authMiddleware } from '@/features/shared/orpc/middlewares/auth.ts';
 
 const todos = [
   { id: 1, name: 'Get groceries' },

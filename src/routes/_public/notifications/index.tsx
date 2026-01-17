@@ -6,7 +6,7 @@ import { CreateNotificationCard, NotificationListSection } from '@/routes/_publi
 import { Permission } from '@/lib/auth/permissions.ts';
 import { useHasPermission } from '@/hooks/use-has-permission.ts';
 import { cn } from '@/lib/utils';
-import { orpc } from '@/orpc/client.ts';
+import { orpc } from '@/lib/orpc/client.ts';
 
 
 
@@ -21,9 +21,7 @@ export const Route = createFileRoute('/_public/notifications/')({
 });
 
 function RouteComponent() {
-  const canCreate = useHasPermission({
-    permissions: { notification: [Permission.Create] }
-  });
+  const { canCreate } = useHasPermission({ canCreate: { notification: [Permission.Create] } });
 
   return (
     <main className="container mx-auto p-4 space-y-4 min-h-safe-screen">

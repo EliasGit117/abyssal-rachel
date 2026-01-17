@@ -1,6 +1,5 @@
 import { ComponentProps, FC } from 'react';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card.tsx';
-import { useCreateNotificationMutation } from '@/features/notifications/server-functions/create.ts';
 import { toast } from 'sonner';
 import {
   createNotificationSchema,
@@ -14,6 +13,7 @@ import { Textarea } from '@/components/ui/textarea.tsx';
 import { LoadingButton } from '@/components/ui/loading-button.tsx';
 import { IconSend } from '@tabler/icons-react';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useCreateNotificationMutation } from '@/features/notifications/hooks/create-notification.ts';
 import * as z from 'zod';
 
 

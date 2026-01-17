@@ -2,7 +2,7 @@ import { createServerFn } from '@tanstack/react-start';
 import { useMutation, UseMutationOptions, useQueryClient } from '@tanstack/react-query';
 import { prisma } from '@/lib/db/prisma.ts';
 import { deleteNotificationByIdSchema } from '@/features/notifications/schemas/delete-notification-by-id.ts';
-import { INotificationBriefDto } from '@/features/notifications/dtos/notification-dto.ts';
+import { TNotificationBriefDto } from '@/features/notifications/dtos/notification-dto.ts';
 
 
 export const deleteNotificationByIdServerFn = createServerFn({ method: 'POST' })
@@ -14,7 +14,7 @@ export const deleteNotificationByIdServerFn = createServerFn({ method: 'POST' })
 
 // React hook
 type TParams = Parameters<typeof deleteNotificationByIdServerFn>[0]['data'];
-type TContext = { previousNotifications?: INotificationBriefDto[]; };
+type TContext = { previousNotifications?: TNotificationBriefDto[]; };
 type TOptions = Omit<UseMutationOptions<void, Error, TParams, TContext>, 'mutationFn'>;
 
 export const useDeleteNotificationByIdMutation = (options?: TOptions) => {
@@ -28,11 +28,11 @@ export const useDeleteNotificationByIdMutation = (options?: TOptions) => {
       await queryClient.cancelQueries({ queryKey: ['notifications'] });
 
       const previousNotifications =
-        queryClient.getQueryData<INotificationBriefDto[]>([
+        queryClient.getQueryData<TNotificationBriefDto[]>([
           'notifications'
         ]);
 
-      queryClient.setQueryData<INotificationBriefDto[]>(
+      queryClient.setQueryData<TNotificationBriefDto[]>(
         ['notifications'],
         (old) => old?.filter((notification) => notification.id !== variables.id) ?? []
       );

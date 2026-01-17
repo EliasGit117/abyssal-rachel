@@ -13,7 +13,7 @@ import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTi
 import { Button } from '@/components/ui/button.tsx';
 import { Permission } from '@/lib/auth/permissions.ts';
 import { useHasPermission } from '@/hooks/use-has-permission.ts';
-import { orpc } from '@/orpc/client.ts';
+import { orpc } from '@/lib/orpc/client.ts';
 
 
 export const NotificationListSection: FC<ComponentProps<'section'>> = ({ className, ...props }) => {
