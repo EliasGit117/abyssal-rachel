@@ -1,6 +1,6 @@
 import { useMutation, UseMutationOptions, useQueryClient } from '@tanstack/react-query';
 import { orpc } from '@/lib/orpc/client.ts';
-import { TNotificationBriefDto } from '@/features/notifications/dtos/notification-dto.ts';
+import { TNotificationBriefDto } from '@/features/notifications/dtos/notification-brief-dto.ts';
 import { TOrpcInputs, TOrpcOutputs } from '@/features/shared/orpc/router.ts';
 
 type TParams = TOrpcInputs['admin']['notifications']['delete'];

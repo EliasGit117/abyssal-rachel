@@ -18,9 +18,9 @@ import {
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu.tsx';
 import { IconKey, IconLogin2, IconUser, IconUserCircle, IconUserPlus } from '@tabler/icons-react';
-import { SignedOut } from '@/components/auth/signed-out.tsx';
+import { SignedOut } from '@/components/auth/utils/signed-out.tsx';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar.tsx';
-import { SignedIn } from '@/components/auth/signed-in.tsx';
+import { SignedIn } from '@/components/auth/utils/signed-in.tsx';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { authClient } from '@/lib/auth/auth-client.ts';
 import { useSession } from '@/hooks/use-session.ts';

@@ -17,7 +17,7 @@ function RouteComponent() {
       <div className='flex flex-col min-h-screen'>
         <AppHeader/>
         <AppSidebar/>
-        <BreadcrumbsNavigation className="container mx-auto px-2 lg:px-3"/>
+        <BreadcrumbsNavigation className="container mx-auto px-2.5 sm:px-2"/>
 
         <Outlet/>
         <AppFooter className="mt-auto"/>

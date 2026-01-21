@@ -9,9 +9,13 @@ import { accessControl, roles } from '@/lib/auth/permissions.ts';
 import { tanstackStartCookies } from 'better-auth/tanstack-start';
 
 
+
 export const auth = betterAuth({
-  database: prismaAdapter(prisma, { provider: 'postgresql' }),
+  database: prismaAdapter(prisma, { provider: 'postgresql', debugLogs: true, }),
   trustedOrigins: [process.env.VITE_BETTER_AUTH_URL!],
+  session: {
+    disableSessionRefresh: true,
+  },
   advanced: {
     cookiePrefix: "app"
   },

@@ -20,7 +20,7 @@ import { Link } from '@tanstack/react-router';
 
 export const NavUser: FC<ComponentProps<typeof SidebarMenu>> = ({ ...props }) => {
   const queryClient = useQueryClient();
-  const { isMobile } = useSidebar();
+  const { isMobile, setOpenMobile } = useSidebar();
   const { user } = useSession();
 
   const initials = getInitials(user?.name);
@@ -79,9 +79,9 @@ export const NavUser: FC<ComponentProps<typeof SidebarMenu>> = ({ ...props }) =>
               </div>
             </DropdownMenuLabel>
             <DropdownMenuSeparator/>
-            <DropdownMenuGroup>
+            <DropdownMenuGroup onClick={() => setOpenMobile(false)}>
               <DropdownMenuItem asChild>
-                <Link to="/admin/settings/profile">
+                <Link to="/admin/settings">
                   <IconUserCircle/>
                   <span>Profile</span>
                 </Link>

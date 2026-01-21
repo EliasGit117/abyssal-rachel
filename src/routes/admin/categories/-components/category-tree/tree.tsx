@@ -36,7 +36,7 @@ import {
 import { IAdminCategoryDto } from '@/features/categories/admin/dtos/admin-category-dto.ts';
 import { ItemInstance } from '@headless-tree/core';
 import { CategoryStatus } from '~/prisma/generated/prisma/enums.ts';
-import { useHasPermission } from '@/hooks/use-has-permission.ts';
+import { useHasPermissions } from '@/hooks/use-has-permission.ts';
 import { AdaptiveButton } from '@/components/ui/adaptive-button.tsx';
 import { useCategorySheet } from '@/routes/admin/categories/-components/category-sheet';
 
@@ -53,7 +53,7 @@ export const CategoryTree: FC<ICategoryTreeProps> = ({ className }) => {
   const { tree, disabled, deleteCategory, isPendingCategories, indent, isEmpty, searchValue } = useCategoryTree();
   const confirm = useConfirm();
 
-  const { canCreate, canEdit, canDelete } = useHasPermission({
+  const { canCreate, canEdit, canDelete } = useHasPermissions({
     canCreate: { category: [Permission.Create] },
     canEdit: { category: [Permission.Update] },
     canDelete: { category: [Permission.Delete] }
@@ -252,7 +252,7 @@ interface ICategoryTreeToolbarProps extends ComponentProps<'div'> {
 
 export const CategoryTreeToolbar: FC<ICategoryTreeToolbarProps> = ({ disabled, className, children, ...divProps }) => {
   const { tree, disabled: isTreeDisabled, searchValue, setSearchValue } = useCategoryTree();
-  const { canCreate, canEdit } = useHasPermission({
+  const { canCreate, canEdit } = useHasPermissions({
     canCreate: { category: [Permission.Create] },
     canEdit: { category: [Permission.Update] }
   });

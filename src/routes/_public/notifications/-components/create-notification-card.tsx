@@ -2,9 +2,9 @@ import { ComponentProps, FC } from 'react';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card.tsx';
 import { toast } from 'sonner';
 import {
-  createNotificationSchema,
+  createNotificationDtoSchema,
   TCreateNotificationSchema
-} from '@/features/notifications/schemas/create-notification';
+} from '@/features/notifications/dtos/create-notification-dto.ts';
 import { m } from '@/paraglide/messages';
 import { Controller, useForm } from 'react-hook-form';
 import { Field, FieldError, FieldGroup, FieldLabel } from '@/components/ui/field.tsx';
@@ -19,7 +19,7 @@ import * as z from 'zod';
 
 export const CreateNotificationCard: FC<ComponentProps<typeof Card>> = ({ ...props }) => {
   const form = useForm<TCreateNotificationSchema>({
-    resolver: zodResolver(createNotificationSchema),
+    resolver: zodResolver(createNotificationDtoSchema),
     defaultValues: {
       nameRo: '',
       nameRu: '',
@@ -38,7 +38,7 @@ export const CreateNotificationCard: FC<ComponentProps<typeof Card>> = ({ ...pro
     }
   });
 
-  const onSubmit = (data: z.infer<typeof createNotificationSchema>) => {
+  const onSubmit = (data: z.infer<typeof createNotificationDtoSchema>) => {
     create(data);
   };
 

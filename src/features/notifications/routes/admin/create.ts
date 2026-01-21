@@ -1,17 +1,16 @@
 import {
   NotificationBriefDtoFactory,
   TNotificationBriefDto
-} from '@/features/notifications/dtos/notification-dto.ts';
+} from '@/features/notifications/dtos/notification-brief-dto.ts';
 import { type } from '@orpc/server';
 import {
-  createNotificationSchema,
-} from '@/features/notifications/schemas/create-notification.ts';
+  createNotificationDtoSchema,
+} from '@/features/notifications/dtos/create-notification-dto.ts';
 import { getLocale } from '@/paraglide/runtime';
 import { prisma } from '@/lib/db/prisma.ts';
-import { auth } from '@/lib/auth/auth.ts';
-import { Permission } from '@/lib/auth/permissions.ts';
-import { authMiddleware } from '@/features/shared/orpc/middlewares/auth.ts';
 import { notificationsAdminBase } from '@/features/notifications/routes/admin/base.ts';
+import { authMiddleware } from '@/features/shared/orpc/middlewares/auth.ts';
+import { hasPermissionsForRole, Permission } from '@/lib/auth';
 
 
 export const createNotification = notificationsAdminBase
@@ -21,24 +20,17 @@ export const createNotification = notificationsAdminBase
     description: 'Create a new notification',
   })
   .use(authMiddleware)
-  .input(createNotificationSchema)
+  .input(createNotificationDtoSchema)
   .output(type<TNotificationBriefDto>())
   .errors({
     FORBIDDEN: { message: 'User does not have permission to create notifications' }
   })
   .handler(async ({ input, errors, context: { user } }) => {
-    const locale = getLocale();
-
-    const canCreate = await auth.api.userHasPermission({
-      body: {
-        userId: user.id,
-        permission: { notification: [Permission.Create] },
-      },
-    });
-
-    if (!canCreate.success)
+    const { canCreate } = hasPermissionsForRole(user.role, { canCreate: { notification: [Permission.Create] } });
+    if (!canCreate)
       throw errors.FORBIDDEN();
 
+    const locale = getLocale();
     const createdEntity = await prisma.notification.create({
       data: {
         nameRo: input.nameRo,

@@ -15,9 +15,52 @@
     "invalid": "Неверно",
     "sign_out": "Выйти",
     "go_back": "Назад",
-    "refresh": "Обновить"
+    "refresh": "Обновить",
+    "confirm": "Подтвердить",
+    "cancel": "Отмена"
   },
   "components": {
+    "auth": {
+      "sessions_card": {
+        "title": "Сессии",
+        "description": "Список ваших активных сессий",
+        "revoke": "Отозвать",
+        "current_session": "Текущая сессия",
+        "revoke_others": "Отозвать другие сессии",
+        "revoke_others_confirm": "Вы уверены, что хотите отозвать все другие сессии?"
+      },
+      "sign_in_card": {
+        "title": "С возвращением!",
+        "description": "Введите свои данные для входа",
+        "dont_have_account": "Нет аккаунта?",
+        "forgot_password": "Забыли пароль?",
+        "create": "Создать",
+        "magic_link": "Magic Link"
+      },
+      "magic_link_card": {
+        "title": "Отправить Magic Link",
+        "description": "Введите свой адрес электронной почты для отправки Magic Link",
+        "success_message": "Magic Link успешно отправлен. Проверьте свою почту для продолжения входа."
+      },
+      "sign_up_card": {
+        "title": "Создать ваш аккаунт",
+        "description": "Заполните поля ниже чтобы создать новый аккаунт",
+        "confirm_password": "Подтвердите пароль",
+        "passwords_do_not_match": "Пароли не совпадают",
+        "already_have_account": "Уже есть аккаунт?",
+        "show_passwords": "Показать пароли",
+        "sign_in": "Войти",
+        "success_message": "Проверьте свою почту для подтверждения регистрации"
+      },
+      "set_new_password_card": {
+        "title": "Создать новый пароль",
+        "description": "Введите новый пароль который будет у вашего аккаунта",
+        "passwords_do_not_match": "Пароли не совпадают",
+        "confirm_password": "Потвердите пароль",
+        "success_message": "Пароль успешно изменен",
+        "show_passwords": "Показать пароли"
+      }
+    },
     "locale_dropdown": {
       "title": "Выбор языка"
     },
@@ -34,12 +77,6 @@
     },
     "user_dropdown": {
       "profile": "Профиль"
-    },
-    "sessions_card": {
-      "title": "Сессии",
-      "description": "Список ваших активных сессий",
-      "revoke": "Отозвать",
-      "current_session": "Текущая сессия"
     },
     "reset_password_card": {
       "form_title": "Сбросить пароль",
@@ -58,39 +95,6 @@
     },
     "contacts": {
       "title": "Контакты"
-    },
-    "auth": {
-      "sign_in": {
-        "form_title": "С возвращением!",
-        "form_description": "Введите свои данные для входа",
-        "dont_have_account": "Нет аккаунта?",
-        "create": "Создать",
-        "forgot_password": "Забыли пароль?",
-        "magic_link": "Magic Link"
-      },
-      "sign_up": {
-        "form_title": "Создать ваш аккаунт",
-        "form_description": "Заполните поля ниже чтобы создать новый аккаунт",
-        "confirm_password": "Подтвердите пароль",
-        "passwords_do_not_match": "Пароли не совпадают",
-        "already_have_account": "Уже есть аккаунт?",
-        "show_passwords": "Показать пароли",
-        "sign_in": "Войти",
-        "success_message": "Проверьте свою почту для подтверждения регистрации"
-      },
-      "magic_link": {
-        "form_title": "Отправить Magic Link",
-        "form_description": "Введите свой адрес электронной почты для отправки Magic Link",
-        "success_message": "Magic Link успешно отправлен. Проверьте свою почту для продолжения входа."
-      },
-      "set_new_password": {
-        "form_title": "Создать новый пароль",
-        "form_description": "Введите новый пароль который будет у вашего аккаунта",
-        "passwords_do_not_match": "Пароли не совпадают",
-        "confirm_password": "Потвердите пароль",
-        "success_message": "Пароль успешно изменен",
-        "show_passwords": "Показать пароли"
-      }
     },
     "notifications": {
       "title": "Уведомления",

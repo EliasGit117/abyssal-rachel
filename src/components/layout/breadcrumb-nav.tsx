@@ -101,7 +101,7 @@ export const BreadcrumbsNavigation: FC<IProps> = ({ className, ...props }) => {
               </Link>
             </Button>
 
-            <BreadcrumbSeparator className={cn('-ml-1', responsiveClassName)}/>
+            <BreadcrumbSeparator className={cn('-ml-2', responsiveClassName)}/>
 
             {items.map((item, index) => {
               if (index < items.length - 1) {

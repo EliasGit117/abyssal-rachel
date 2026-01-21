@@ -11,13 +11,13 @@ import { m } from '@/paraglide/messages';
 import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from '@/components/ui/empty.tsx';
 import { Button } from '@/components/ui/button.tsx';
 import { Permission } from '@/lib/auth/permissions.ts';
-import { useHasPermission } from '@/hooks/use-has-permission.ts';
+import { useHasPermissions } from '@/hooks/use-has-permission.ts';
 import { orpc } from '@/lib/orpc/client.ts';
 import { useDeleteNotification } from '@/features/notifications/hooks/delete-notification.ts';
 
 
 export const NotificationListSection: FC<ComponentProps<'section'>> = ({ className, ...props }) => {
-  const permissions = useHasPermission({
+  const permissions = useHasPermissions({
     canCreate: { notification: [Permission.Create] },
     canDelete: { notification: [Permission.Delete] },
   });

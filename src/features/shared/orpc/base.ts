@@ -1,3 +1,12 @@
 import { os } from '@orpc/server';
+import { TPermissionsInput } from '@/lib/auth';
 
-export const base = os.$context<{ headers: Headers }>();
+interface IORPCMetadata {
+  anonymous?: boolean;
+  permissions?: TPermissionsInput;
+}
+
+
+export const base = os
+  .$meta<IORPCMetadata>({})
+  .$context<{ headers: Headers }>();

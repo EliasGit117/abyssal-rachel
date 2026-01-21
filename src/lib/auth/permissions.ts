@@ -24,11 +24,8 @@ const statement = {
 // Cccess types
 export type TAccessStatement = typeof statement;
 export type TAccessCategory = keyof TAccessStatement;
-export type TAccessPermission<C extends TAccessCategory> =
-  TAccessStatement[C][number];
-export type TPermissionsInput = {
-  [C in TAccessCategory]?: TAccessPermission<C>[];
-};
+export type TAccessPermission<C extends TAccessCategory> = TAccessStatement[C][number];
+export type TPermissionsInput = { [C in TAccessCategory]?: TAccessPermission<C>[]; };
 
 // Access control
 export const accessControl = createAccessControl(statement);

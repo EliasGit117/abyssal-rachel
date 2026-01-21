@@ -14,9 +14,52 @@
     "invalid": "Incorect",
     "sign_out": "Deconectare",
     "go_back": "Înapoi",
-    "refresh": "Reîncarcă"
+    "refresh": "Reîncarcă",
+    "confirm": "Confirmă",
+    "cancel": "Anulează"
   },
   "components": {
+    "auth": {
+      "sessions_card": {
+        "title": "Sesiuni",
+        "description": "Lista sesiunilor active",
+        "revoke": "Revocă",
+        "current_session": "Sesiune curentă",
+        "revoke_others": "Revocă alte sessiuni",
+        "revoke_others_confirm": "Sigur doriți să revocați toate alte sesiuni?"
+      },
+      "sign_in_card": {
+        "title": "Bine ai revenit!",
+        "description": "Introdu datele tale pentru autentificare",
+        "dont_have_account": "Nu ai un cont?",
+        "forgot_password": "Ai uitat parola?",
+        "create": "Creează",
+        "magic_link": "Linkul Magic"
+      },
+      "magic_link_card": {
+        "title": "Trimite Magic Link",
+        "description": "Introdu adresa de e-mail pentru a trimite Magic Link",
+        "success_message": "Magic Link a fost trimis cu succes. Verifică e-mailul pentru a continua autentificarea."
+      },
+      "sign_up_card": {
+        "title": "Creează-ți contul",
+        "description": "Completează câmpurile de mai jos pentru a crea un cont nou",
+        "confirm_password": "Confirmă parola",
+        "passwords_do_not_match": "Parolele nu coincid",
+        "already_have_account": "Ai deja un cont?",
+        "show_passwords": "Afișează parolele",
+        "sign_in": "Autentifică-te",
+        "success_message": "Verifică e-mailul pentru confirmarea înregistrării"
+      },
+      "set_new_password_card": {
+        "title": "Setează noua parolă",
+        "description": "Introdu noua parolă pentru contul tău",
+        "passwords_do_not_match": "Parolele nu coincid",
+        "confirm_password": "Confirmați parola",
+        "success_message": "Parola a fost resetată cu succes",
+        "show_passwords": "Afișează parolele"
+      }
+    },
     "locale_dropdown": {
       "title": "Select limba"
     },
@@ -33,12 +76,6 @@
     },
     "user_dropdown": {
       "profile": "Contul"
-    },
-    "sessions_card": {
-      "title": "Sesiuni",
-      "description": "Lista sesiunilor active",
-      "revoke": "Revocă",
-      "current_session": "Sesiune curentă"
     },
     "reset_password_card": {
       "form_title": "Resetează parola",
@@ -57,39 +94,6 @@
     },
     "contacts": {
       "title": "Contacte"
-    },
-    "auth": {
-      "sign_in": {
-        "form_title": "Bine ai revenit!",
-        "form_description": "Introdu datele tale pentru autentificare",
-        "dont_have_account": "Nu ai un cont?",
-        "forgot_password": "Ai uitat parola?",
-        "create": "Creează",
-        "magic_link": "Linkul Magic"
-      },
-      "sign_up": {
-        "form_title": "Creează-ți contul",
-        "form_description": "Completează câmpurile de mai jos pentru a crea un cont nou",
-        "confirm_password": "Confirmă parola",
-        "passwords_do_not_match": "Parolele nu coincid",
-        "already_have_account": "Ai deja un cont?",
-        "show_passwords": "Afișează parolele",
-        "sign_in": "Autentifică-te",
-        "success_message": "Verifică e-mailul pentru confirmarea înregistrării"
-      },
-      "magic_link": {
-        "form_title": "Trimite Magic Link",
-        "form_description": "Introdu adresa de e-mail pentru a trimite Magic Link",
-        "success_message": "Magic Link a fost trimis cu succes. Verifică e-mailul pentru a continua autentificarea."
-      },
-      "set_new_password": {
-        "form_title": "Setează noua parolă",
-        "form_description": "Introdu noua parolă pentru contul tău",
-        "passwords_do_not_match": "Parolele nu coincid",
-        "confirm_password": "Confirmați parola",
-        "success_message": "Parola a fost resetată cu succes",
-        "show_passwords": "Afișează parolele"
-      }
     },
     "notifications": {
       "title": "Notificări",

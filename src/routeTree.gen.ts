@@ -15,14 +15,14 @@ import { Route as PublicRouteRouteImport } from './routes/_public/route'
 import { Route as AuthIndexRouteImport } from './routes/auth/index'
 import { Route as AdminIndexRouteImport } from './routes/admin/index'
 import { Route as PublicIndexRouteImport } from './routes/_public/index'
+import { Route as AuthSignUpRouteImport } from './routes/auth/sign-up'
+import { Route as AuthSignInRouteImport } from './routes/auth/sign-in'
+import { Route as AuthSetPasswordRouteImport } from './routes/auth/set-password'
+import { Route as AuthResetPasswordRouteImport } from './routes/auth/reset-password'
+import { Route as AuthMagicLinkRouteImport } from './routes/auth/magic-link'
 import { Route as ApiSplatRouteImport } from './routes/api/$'
 import { Route as PublicContactsRouteImport } from './routes/_public/contacts'
 import { Route as AdminSettingsRouteRouteImport } from './routes/admin/settings/route'
-import { Route as AuthSignUpIndexRouteImport } from './routes/auth/sign-up/index'
-import { Route as AuthSignInIndexRouteImport } from './routes/auth/sign-in/index'
-import { Route as AuthSetPasswordIndexRouteImport } from './routes/auth/set-password/index'
-import { Route as AuthResetPasswordIndexRouteImport } from './routes/auth/reset-password/index'
-import { Route as AuthMagicLinkIndexRouteImport } from './routes/auth/magic-link/index'
 import { Route as AdminUsersIndexRouteImport } from './routes/admin/users/index'
 import { Route as AdminSettingsIndexRouteImport } from './routes/admin/settings/index'
 import { Route as AdminSessionsIndexRouteImport } from './routes/admin/sessions/index'
@@ -32,7 +32,6 @@ import { Route as PublicNotificationsIndexRouteImport } from './routes/_public/n
 import { Route as ApiRpcSplatRouteImport } from './routes/api/rpc.$'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
 import { Route as AdminSettingsSecurityRouteImport } from './routes/admin/settings/security'
-import { Route as AdminSettingsProfileRouteImport } from './routes/admin/settings/profile'
 import { Route as AdminSettingsPreferencesRouteImport } from './routes/admin/settings/preferences'
 
 const AuthRouteRoute = AuthRouteRouteImport.update({
@@ -64,6 +63,31 @@ const PublicIndexRoute = PublicIndexRouteImport.update({
   path: '/',
   getParentRoute: () => PublicRouteRoute,
 } as any)
+const AuthSignUpRoute = AuthSignUpRouteImport.update({
+  id: '/sign-up',
+  path: '/sign-up',
+  getParentRoute: () => AuthRouteRoute,
+} as any)
+const AuthSignInRoute = AuthSignInRouteImport.update({
+  id: '/sign-in',
+  path: '/sign-in',
+  getParentRoute: () => AuthRouteRoute,
+} as any)
+const AuthSetPasswordRoute = AuthSetPasswordRouteImport.update({
+  id: '/set-password',
+  path: '/set-password',
+  getParentRoute: () => AuthRouteRoute,
+} as any)
+const AuthResetPasswordRoute = AuthResetPasswordRouteImport.update({
+  id: '/reset-password',
+  path: '/reset-password',
+  getParentRoute: () => AuthRouteRoute,
+} as any)
+const AuthMagicLinkRoute = AuthMagicLinkRouteImport.update({
+  id: '/magic-link',
+  path: '/magic-link',
+  getParentRoute: () => AuthRouteRoute,
+} as any)
 const ApiSplatRoute = ApiSplatRouteImport.update({
   id: '/api/$',
   path: '/api/$',
@@ -78,31 +102,6 @@ const AdminSettingsRouteRoute = AdminSettingsRouteRouteImport.update({
   id: '/settings',
   path: '/settings',
   getParentRoute: () => AdminRouteRoute,
-} as any)
-const AuthSignUpIndexRoute = AuthSignUpIndexRouteImport.update({
-  id: '/sign-up/',
-  path: '/sign-up/',
-  getParentRoute: () => AuthRouteRoute,
-} as any)
-const AuthSignInIndexRoute = AuthSignInIndexRouteImport.update({
-  id: '/sign-in/',
-  path: '/sign-in/',
-  getParentRoute: () => AuthRouteRoute,
-} as any)
-const AuthSetPasswordIndexRoute = AuthSetPasswordIndexRouteImport.update({
-  id: '/set-password/',
-  path: '/set-password/',
-  getParentRoute: () => AuthRouteRoute,
-} as any)
-const AuthResetPasswordIndexRoute = AuthResetPasswordIndexRouteImport.update({
-  id: '/reset-password/',
-  path: '/reset-password/',
-  getParentRoute: () => AuthRouteRoute,
-} as any)
-const AuthMagicLinkIndexRoute = AuthMagicLinkIndexRouteImport.update({
-  id: '/magic-link/',
-  path: '/magic-link/',
-  getParentRoute: () => AuthRouteRoute,
 } as any)
 const AdminUsersIndexRoute = AdminUsersIndexRouteImport.update({
   id: '/users/',
@@ -150,11 +149,6 @@ const AdminSettingsSecurityRoute = AdminSettingsSecurityRouteImport.update({
   path: '/security',
   getParentRoute: () => AdminSettingsRouteRoute,
 } as any)
-const AdminSettingsProfileRoute = AdminSettingsProfileRouteImport.update({
-  id: '/profile',
-  path: '/profile',
-  getParentRoute: () => AdminSettingsRouteRoute,
-} as any)
 const AdminSettingsPreferencesRoute =
   AdminSettingsPreferencesRouteImport.update({
     id: '/preferences',
@@ -168,11 +162,15 @@ export interface FileRoutesByFullPath {
   '/admin/settings': typeof AdminSettingsRouteRouteWithChildren
   '/contacts': typeof PublicContactsRoute
   '/api/$': typeof ApiSplatRoute
+  '/auth/magic-link': typeof AuthMagicLinkRoute
+  '/auth/reset-password': typeof AuthResetPasswordRoute
+  '/auth/set-password': typeof AuthSetPasswordRoute
+  '/auth/sign-in': typeof AuthSignInRoute
+  '/auth/sign-up': typeof AuthSignUpRoute
   '/': typeof PublicIndexRoute
   '/admin/': typeof AdminIndexRoute
   '/auth/': typeof AuthIndexRoute
   '/admin/settings/preferences': typeof AdminSettingsPreferencesRoute
-  '/admin/settings/profile': typeof AdminSettingsProfileRoute
   '/admin/settings/security': typeof AdminSettingsSecurityRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/api/rpc/$': typeof ApiRpcSplatRoute
@@ -182,20 +180,19 @@ export interface FileRoutesByFullPath {
   '/admin/sessions': typeof AdminSessionsIndexRoute
   '/admin/settings/': typeof AdminSettingsIndexRoute
   '/admin/users': typeof AdminUsersIndexRoute
-  '/auth/magic-link': typeof AuthMagicLinkIndexRoute
-  '/auth/reset-password': typeof AuthResetPasswordIndexRoute
-  '/auth/set-password': typeof AuthSetPasswordIndexRoute
-  '/auth/sign-in': typeof AuthSignInIndexRoute
-  '/auth/sign-up': typeof AuthSignUpIndexRoute
 }
 export interface FileRoutesByTo {
   '/contacts': typeof PublicContactsRoute
   '/api/$': typeof ApiSplatRoute
+  '/auth/magic-link': typeof AuthMagicLinkRoute
+  '/auth/reset-password': typeof AuthResetPasswordRoute
+  '/auth/set-password': typeof AuthSetPasswordRoute
+  '/auth/sign-in': typeof AuthSignInRoute
+  '/auth/sign-up': typeof AuthSignUpRoute
   '/': typeof PublicIndexRoute
   '/admin': typeof AdminIndexRoute
   '/auth': typeof AuthIndexRoute
   '/admin/settings/preferences': typeof AdminSettingsPreferencesRoute
-  '/admin/settings/profile': typeof AdminSettingsProfileRoute
   '/admin/settings/security': typeof AdminSettingsSecurityRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/api/rpc/$': typeof ApiRpcSplatRoute
@@ -205,11 +202,6 @@ export interface FileRoutesByTo {
   '/admin/sessions': typeof AdminSessionsIndexRoute
   '/admin/settings': typeof AdminSettingsIndexRoute
   '/admin/users': typeof AdminUsersIndexRoute
-  '/auth/magic-link': typeof AuthMagicLinkIndexRoute
-  '/auth/reset-password': typeof AuthResetPasswordIndexRoute
-  '/auth/set-password': typeof AuthSetPasswordIndexRoute
-  '/auth/sign-in': typeof AuthSignInIndexRoute
-  '/auth/sign-up': typeof AuthSignUpIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -219,11 +211,15 @@ export interface FileRoutesById {
   '/admin/settings': typeof AdminSettingsRouteRouteWithChildren
   '/_public/contacts': typeof PublicContactsRoute
   '/api/$': typeof ApiSplatRoute
+  '/auth/magic-link': typeof AuthMagicLinkRoute
+  '/auth/reset-password': typeof AuthResetPasswordRoute
+  '/auth/set-password': typeof AuthSetPasswordRoute
+  '/auth/sign-in': typeof AuthSignInRoute
+  '/auth/sign-up': typeof AuthSignUpRoute
   '/_public/': typeof PublicIndexRoute
   '/admin/': typeof AdminIndexRoute
   '/auth/': typeof AuthIndexRoute
   '/admin/settings/preferences': typeof AdminSettingsPreferencesRoute
-  '/admin/settings/profile': typeof AdminSettingsProfileRoute
   '/admin/settings/security': typeof AdminSettingsSecurityRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/api/rpc/$': typeof ApiRpcSplatRoute
@@ -233,11 +229,6 @@ export interface FileRoutesById {
   '/admin/sessions/': typeof AdminSessionsIndexRoute
   '/admin/settings/': typeof AdminSettingsIndexRoute
   '/admin/users/': typeof AdminUsersIndexRoute
-  '/auth/magic-link/': typeof AuthMagicLinkIndexRoute
-  '/auth/reset-password/': typeof AuthResetPasswordIndexRoute
-  '/auth/set-password/': typeof AuthSetPasswordIndexRoute
-  '/auth/sign-in/': typeof AuthSignInIndexRoute
-  '/auth/sign-up/': typeof AuthSignUpIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -247,11 +238,15 @@ export interface FileRouteTypes {
     | '/admin/settings'
     | '/contacts'
     | '/api/$'
+    | '/auth/magic-link'
+    | '/auth/reset-password'
+    | '/auth/set-password'
+    | '/auth/sign-in'
+    | '/auth/sign-up'
     | '/'
     | '/admin/'
     | '/auth/'
     | '/admin/settings/preferences'
-    | '/admin/settings/profile'
     | '/admin/settings/security'
     | '/api/auth/$'
     | '/api/rpc/$'
@@ -261,20 +256,19 @@ export interface FileRouteTypes {
     | '/admin/sessions'
     | '/admin/settings/'
     | '/admin/users'
+  fileRoutesByTo: FileRoutesByTo
+  to:
+    | '/contacts'
+    | '/api/$'
     | '/auth/magic-link'
     | '/auth/reset-password'
     | '/auth/set-password'
     | '/auth/sign-in'
     | '/auth/sign-up'
-  fileRoutesByTo: FileRoutesByTo
-  to:
-    | '/contacts'
-    | '/api/$'
     | '/'
     | '/admin'
     | '/auth'
     | '/admin/settings/preferences'
-    | '/admin/settings/profile'
     | '/admin/settings/security'
     | '/api/auth/$'
     | '/api/rpc/$'
@@ -284,11 +278,6 @@ export interface FileRouteTypes {
     | '/admin/sessions'
     | '/admin/settings'
     | '/admin/users'
-    | '/auth/magic-link'
-    | '/auth/reset-password'
-    | '/auth/set-password'
-    | '/auth/sign-in'
-    | '/auth/sign-up'
   id:
     | '__root__'
     | '/_public'
@@ -297,11 +286,15 @@ export interface FileRouteTypes {
     | '/admin/settings'
     | '/_public/contacts'
     | '/api/$'
+    | '/auth/magic-link'
+    | '/auth/reset-password'
+    | '/auth/set-password'
+    | '/auth/sign-in'
+    | '/auth/sign-up'
     | '/_public/'
     | '/admin/'
     | '/auth/'
     | '/admin/settings/preferences'
-    | '/admin/settings/profile'
     | '/admin/settings/security'
     | '/api/auth/$'
     | '/api/rpc/$'
@@ -311,11 +304,6 @@ export interface FileRouteTypes {
     | '/admin/sessions/'
     | '/admin/settings/'
     | '/admin/users/'
-    | '/auth/magic-link/'
-    | '/auth/reset-password/'
-    | '/auth/set-password/'
-    | '/auth/sign-in/'
-    | '/auth/sign-up/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -371,6 +359,41 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PublicIndexRouteImport
       parentRoute: typeof PublicRouteRoute
     }
+    '/auth/sign-up': {
+      id: '/auth/sign-up'
+      path: '/sign-up'
+      fullPath: '/auth/sign-up'
+      preLoaderRoute: typeof AuthSignUpRouteImport
+      parentRoute: typeof AuthRouteRoute
+    }
+    '/auth/sign-in': {
+      id: '/auth/sign-in'
+      path: '/sign-in'
+      fullPath: '/auth/sign-in'
+      preLoaderRoute: typeof AuthSignInRouteImport
+      parentRoute: typeof AuthRouteRoute
+    }
+    '/auth/set-password': {
+      id: '/auth/set-password'
+      path: '/set-password'
+      fullPath: '/auth/set-password'
+      preLoaderRoute: typeof AuthSetPasswordRouteImport
+      parentRoute: typeof AuthRouteRoute
+    }
+    '/auth/reset-password': {
+      id: '/auth/reset-password'
+      path: '/reset-password'
+      fullPath: '/auth/reset-password'
+      preLoaderRoute: typeof AuthResetPasswordRouteImport
+      parentRoute: typeof AuthRouteRoute
+    }
+    '/auth/magic-link': {
+      id: '/auth/magic-link'
+      path: '/magic-link'
+      fullPath: '/auth/magic-link'
+      preLoaderRoute: typeof AuthMagicLinkRouteImport
+      parentRoute: typeof AuthRouteRoute
+    }
     '/api/$': {
       id: '/api/$'
       path: '/api/$'
@@ -391,41 +414,6 @@ declare module '@tanstack/react-router' {
       fullPath: '/admin/settings'
       preLoaderRoute: typeof AdminSettingsRouteRouteImport
       parentRoute: typeof AdminRouteRoute
-    }
-    '/auth/sign-up/': {
-      id: '/auth/sign-up/'
-      path: '/sign-up'
-      fullPath: '/auth/sign-up'
-      preLoaderRoute: typeof AuthSignUpIndexRouteImport
-      parentRoute: typeof AuthRouteRoute
-    }
-    '/auth/sign-in/': {
-      id: '/auth/sign-in/'
-      path: '/sign-in'
-      fullPath: '/auth/sign-in'
-      preLoaderRoute: typeof AuthSignInIndexRouteImport
-      parentRoute: typeof AuthRouteRoute
-    }
-    '/auth/set-password/': {
-      id: '/auth/set-password/'
-      path: '/set-password'
-      fullPath: '/auth/set-password'
-      preLoaderRoute: typeof AuthSetPasswordIndexRouteImport
-      parentRoute: typeof AuthRouteRoute
-    }
-    '/auth/reset-password/': {
-      id: '/auth/reset-password/'
-      path: '/reset-password'
-      fullPath: '/auth/reset-password'
-      preLoaderRoute: typeof AuthResetPasswordIndexRouteImport
-      parentRoute: typeof AuthRouteRoute
-    }
-    '/auth/magic-link/': {
-      id: '/auth/magic-link/'
-      path: '/magic-link'
-      fullPath: '/auth/magic-link'
-      preLoaderRoute: typeof AuthMagicLinkIndexRouteImport
-      parentRoute: typeof AuthRouteRoute
     }
     '/admin/users/': {
       id: '/admin/users/'
@@ -490,13 +478,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminSettingsSecurityRouteImport
       parentRoute: typeof AdminSettingsRouteRoute
     }
-    '/admin/settings/profile': {
-      id: '/admin/settings/profile'
-      path: '/profile'
-      fullPath: '/admin/settings/profile'
-      preLoaderRoute: typeof AdminSettingsProfileRouteImport
-      parentRoute: typeof AdminSettingsRouteRoute
-    }
     '/admin/settings/preferences': {
       id: '/admin/settings/preferences'
       path: '/preferences'
@@ -527,14 +508,12 @@ const PublicRouteRouteWithChildren = PublicRouteRoute._addFileChildren(
 
 interface AdminSettingsRouteRouteChildren {
   AdminSettingsPreferencesRoute: typeof AdminSettingsPreferencesRoute
-  AdminSettingsProfileRoute: typeof AdminSettingsProfileRoute
   AdminSettingsSecurityRoute: typeof AdminSettingsSecurityRoute
   AdminSettingsIndexRoute: typeof AdminSettingsIndexRoute
 }
 
 const AdminSettingsRouteRouteChildren: AdminSettingsRouteRouteChildren = {
   AdminSettingsPreferencesRoute: AdminSettingsPreferencesRoute,
-  AdminSettingsProfileRoute: AdminSettingsProfileRoute,
   AdminSettingsSecurityRoute: AdminSettingsSecurityRoute,
   AdminSettingsIndexRoute: AdminSettingsIndexRoute,
 }
@@ -563,21 +542,21 @@ const AdminRouteRouteWithChildren = AdminRouteRoute._addFileChildren(
 )
 
 interface AuthRouteRouteChildren {
+  AuthMagicLinkRoute: typeof AuthMagicLinkRoute
+  AuthResetPasswordRoute: typeof AuthResetPasswordRoute
+  AuthSetPasswordRoute: typeof AuthSetPasswordRoute
+  AuthSignInRoute: typeof AuthSignInRoute
+  AuthSignUpRoute: typeof AuthSignUpRoute
   AuthIndexRoute: typeof AuthIndexRoute
-  AuthMagicLinkIndexRoute: typeof AuthMagicLinkIndexRoute
-  AuthResetPasswordIndexRoute: typeof AuthResetPasswordIndexRoute
-  AuthSetPasswordIndexRoute: typeof AuthSetPasswordIndexRoute
-  AuthSignInIndexRoute: typeof AuthSignInIndexRoute
-  AuthSignUpIndexRoute: typeof AuthSignUpIndexRoute
 }
 
 const AuthRouteRouteChildren: AuthRouteRouteChildren = {
+  AuthMagicLinkRoute: AuthMagicLinkRoute,
+  AuthResetPasswordRoute: AuthResetPasswordRoute,
+  AuthSetPasswordRoute: AuthSetPasswordRoute,
+  AuthSignInRoute: AuthSignInRoute,
+  AuthSignUpRoute: AuthSignUpRoute,
   AuthIndexRoute: AuthIndexRoute,
-  AuthMagicLinkIndexRoute: AuthMagicLinkIndexRoute,
-  AuthResetPasswordIndexRoute: AuthResetPasswordIndexRoute,
-  AuthSetPasswordIndexRoute: AuthSetPasswordIndexRoute,
-  AuthSignInIndexRoute: AuthSignInIndexRoute,
-  AuthSignUpIndexRoute: AuthSignUpIndexRoute,
 }
 
 const AuthRouteRouteWithChildren = AuthRouteRoute._addFileChildren(

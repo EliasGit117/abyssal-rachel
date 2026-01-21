@@ -6,7 +6,8 @@ import { onError } from '@orpc/server';
 import { OpenAPIReferencePlugin } from '@orpc/openapi/plugins'
 import { orpcRouter } from '@/features/shared/orpc/router.ts';
 import { getRequestHeaders } from '@tanstack/react-start/server';
-import { NotificationBriefDtoSchema } from '@/features/notifications/dtos/notification-dto.ts';
+import { notificationBriefDtoSchema } from '@/features/notifications/dtos/notification-brief-dto.ts';
+import { createNotificationDtoSchema } from '@/features/notifications/dtos/create-notification-dto.ts';
 
 
 const handler = new OpenAPIHandler(orpcRouter, {
@@ -17,33 +18,29 @@ const handler = new OpenAPIHandler(orpcRouter, {
   ],
   plugins: [
     new SmartCoercionPlugin({
-      schemaConverters: [new ZodToJsonSchemaConverter()],
+      schemaConverters: [new ZodToJsonSchemaConverter(
+
+      )],
     }),
     new OpenAPIReferencePlugin({
       schemaConverters: [new ZodToJsonSchemaConverter()],
       specGenerateOptions: {
         info: {
-          title: 'TanStack ORPC Playground',
+          title: 'API',
           version: '1.0.0',
         },
         commonSchemas: {
-          NotificationBriefDto: { schema: NotificationBriefDtoSchema },
-          UndefinedError: { error: 'UndefinedError' },
+          CreateNotificationDto: { schema: createNotificationDtoSchema },
+          NotificationBriefDto: { schema: notificationBriefDtoSchema },
         },
-        security: [{ bearerAuth: [] }],
+        security: [],
         components: {
-          securitySchemes: {
-            bearerAuth: { type: 'http', scheme: 'bearer' }
-          },
+          securitySchemes: {},
         },
       },
       docsConfig: {
         authentication: {
-          securitySchemes: {
-            bearerAuth: {
-              token: 'default-token',
-            },
-          },
+          securitySchemes: {}
         },
       },
     }),

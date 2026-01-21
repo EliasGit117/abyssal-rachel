@@ -3,33 +3,20 @@ import { authMiddleware } from '@/middleware/auth.ts';
 import { serverZodValidator } from '@/lib/zod/server-zod-validator.ts';
 import { deleteCategorySchema } from '@/features/categories/admin/schemas/delete.ts';
 import { CategoryService } from '@/features/categories/admin/services/category-service.ts';
-import { auth } from '@/lib/auth/auth.ts';
 import { Permission } from '@/lib/auth/permissions.ts';
 import {
-  throwForbiddenError,
-  throwUnauthorizedError
+  throwForbiddenError
 } from '@/lib/errors/throw-api-error.ts';
-import { getSessionServerFn } from '@/features/auth/server-functions/public/get-session.ts';
 import { useMutation, UseMutationOptions, useQueryClient } from '@tanstack/react-query';
+import { hasPermissionForRole } from '@/lib/auth';
 
 
 export const deleteCategoryServerFn = createServerFn({ method: 'POST' })
   .inputValidator(serverZodValidator(deleteCategorySchema))
   .middleware([authMiddleware()])
-  .handler(async ({ data }) => {
-    const session = await getSessionServerFn();
-
-    if (!session)
-      throwUnauthorizedError({ translated: false });
-
-    const canDelete = await auth.api.userHasPermission({
-      body: {
-        userId: session.user!.id,
-        permission: { category: [Permission.Delete] }
-      }
-    });
-
-    if (!canDelete.success)
+  .handler(async ({ data, context: { user } }) => {
+    const canDelete = hasPermissionForRole(user?.role, { category: [Permission.Delete] });
+    if (!canDelete)
       throwForbiddenError({ translated: false });
 
     return CategoryService.delete({ categoryId: data.categoryId });

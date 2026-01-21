@@ -19,7 +19,7 @@ import { ActionBarButton } from '@/components/data-table/action-bar.tsx';
 import { AdaptiveButton } from '@/components/ui/adaptive-button.tsx';
 import { exportToCsv } from '@/lib/utils/csv.ts';
 import { Permission } from '@/lib/auth/permissions.ts';
-import { useHasPermission } from '@/hooks/use-has-permission.ts';
+import { useHasPermissions } from '@/hooks/use-has-permission.ts';
 
 
 interface IProps extends ComponentProps<'div'> {
@@ -31,7 +31,7 @@ export const UsersTable: FC<IProps> = (props) => {
   'use no memo';
 
   const { className, search = {}, ...divProps } = props;
-  const { canDelete } = useHasPermission({ canDelete: { user: [Permission.Delete] } });
+  const { canDelete } = useHasPermissions({ canDelete: { user: [Permission.Delete] } });
   const { mutate: deleteUser, isPending: isDeletingUser } = useDeleteUserMutation();
   const { data, isPending: isPendingData, isFetching: isFetchingData, refetch } = useQuery({
     ...getUsersPaginatedAdminQueryOptions(search),

@@ -17,7 +17,6 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu';
 import { IconSelector } from '@tabler/icons-react';
@@ -145,8 +144,10 @@ function PageLimitSelect(props: IPageLimitSelectProps) {
             <IconSelector className="ml-auto"/>
           </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent align="start">
-          <DropdownMenuLabel>Select rows per page</DropdownMenuLabel>
+        <DropdownMenuContent
+          align="start"
+          className="min-w-[--radix-popper-anchor-width]"
+        >
           {variants.map(page => (
             <DropdownMenuItem key={page} onSelect={() => _onValueChange(page)}>
               {page}

@@ -7,7 +7,7 @@ import {
   IconSettings,
   IconUsers
 } from '@tabler/icons-react';
-import { hasPermissionForRole } from '@/lib/auth/has-permission-for-role.ts';
+import { hasPermissionsForRole } from '@/lib/auth/has-permission-for-role.ts';
 import { Permission } from '@/lib/auth/permissions.ts';
 
 export interface INavItem {
@@ -42,7 +42,7 @@ const catalogLinks: NavConfig[] = [
     title: "Categories",
     icon: IconCategory,
     linkOptions: { to: "/admin/categories" },
-    can: (role) => hasPermissionForRole(role, { canListCategory: { category: [Permission.List] } }).canListCategory,
+    can: (role) => hasPermissionsForRole(role, { canListCategory: { category: [Permission.List] } }).canListCategory,
   },
 ];
 
@@ -51,13 +51,13 @@ const userLinks: NavConfig[] = [
     title: "Users",
     icon: IconUsers,
     linkOptions: { to: "/admin/users" },
-    can: (role) => hasPermissionForRole(role, { canListUsers: { user: [Permission.List] } }).canListUsers,
+    can: (role) => hasPermissionsForRole(role, { canListUsers: { user: [Permission.List] } }).canListUsers,
   },
   {
     title: "Sessions",
     icon: IconNetwork,
     linkOptions: { to: "/admin/sessions" },
-    can: (role) => hasPermissionForRole(role, { canListSessions: { session: [Permission.List] } }).canListSessions,
+    can: (role) => hasPermissionsForRole(role, { canListSessions: { session: [Permission.List] } }).canListSessions,
   },
 ];
 

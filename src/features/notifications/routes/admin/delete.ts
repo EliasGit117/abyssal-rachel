@@ -1,9 +1,9 @@
 import * as z from 'zod';
 import { prisma } from '@/lib/db/prisma.ts';
-import { auth } from '@/lib/auth/auth.ts';
 import { Permission } from '@/lib/auth/permissions.ts';
-import { authMiddleware } from '@/features/shared/orpc/middlewares/auth.ts';
 import { notificationAdminPath, notificationsAdminBase } from '@/features/notifications/routes/admin/base.ts';
+import { authMiddleware } from '@/features/shared/orpc/middlewares/auth.ts';
+import { hasPermissionsForRole } from '@/lib/auth';
 
 
 export const deleteNotification = notificationsAdminBase
@@ -20,14 +20,8 @@ export const deleteNotification = notificationsAdminBase
     NOT_FOUND: { message: 'Notification not found' }
   })
   .handler(async ({ input, errors, context: { user } }) => {
-    const canDelete = await auth.api.userHasPermission({
-      body: {
-        userId: user.id,
-        permission: { notification: [Permission.Delete] }
-      }
-    });
-
-    if (!canDelete.success)
+    const { canDelete } = hasPermissionsForRole(user.role, { canDelete: { notification: [Permission.Delete] } });
+    if (!canDelete)
       throw errors.FORBIDDEN();
 
     try {

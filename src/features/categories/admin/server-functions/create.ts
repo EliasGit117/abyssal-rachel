@@ -8,32 +8,19 @@ import { authMiddleware } from '@/middleware/auth.ts';
 import { serverZodValidator } from '@/lib/zod/server-zod-validator.ts';
 import { createCategorySchema } from '@/features/categories/admin/schemas/create.ts';
 import { CategoryService } from '@/features/categories/admin/services/category-service.ts';
-import { auth } from '@/lib/auth/auth.ts';
 import { Permission } from '@/lib/auth/permissions.ts';
 import {
   throwForbiddenError,
-  throwUnauthorizedError
 } from '@/lib/errors/throw-api-error.ts';
-import { getSessionServerFn } from '@/features/auth/server-functions/public/get-session.ts';
+import { hasPermissionsForRole } from '@/lib/auth';
 
 
 export const createCategoryServerFn = createServerFn({ method: 'POST' })
   .inputValidator(serverZodValidator(createCategorySchema))
   .middleware([authMiddleware()])
-  .handler(async ({ data }) => {
-    const session = await getSessionServerFn();
-
-    if (!session)
-      throwUnauthorizedError({ translated: false });
-
-    const canCreate = await auth.api.userHasPermission({
-      body: {
-        userId: session.user!.id,
-        permission: { category: [Permission.Create] }
-      }
-    });
-
-    if (!canCreate.success)
+  .handler(async ({ data, context: { user } }) => {
+    const { canCreate } = hasPermissionsForRole(user?.role, { canCreate: { category: [Permission.Create] } });
+    if (!canCreate)
       throwForbiddenError({ translated: false });
 
     return CategoryService.create(data);
