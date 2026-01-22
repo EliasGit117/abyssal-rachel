@@ -1,9 +1,9 @@
-import { OpenAPIHandler } from '@orpc/openapi/fetch'
-import { ZodToJsonSchemaConverter } from '@orpc/zod/zod4'
-import { SmartCoercionPlugin } from '@orpc/json-schema'
-import { createFileRoute } from '@tanstack/react-router'
+import { OpenAPIHandler } from '@orpc/openapi/fetch';
+import { ZodToJsonSchemaConverter } from '@orpc/zod/zod4';
+import { SmartCoercionPlugin } from '@orpc/json-schema';
+import { createFileRoute } from '@tanstack/react-router';
 import { onError } from '@orpc/server';
-import { OpenAPIReferencePlugin } from '@orpc/openapi/plugins'
+import { OpenAPIReferencePlugin } from '@orpc/openapi/plugins';
 import { orpcRouter } from '@/features/shared/orpc/router.ts';
 import { getRequestHeaders } from '@tanstack/react-start/server';
 import { notificationBriefDtoSchema } from '@/features/notifications/dtos/notification-brief-dto.ts';
@@ -13,39 +13,37 @@ import { createNotificationDtoSchema } from '@/features/notifications/dtos/creat
 const handler = new OpenAPIHandler(orpcRouter, {
   interceptors: [
     onError((error) => {
-      console.error(error)
-    }),
+      console.error(error);
+    })
   ],
   plugins: [
     new SmartCoercionPlugin({
-      schemaConverters: [new ZodToJsonSchemaConverter(
-
-      )],
+      schemaConverters: [new ZodToJsonSchemaConverter()]
     }),
     new OpenAPIReferencePlugin({
       schemaConverters: [new ZodToJsonSchemaConverter()],
       specGenerateOptions: {
         info: {
           title: 'API',
-          version: '1.0.0',
+          version: '1.0.0'
         },
         commonSchemas: {
           CreateNotificationDto: { schema: createNotificationDtoSchema },
-          NotificationBriefDto: { schema: notificationBriefDtoSchema },
+          NotificationBriefDto: { schema: notificationBriefDtoSchema }
         },
         security: [],
         components: {
-          securitySchemes: {},
-        },
+          securitySchemes: {}
+        }
       },
       docsConfig: {
         authentication: {
           securitySchemes: {}
-        },
-      },
-    }),
-  ],
-})
+        }
+      }
+    })
+  ]
+});
 
 
 const LOCALE_PATTERN = /^\/[a-z]{2}(\/.*)$/;
@@ -53,6 +51,13 @@ const LOCALE_PATTERN = /^\/[a-z]{2}(\/.*)$/;
 async function handle({ request }: { request: Request }) {
   // A trick to handle paraglide url strategy
   const url = new URL(request.url);
+  const forwardedProto = request.headers.get('x-forwarded-proto') ?? url.protocol.replace(':', '');
+  const forwardedHost = request.headers.get('x-forwarded-host') ?? request.headers.get('host');
+  if (forwardedHost) {
+    url.protocol = `${forwardedProto}:`;
+    url.host = forwardedHost;
+  }
+
   const pathWithoutLocale = url.pathname.replace(LOCALE_PATTERN, '$1');
   const newUrl = new URL(request.url);
   newUrl.pathname = pathWithoutLocale;
@@ -63,7 +68,7 @@ async function handle({ request }: { request: Request }) {
     prefix: '/api',
     context: {
       headers: getRequestHeaders()
-    },
+    }
   });
 
   return response ?? new Response('Not Found', { status: 404 });
@@ -77,7 +82,7 @@ export const Route = createFileRoute('/api/$')({
       POST: handle,
       PUT: handle,
       PATCH: handle,
-      DELETE: handle,
-    },
-  },
-})
+      DELETE: handle
+    }
+  }
+});
