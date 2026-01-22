@@ -10,6 +10,7 @@ interface ViteTypeOptions {
 interface ImportMetaEnv {
   readonly VITE_APP_NAME?: string;
   readonly VITE_BETTER_AUTH_URL?: string;
+  readonly VITE_APP_BASE_URL?: string;
 }
 
 interface ImportMeta {

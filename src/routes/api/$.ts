@@ -23,6 +23,7 @@ const handler = new OpenAPIHandler(orpcRouter, {
     new OpenAPIReferencePlugin({
       schemaConverters: [new ZodToJsonSchemaConverter()],
       specGenerateOptions: {
+        servers: import.meta.env.VITE_APP_BASE_URL ? [{ url: `${import.meta.env.VITE_APP_BASE_URL}/api` }] : undefined,
         info: {
           title: 'API',
           version: '1.0.0'
@@ -51,13 +52,6 @@ const LOCALE_PATTERN = /^\/[a-z]{2}(\/.*)$/;
 async function handle({ request }: { request: Request }) {
   // A trick to handle paraglide url strategy
   const url = new URL(request.url);
-  const forwardedProto = request.headers.get('x-forwarded-proto') ?? url.protocol.replace(':', '');
-  const forwardedHost = request.headers.get('x-forwarded-host') ?? request.headers.get('host');
-  if (forwardedHost) {
-    url.protocol = `${forwardedProto}:`;
-    url.host = forwardedHost;
-  }
-
   const pathWithoutLocale = url.pathname.replace(LOCALE_PATTERN, '$1');
   const newUrl = new URL(request.url);
   newUrl.pathname = pathWithoutLocale;
