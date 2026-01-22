@@ -1,5 +1,6 @@
-import { Category, Prisma } from '~/prisma/generated/prisma/client.ts';
+import { Category } from '~/prisma/generated/prisma/client.ts';
 import { throwBadRequest } from '@/lib/errors/throw-api-error.ts';
+import { TxClient } from '@/lib/db/prisma.ts';
 
 export class CategoryPathService {
 
@@ -21,7 +22,7 @@ export class CategoryPathService {
 
 
   static async updateSubtree(
-    tx: Prisma.TransactionClient,
+    tx: TxClient,
     categoryId: number,
     newIdPath: string,
     newSlugPath: string

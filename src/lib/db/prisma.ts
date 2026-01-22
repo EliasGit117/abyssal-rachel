@@ -50,3 +50,6 @@ export const prisma = globalThis.__prisma ?? prismaClient;
 if (process.env.NODE_ENV !== 'production') {
   globalThis.__prisma = prisma;
 }
+
+
+export type TxClient = Omit<PrismaExtendedClient, '$connect' | '$disconnect' | '$transaction' | '$extends'>;

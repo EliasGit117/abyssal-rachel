@@ -1,9 +1,9 @@
 import { TCreateCategory } from '@/features/categories/admin/schemas/create.ts';
-import { prisma } from '@/lib/db/prisma.ts';
+import { prisma, TxClient } from '@/lib/db/prisma.ts';
 import { throwBadRequest } from '@/lib/errors/throw-api-error.ts';
 import { CategoryPathService } from '@/features/categories/admin/services/category-path-service.ts';
 import { TDeleteCategory, TUpdateCategory } from '@/features/categories/admin/schemas';
-import { Category, Prisma } from '~/prisma/generated/prisma/client.ts';
+import { Category } from '~/prisma/generated/prisma/client.ts';
 
 
 export class CategoryService {
@@ -158,7 +158,7 @@ export class CategoryService {
   }
 
   static async ensureSlugUnique(
-    tx: Prisma.TransactionClient,
+    tx: TxClient,
     slug: string,
     parentId: number | null,
     excludeId?: number
