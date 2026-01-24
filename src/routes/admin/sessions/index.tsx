@@ -1,20 +1,21 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { awaitIfServer } from '@/lib/server/await-if-server.ts';
-import {
-  getSessionsPaginatedAdminQueryOptions,
-  getSessionsPaginatedAdminSchema
-} from '@/features/auth/server-functions/admin/sessions-paginated.ts';
 import { SessionsTable } from '@/routes/admin/sessions/-components/sessions-table/table.tsx';
+import { orpc } from '@/lib/orpc';
+import { listSessionsSchema } from '@/features/sessions/dtos/list-sessions-dto.ts';
 
 
 export const Route = createFileRoute('/admin/sessions/')({
   component: RouteComponent,
   staticData: { breadcrumbs: { title: 'Sessions' } },
   head: () => ({ meta: [{ title: 'Sessions' }] }),
-  validateSearch: getSessionsPaginatedAdminSchema,
+  validateSearch: listSessionsSchema,
   loaderDeps: (deps) => (deps),
   loader: async ({ context: { queryClient }, deps: { search } }) => {
-    await awaitIfServer(queryClient.prefetchQuery(getSessionsPaginatedAdminQueryOptions(search)));
+    await awaitIfServer(queryClient.prefetchQuery({
+      ...orpc.admin.sessions.list.queryOptions({ input: search }),
+      staleTime: Infinity,
+    }));
   },
 })
 

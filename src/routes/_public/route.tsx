@@ -1,5 +1,4 @@
 import { createFileRoute, Outlet } from '@tanstack/react-router';
-import { Bar, Progress } from '@bprogress/react';
 import { AppHeader, AppSidebar, AppSidebarProvider, AppFooter } from '@/routes/_public/-components';
 import { BreadcrumbsNavigation } from '@/components/layout';
 
@@ -10,10 +9,6 @@ export const Route = createFileRoute('/_public')({
 function RouteComponent() {
   return (
     <AppSidebarProvider>
-      <Progress>
-        <Bar className="h-0.5 bg-primary fixed top-0 z-50"/>
-      </Progress>
-
       <div className='flex flex-col min-h-screen'>
         <AppHeader/>
         <AppSidebar/>

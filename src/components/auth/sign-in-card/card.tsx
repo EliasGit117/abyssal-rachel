@@ -11,8 +11,8 @@ import { authClient } from '@/lib/auth/auth-client.ts';
 import { toast } from 'sonner';
 import { m } from '@/paraglide/messages';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { getSessionQueryOptions } from '@/features/auth/server-functions/public/get-session.ts';
 import { Button } from '@/components/ui/button.tsx';
+import { orpc } from '@/lib/orpc';
 
 
 interface ISignInCard extends ComponentProps<typeof Card> {
@@ -31,7 +31,7 @@ export const SignInCard: FC<ISignInCard> = ({ className, signUpPath, magicLinkPa
     mutationFn: ({ email, password }: TSignInSchema) => authClient.signIn.email({ email, password }),
     onSuccess: (res) => {
       if (!res.error) {
-        void queryClient.invalidateQueries({ queryKey: getSessionQueryOptions().queryKey });
+        void queryClient.invalidateQueries({ queryKey: orpc.sessions.current.queryKey() });
         return;
       }
 

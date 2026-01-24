@@ -8,6 +8,9 @@ import { orpcRouter } from '@/features/shared/orpc/router.ts';
 import { getRequestHeaders } from '@tanstack/react-start/server';
 import { notificationBriefDtoSchema } from '@/features/notifications/dtos/notification-brief-dto.ts';
 import { createNotificationDtoSchema } from '@/features/notifications/dtos/create-notification-dto.ts';
+import { paginatedUsersSchema } from '@/features/users/dtos/list-users-dto.ts';
+import { envConfig } from '@/lib/config';
+
 
 
 const handler = new OpenAPIHandler(orpcRouter, {
@@ -23,14 +26,15 @@ const handler = new OpenAPIHandler(orpcRouter, {
     new OpenAPIReferencePlugin({
       schemaConverters: [new ZodToJsonSchemaConverter()],
       specGenerateOptions: {
-        servers: import.meta.env.VITE_APP_BASE_URL ? [{ url: `${import.meta.env.VITE_APP_BASE_URL}/api` }] : undefined,
+        servers: [{ url: `${envConfig.appBaseUrl}/api` }],
         info: {
           title: 'API',
           version: '1.0.0'
         },
         commonSchemas: {
           CreateNotificationDto: { schema: createNotificationDtoSchema },
-          NotificationBriefDto: { schema: notificationBriefDtoSchema }
+          NotificationBriefDto: { schema: notificationBriefDtoSchema },
+          PaginatedUsersDto: { schema: paginatedUsersSchema }
         },
         security: [],
         components: {

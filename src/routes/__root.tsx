@@ -11,10 +11,10 @@ import { ReactNode, useEffect, useRef } from 'react';
 import { getLocale } from '@/paraglide/runtime';
 import { envConfig } from '@/lib/config/env-config.ts';
 import { getZodErrorMap } from '@/lib/zod/get-zod-error-map.ts';
-import Providers from '@/providers.tsx';
+import { Providers } from '@/providers.tsx';
 import z from 'zod';
-import { getSessionQueryOptions } from '@/features/auth/server-functions/public/get-session.ts';
 import { TSession, TUser } from '@/lib/auth/auth.ts';
+import { orpc } from '@/lib/orpc';
 
 
 interface IRouterContext {
@@ -25,7 +25,7 @@ interface IRouterContext {
 
 export const Route = createRootRouteWithContext<IRouterContext>()({
   beforeLoad: async ({ context: { queryClient } }) => {
-    const res = await queryClient.ensureQueryData(getSessionQueryOptions());
+    const res = await queryClient.ensureQueryData(orpc.sessions.current.queryOptions());
     return { session: res?.session, user: res?.user };
   },
   shellComponent: RootDocument,
@@ -46,7 +46,7 @@ export const Route = createRootRouteWithContext<IRouterContext>()({
 function RootDocument({ children }: { children: ReactNode }) {
   const locale = getLocale();
   const router = useRouter();
-  const { data: authRes } = useQuery(getSessionQueryOptions());
+  const { data: authRes } = useQuery(orpc.sessions.current.queryOptions());
   const prevSession = useRef<TSession | null>(authRes?.session);
 
   useEffect(() => {

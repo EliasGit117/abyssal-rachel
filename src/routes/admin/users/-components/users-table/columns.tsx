@@ -30,7 +30,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { ColumnFilterType, DataTableColumnHeader } from '@/components/data-table';
 import { Skeleton } from '@/components/ui/skeleton';
-import { IUserBriefDto } from '@/features/auth/dtos/user-brief-dto.ts';
+import { TUserBriefDto } from '@/features/auth/dtos/user-brief-dto.ts';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar.tsx';
 import { Link } from '@tanstack/react-router';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group.tsx';
@@ -39,12 +39,13 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group.tsx';
 interface IOptions {
   disabled?: boolean;
   canDelete?: boolean;
+  currentUserId?: string;
   onDeleteClick?: (id: string) => void;
 }
 
-const columnHelper = createColumnHelper<IUserBriefDto>();
+const columnHelper = createColumnHelper<TUserBriefDto>();
 export const userColumns = (options?: IOptions) => {
-  const { disabled, canDelete, onDeleteClick } = options ?? {};
+  const { disabled, canDelete, onDeleteClick, currentUserId } = options ?? {};
 
   return [
     // Select
@@ -58,14 +59,13 @@ export const userColumns = (options?: IOptions) => {
       },
       header: () => null,
       cell: ({ row, table }) => {
-        const selectedRowId =
-          Object.keys(table.getState().rowSelection)[0] ?? '';
-
         const rowId = row.id;
+        const selectedRowId = Object.keys(table.getState().rowSelection)[0] ?? '';
+        const isCurrentUser = currentUserId === row.getValue('id');
 
         return (
           <RadioGroup
-            disabled={disabled}
+            disabled={isCurrentUser || disabled}
             value={selectedRowId}
             onValueChange={(value) => {
               if (value === selectedRowId) {

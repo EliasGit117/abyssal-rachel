@@ -29,10 +29,10 @@ import { Skeleton } from '@/components/ui/skeleton.tsx';
 import { cn } from '@/lib/utils';
 import { authClient } from '@/lib/auth/auth-client.ts';
 import { useSession } from '@/hooks/use-session.ts';
-import { getSessionQueryOptions } from '@/features/auth/server-functions/public/get-session.ts';
 import { m } from '@/paraglide/messages';
 import { Separator } from '@/components/ui/separator.tsx';
 import { useConfirm } from '@/components/ui/confirm-dialog.tsx';
+import { orpc } from '@/lib/orpc';
 
 
 const ENGLISH_MESSAGES = {
@@ -95,7 +95,7 @@ export function SessionsCard({ className, translated = true }: SessionsCardProps
     },
     onSuccess: () => {
       void queryClient.invalidateQueries({
-        queryKey: getSessionQueryOptions().queryKey
+        queryKey: orpc.sessions.current.queryKey()
       });
     },
     onError: (e) =>
@@ -232,7 +232,6 @@ export function SessionsCard({ className, translated = true }: SessionsCardProps
       {(!!res?.data && res.data.length > 1) && (
         <CardFooter>
           <LoadingButton
-            size="sm"
             variant="outline-destructive"
             className="w-full sm:w-fit sm:ml-auto"
             disabled={isFetching}

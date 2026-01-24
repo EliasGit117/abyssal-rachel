@@ -16,6 +16,7 @@ import { SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar } from '@/c
 import { ComponentProps, FC } from 'react';
 import { IconDotsVertical, IconLogout, IconUserCircle } from '@tabler/icons-react';
 import { Link } from '@tanstack/react-router';
+import { orpc } from '@/lib/orpc';
 
 
 export const NavUser: FC<ComponentProps<typeof SidebarMenu>> = ({ ...props }) => {
@@ -28,7 +29,7 @@ export const NavUser: FC<ComponentProps<typeof SidebarMenu>> = ({ ...props }) =>
   const { isPending, mutate: signOut } = useMutation({
     mutationFn: () => authClient.signOut(),
     onSuccess: () => {
-      void queryClient.invalidateQueries({ queryKey: ['session'] })
+      void queryClient.invalidateQueries({ queryKey: orpc.sessions.current.queryKey() })
     }
   });
 

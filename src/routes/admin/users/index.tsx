@@ -1,21 +1,22 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { UsersTable } from '@/routes/admin/users/-components/users-table/table.tsx';
-import {
-  getUsersPaginatedAdminQueryOptions,
-  getUsersPaginatedAdminSchema
-} from '@/features/auth/server-functions/admin/users-paginated.ts';
 import { awaitIfServer } from '@/lib/server/await-if-server.ts';
+import { orpc } from '@/lib/orpc';
+import { listUsersSchema } from '@/features/users/dtos/list-users-dto.ts';
 
 
 export const Route = createFileRoute('/admin/users/')({
   component: RouteComponent,
   staticData: { breadcrumbs: { title: 'Users' } },
   head: () => ({ meta: [{ title: 'Users' }] }),
-  validateSearch: getUsersPaginatedAdminSchema,
+  validateSearch: listUsersSchema,
   loaderDeps: (deps) => (deps),
   loader: async ({ context: { queryClient }, deps: { search } }) => {
-    await awaitIfServer(queryClient.prefetchQuery(getUsersPaginatedAdminQueryOptions(search)));
-  },
+    await awaitIfServer(queryClient.prefetchQuery({
+      ...orpc.admin.users.list.queryOptions({ input: search }),
+      staleTime: Infinity,
+    }));
+  }
 });
 
 function RouteComponent() {

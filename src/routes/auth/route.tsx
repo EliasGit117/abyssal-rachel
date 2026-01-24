@@ -7,18 +7,18 @@ import { Bar, Progress } from '@bprogress/react';
 
 
 export const Route = createFileRoute('/auth')({
-  component: RouteComponent,
+  component: RouteComponent
 });
 
 function RouteComponent() {
   return (
     <>
-      <div className="grid min-h-svh lg:grid-cols-2">
-        <div className="flex flex-col gap-4 p-6 md:p-10 relative">
-          <Progress className="absolute left-0 right-0 top-0 z-40">
-            <Bar className="h-0.5 bg-primary"/>
-          </Progress>
+      <div className="grid min-h-svh lg:grid-cols-2 relative">
+        <Progress className="absolute left-0 right-0 top-0 z-40">
+          <Bar className="h-0.5 bg-primary"/>
+        </Progress>
 
+        <div className="flex flex-col gap-4 p-6 md:p-10">
           <div className="flex justify-center gap-2 md:justify-start h-6 items-center relative">
             <Button
               variant="link"

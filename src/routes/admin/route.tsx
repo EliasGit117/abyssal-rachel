@@ -20,11 +20,12 @@ export const Route = createFileRoute('/admin')({
 function RouteComponent() {
   return (
     <SidebarProvider>
+      <Progress>
+        <Bar className="h-0.5 bg-primary fixed top-0 z-50"/>
+      </Progress>
+
       <AdminSidebar/>
       <SidebarInset className="min-w-0">
-        <Progress>
-          <Bar className="h-0.5 bg-primary fixed top-0 z-50"/>
-        </Progress>
 
         <AdminHeader/>
         <Outlet/>

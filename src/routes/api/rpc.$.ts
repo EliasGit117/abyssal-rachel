@@ -3,7 +3,8 @@ import { createFileRoute } from '@tanstack/react-router';
 import { orpcRouter } from '@/features/shared/orpc/router.ts';
 import { getRequestHeaders } from '@tanstack/react-start/server';
 
-const handler = new RPCHandler(orpcRouter);
+
+const handler = new RPCHandler(orpcRouter, {});
 
 async function handle({ request }: { request: Request }) {
   const { response } = await handler.handle(request, {

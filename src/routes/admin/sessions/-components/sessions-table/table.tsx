@@ -6,34 +6,34 @@ import {
   useDataTable
 } from '@/components/data-table';
 import { sessionColumns } from './columns.tsx';
-import {
-  getSessionsPaginatedAdminQueryOptions,
-  TGetSessionsPaginatedAdmin
-} from '@/features/auth/server-functions/admin/sessions-paginated.ts';
 import { ComponentProps, FC, useMemo } from 'react';
 import { cn } from '@/lib/utils';
 import { IconFileExport, IconRefresh, IconTrash } from '@tabler/icons-react';
 import { ActionBarButton } from '@/components/data-table/action-bar.tsx';
 import { AdaptiveButton } from '@/components/ui/adaptive-button.tsx';
-import { useRevokeSessionsMutation } from '@/features/auth/server-functions/admin/revoke-sessions.ts';
 import { exportToCsv } from '@/lib/utils/csv.ts';
 import { Permission } from '@/lib/auth/permissions.ts';
 import { useHasPermissions } from '@/hooks/use-has-permission.ts';
+import { orpc } from '@/lib/orpc';
+import { TListSessions } from '@/features/sessions/dtos/list-sessions-dto.ts';
+import { useRevokeSessionsMutation } from '@/features/sessions/hooks/use-revoke-sessions.tsx';
 
 
 interface IProps extends ComponentProps<'div'> {
-  search?: TGetSessionsPaginatedAdmin;
+  search?: TListSessions;
 }
 
 export const SessionsTable: FC<IProps> = (props) => {
   // noinspection BadExpressionStatementJS
   'use no memo';
 
+
   const { className, search = {}, ...divProps } = props;
   const { canDelete } = useHasPermissions({ canDelete: { user: [Permission.Delete] } });
   const { mutate: revokeSessions, isPending: isRevokingSession } = useRevokeSessionsMutation();
   const { data, isPending: isPendingData, isFetching: isFetchingData, refetch } = useQuery({
-    ...getSessionsPaginatedAdminQueryOptions(search), placeholderData: keepPreviousData,
+    ...orpc.admin.sessions.list.queryOptions({ input: search }),
+    placeholderData: keepPreviousData,
   });
 
   const columns = useMemo(() => sessionColumns({

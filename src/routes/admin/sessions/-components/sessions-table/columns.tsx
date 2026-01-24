@@ -28,7 +28,6 @@ import {
   DataTableColumnHeader
 } from '@/components/data-table';
 import { Checkbox } from '@/components/ui/checkbox.tsx';
-import { ISessionBriefDto } from '@/features/auth/dtos/session-brief-dto.ts';
 import { UAParser } from 'ua-parser-js';
 import {
   DropdownMenu,
@@ -42,6 +41,7 @@ import { Button } from '@/components/ui/button.tsx';
 import { Badge } from '@/components/ui/badge.tsx';
 import { cn } from '@/lib/utils';
 import { Link } from '@tanstack/react-router';
+import { TSessionDto } from '@/features/sessions/dtos/session-dto.ts';
 
 
 interface IOptions {
@@ -50,7 +50,7 @@ interface IOptions {
   onRevokeClick?: (id: string) => void;
 }
 
-const columnHelper = createColumnHelper<ISessionBriefDto>();
+const columnHelper = createColumnHelper<TSessionDto>();
 
 export const sessionColumns = (options?: IOptions) => {
   const { disabled, canDelete, onRevokeClick } = options ?? {};

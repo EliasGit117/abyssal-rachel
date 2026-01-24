@@ -1,26 +1,29 @@
 import { Session } from '~/prisma/generated/prisma/client.ts';
+import * as z from 'zod';
 
-export interface ISessionBriefDto {
-  id: string;
-  userId: string;
-  ipAddress: string | null;
-  userAgent: string | null;
-  createdAt: string;
-  updatedAt: string;
-  expiresAt: string;
-  isCurrent?: boolean;
-  isMine?: boolean;
-  expired?: boolean;
-}
 
-interface SessionBriefDtoOptions {
+export const sessionDtoSchema = z.object({
+  id: z.string(),
+  userId: z.string(),
+  ipAddress: z.string().nullable(),
+  userAgent: z.string().nullable(),
+  createdAt: z.iso.datetime(),
+  updatedAt: z.iso.datetime(),
+  expiresAt: z.iso.datetime(),
+  isCurrent: z.boolean().optional(),
+  isMine: z.boolean().optional(),
+  expired: z.boolean(),
+});
+
+export type TSessionDto = z.infer<typeof sessionDtoSchema>;
+
+interface ISessionDtoFactoryOptions {
   currentSessionId?: string;
   currentUserId?: string;
 }
 
-export class SessionBriefDtoFactory {
-  static fromEntity(entity: Session, options?: SessionBriefDtoOptions): ISessionBriefDto {
-
+export class SessionDtoFactory {
+  static fromEntity(entity: Session, options?: ISessionDtoFactoryOptions): TSessionDto {
     return {
       id: entity.id,
       userId: entity.userId,
@@ -35,7 +38,7 @@ export class SessionBriefDtoFactory {
     };
   }
 
-  static fromEntities(entities: Session[], options?: SessionBriefDtoOptions): ISessionBriefDto[] {
+  static fromEntities(entities: Session[], options?: ISessionDtoFactoryOptions): TSessionDto[] {
     return entities.map((entity) =>
       this.fromEntity(entity, options)
     );
