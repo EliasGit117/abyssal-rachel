@@ -16,7 +16,8 @@
     "go_back": "Înapoi",
     "refresh": "Reîncarcă",
     "confirm": "Confirmă",
-    "cancel": "Anulează"
+    "cancel": "Anulează",
+    "home": "La acasă"
   },
   "components": {
     "auth": {

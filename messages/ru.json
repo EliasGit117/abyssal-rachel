@@ -17,7 +17,8 @@
     "go_back": "Назад",
     "refresh": "Обновить",
     "confirm": "Подтвердить",
-    "cancel": "Отмена"
+    "cancel": "Отмена",
+    "home": "На главную"
   },
   "components": {
     "auth": {

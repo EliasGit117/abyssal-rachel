@@ -80,6 +80,9 @@ export const AppHeader: FC<IAppHeader> = ({ className, ...props }) => {
         <Button variant="link" size="dense" asChild>
           <Link to="/">
             <Logo className={cn('h-4 lg:h-5! w-full! max-w-20!', isAtTop && type === 'fixed' ? 'text-white' : 'text-foreground')}/>
+            <span className="sr-only">
+              {m['common.home']()}
+            </span>
           </Link>
         </Button>
 
@@ -115,6 +118,7 @@ const AuthDropdown: FC<IAuthDropdown> = ({ align, ...props }) => {
       <DropdownMenuTrigger asChild>
         <Button size="icon-sm" variant="outline" {...props}>
           <IconUserCircle/>
+          <span className='sr-only'>{m['components.auth_dropdown.title']()}</span>
         </Button>
       </DropdownMenuTrigger>
 

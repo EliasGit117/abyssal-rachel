@@ -19,6 +19,7 @@ import {
   CategorySheetProvider
 } from '@/routes/admin/categories/-components/category-sheet';
 
+const title = 'Categories';
 
 export const Route = createFileRoute('/admin/categories/')({
   component: RouteComponent,
@@ -28,8 +29,8 @@ export const Route = createFileRoute('/admin/categories/')({
 
     void queryClient.prefetchQuery(getCategoryTreeForAdminQueryOptions());
   },
-  head: () => ({ meta: [{ title: 'Categories' }] }),
-  staticData: { breadcrumbs: { title: 'Categories' } }
+  head: () => ({ meta: [{ title: title }] }),
+  staticData: { crumbs: { title: title } }
 });
 
 function RouteComponent() {

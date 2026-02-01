@@ -6,25 +6,18 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator
 } from '@/components/ui/breadcrumb';
-import { isMatch, Link, useMatches } from '@tanstack/react-router';
+import { Link, LinkOptions, useMatches } from '@tanstack/react-router';
 import { ComponentProps, FC, Fragment } from 'react';
 import { cn } from '@/lib/utils';
-import { z } from 'zod';
 import { Button } from '@/components/ui/button';
 import { IconHome } from '@tabler/icons-react';
 
-const breadcrumbDataSchema = z.object({
-  title: z.string(),
-  disabled: z.boolean().optional(),
-  link: z.string().optional()
-});
 
-const breadcrumbListSchema = z.union([
-  breadcrumbDataSchema,
-  z.array(breadcrumbDataSchema)
-]);
-
-export type TBreadcrumbData = z.infer<typeof breadcrumbDataSchema>;
+export interface IBreadcrumb {
+  title: string;
+  disabled?: boolean;
+  link?: LinkOptions;
+}
 
 interface IProps extends ComponentProps<'nav'> {}
 
@@ -32,66 +25,27 @@ const responsiveClassName = 'hidden md:flex';
 
 export const BreadcrumbsNavigation: FC<IProps> = ({ className, ...props }) => {
   const matches = useMatches();
+  const hideBreadcrumbs = matches.some((match) => match.staticData?.hideCrumbs === true);
+  if (hideBreadcrumbs)
+    return null;
 
-  const hideBreadcrumbs = matches.some(
-    (match) => match.staticData.hideBreadcrumbs === true
-  );
+  const items = matches
+    .filter((match) => match.loaderData?.crumbs !== undefined || match.staticData?.crumbs !== undefined)
+    .flatMap(({ pathname, loaderData, staticData }) => {
+      const loaderCrumbs = parseBreadcrumbList(loaderData?.crumbs);
+      const staticCrumbs = parseBreadcrumbList(staticData?.crumbs);
+      const crumbs = loaderCrumbs ?? staticCrumbs ?? [];
 
-  if (hideBreadcrumbs) return null;
+      return crumbs
+        .filter((crumb) => !crumb.disabled)
+        .map((crumb) => ({ href: pathname, label: crumb.title, link: crumb.link }));
+    });
 
-  const matchesWithCrumbs = matches.filter((match) => {
-    return (
-      // @ts-ignore
-      isMatch(match, 'loaderData.breadcrumbs') ||
-      isMatch(match, 'staticData.breadcrumbs')
-    );
-  });
-
-  const items = matchesWithCrumbs
-    .flatMap(({ pathname, staticData, loaderData }) => {
-      const res: TBreadcrumbData[] = [];
-      // @ts-ignore
-      const hasLoaderData = isMatch(loaderData, 'breadcrumbs');
-      const loaderValidation =
-        hasLoaderData &&
-        breadcrumbListSchema.safeParse(loaderData['breadcrumbs']);
-
-      if (loaderValidation && loaderValidation.success) {
-        const data = loaderValidation.data;
-        const breadcrumbs = Array.isArray(data) ? data : [data];
-        breadcrumbs
-          .filter((item) => !item.disabled)
-          .forEach((breadcrumb) => {
-            res.push(breadcrumb);
-          });
-
-        return res.map((breadcrumb) => ({
-          href: breadcrumb.link ?? pathname,
-          label: breadcrumb.title
-        }));
-      }
-
-      if (staticData.breadcrumbs) {
-        const breadcrumbs = Array.isArray(staticData.breadcrumbs)
-          ? staticData.breadcrumbs
-          : [staticData.breadcrumbs];
-
-        breadcrumbs.forEach((breadcrumb) => {
-          res.push(breadcrumb);
-        });
-      }
-
-      return res.map((breadcrumb) => ({
-        href: breadcrumb.link ?? pathname,
-        label: breadcrumb.title
-      }));
-    })
-    .filter((i) => i.label);
-
-  if (items.length <= 0) return null;
+  if (items.length === 0)
+    return null;
 
   return (
-    <nav className={cn( className)} {...props}>
+    <nav className={cn(className)} {...props}>
       <div className="flex w-max py-1">
         <Breadcrumb>
           <BreadcrumbList>
@@ -104,25 +58,29 @@ export const BreadcrumbsNavigation: FC<IProps> = ({ className, ...props }) => {
             <BreadcrumbSeparator className={cn('-ml-2', responsiveClassName)}/>
 
             {items.map((item, index) => {
-              if (index < items.length - 1) {
+              const isLast = index === items.length - 1;
+              const linkOptions: LinkOptions = item.link ? item.link : { href: item.href };
+
+              if (!isLast) {
                 return (
                   <Fragment key={`${index}-${item.label}`}>
                     <BreadcrumbLink className={responsiveClassName} asChild>
-                      <Link to={item.href}>{item.label}</Link>
+                      <Link {...linkOptions}>
+                        {item.label}
+                      </Link>
                     </BreadcrumbLink>
-                    {index < items.length - 1 && (
-                      <BreadcrumbSeparator className={responsiveClassName}/>
-                    )}
+                    <BreadcrumbSeparator
+                      className={responsiveClassName}
+                    />
                   </Fragment>
                 );
               }
 
               return (
-                <BreadcrumbItem
-                  key={`${index}-${item.label}`}
-                  className="ml-2 md:ml-0"
-                >
-                  <BreadcrumbPage>{item.label}</BreadcrumbPage>
+                <BreadcrumbItem key={`${index}-${item.label}`} className="ml-2 md:ml-0">
+                  <BreadcrumbPage>
+                    {item.label}
+                  </BreadcrumbPage>
                 </BreadcrumbItem>
               );
             })}
@@ -132,3 +90,27 @@ export const BreadcrumbsNavigation: FC<IProps> = ({ className, ...props }) => {
     </nav>
   );
 };
+
+function isBreadcrumb(value: unknown): value is IBreadcrumb {
+  if (typeof value !== 'object' || value === null)
+    return false;
+
+  const data = value as Record<string, unknown>;
+
+  return (
+    typeof data.title === 'string' &&
+    (data.disabled === undefined || typeof data.disabled === 'boolean') &&
+    (data.link === undefined || typeof data.link === 'object')
+  );
+}
+
+
+function parseBreadcrumbList(value: unknown): IBreadcrumb[] | null {
+  if (isBreadcrumb(value))
+    return [value];
+
+  if (Array.isArray(value) && value.every(isBreadcrumb))
+    return value;
+
+  return null;
+}

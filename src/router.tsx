@@ -2,7 +2,7 @@ import { createRouter } from '@tanstack/react-router';
 import { setupRouterSsrQueryIntegration } from '@tanstack/react-router-ssr-query';
 import { routeTree } from './routeTree.gen';
 import { deLocalizeUrl, localizeUrl } from '@/paraglide/runtime';
-import { TBreadcrumbData } from '@/components/layout';
+import { IBreadcrumb } from '@/components/layout';
 import { QueryClient } from '@tanstack/react-query';
 
 
@@ -43,8 +43,8 @@ declare module '@tanstack/react-router' {
   }
 
   interface StaticDataRouteOption {
-    hideBreadcrumbs?: boolean;
-    breadcrumbs?: TBreadcrumbData | TBreadcrumbData[];
+    crumbs?: IBreadcrumb | IBreadcrumb[];
+    hideCrumbs?: boolean;
     headerOptions?: {
       type?: 'fixed' | 'sticky';
     };

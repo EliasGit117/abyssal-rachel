@@ -1,6 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { awaitIfServer } from '@/lib/server/await-if-server.ts';
-import { TBreadcrumbData } from '@/components/layout';
+import { IBreadcrumb } from '@/components/layout';
 import { m } from '@/paraglide/messages';
 import { CreateNotificationCard, NotificationListSection } from '@/routes/_public/notifications/-components';
 import { Permission } from '@/lib/auth/permissions.ts';
@@ -15,8 +15,8 @@ export const Route = createFileRoute('/_public/notifications/')({
   loader: async ({ context: { queryClient } }) => {
     await awaitIfServer(queryClient.prefetchQuery(orpc.notifications.list.queryOptions(),));
 
-    const breadcrumbs: TBreadcrumbData = { title: m['pages.notifications.title']() };
-    return { breadcrumbs: breadcrumbs };
+    const crumbs: IBreadcrumb = { title: m['pages.notifications.title']() };
+    return { crumbs: crumbs };
   }
 });
 

@@ -7,7 +7,7 @@ import { listUsersSchema } from '@/features/users/dtos/list-users-dto.ts';
 
 export const Route = createFileRoute('/admin/users/')({
   component: RouteComponent,
-  staticData: { breadcrumbs: { title: 'Users' } },
+  staticData: { crumbs: { title: 'Users' } },
   head: () => ({ meta: [{ title: 'Users' }] }),
   validateSearch: listUsersSchema,
   loaderDeps: (deps) => (deps),

@@ -6,7 +6,7 @@ import { Icon, IconAdjustments, IconLock } from '@tabler/icons-react';
 export const Route = createFileRoute('/admin/settings')({
   component: RouteComponent,
   staticData: {
-    breadcrumbs: { title: 'Settings' }
+    crumbs: { title: 'Settings' }
   }
 });
 

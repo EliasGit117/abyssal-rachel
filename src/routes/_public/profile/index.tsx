@@ -1,5 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router';
-import { TBreadcrumbData } from '@/components/layout';
+import { IBreadcrumb } from '@/components/layout';
 import { m } from '@/paraglide/messages';
 import { SessionsCard } from '@/components/auth/sessions-card';
 
@@ -7,8 +7,8 @@ import { SessionsCard } from '@/components/auth/sessions-card';
 export const Route = createFileRoute('/_public/profile/')({
   component: RouteComponent,
   loader: () => {
-    const breadcrumb: TBreadcrumbData = { title: m['pages.profile.title']() };
-    return { breadcrumbs: breadcrumb };
+    const breadcrumb: IBreadcrumb = { title: m['pages.profile.title']() };
+    return { crumbs: breadcrumb };
   }
 });
 

@@ -13,7 +13,7 @@ export const Route = createFileRoute('/admin')({
       throw redirect({ to: '/' });
   },
   staticData: {
-    breadcrumbs: { title: 'Admin' }
+    crumbs: { title: 'Admin' }
   }
 });
 
@@ -26,7 +26,6 @@ function RouteComponent() {
 
       <AdminSidebar/>
       <SidebarInset className="min-w-0">
-
         <AdminHeader/>
         <Outlet/>
       </SidebarInset>

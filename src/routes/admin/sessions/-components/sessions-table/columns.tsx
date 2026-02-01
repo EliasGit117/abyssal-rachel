@@ -1,7 +1,7 @@
 import { createColumnHelper } from '@tanstack/react-table';
 import { format } from 'date-fns';
 import {
-  IconUser,
+  IconUserCircle,
   IconHash,
   IconClock,
   IconCalendar,
@@ -106,7 +106,7 @@ export const sessionColumns = (options?: IOptions) => {
       ),
       meta: {
         label: 'User ID',
-        icon: IconUser,
+        icon: IconUserCircle,
         filter: { type: ColumnFilterType.Text }
       }
     }),
@@ -267,8 +267,8 @@ export const sessionColumns = (options?: IOptions) => {
 
               <DropdownMenuItem asChild>
                 <Link to="/admin/users" search={{ id: row.original.userId }}>
-                  <IconUser className="mr-2 size-4"/>
-                  <span>User</span>
+                  <IconUserCircle className="mr-2 size-4"/>
+                  <span>Owner</span>
                 </Link>
               </DropdownMenuItem>
 

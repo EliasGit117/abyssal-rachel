@@ -7,7 +7,7 @@ import { listSessionsSchema } from '@/features/sessions/dtos/list-sessions-dto.t
 
 export const Route = createFileRoute('/admin/sessions/')({
   component: RouteComponent,
-  staticData: { breadcrumbs: { title: 'Sessions' } },
+  staticData: { crumbs: { title: 'Sessions' } },
   head: () => ({ meta: [{ title: 'Sessions' }] }),
   validateSearch: listSessionsSchema,
   loaderDeps: (deps) => (deps),
