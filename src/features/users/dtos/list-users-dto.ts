@@ -18,12 +18,12 @@ const sortableFields: (keyof User)[] = [
 ];
 
 export const listUsersSchema = paginatedSchema.extend({
-  id: z.string().optional().catch(undefined),
-  sort: z.enum(sortableFields).optional().catch(undefined),
-  name: z.string().optional().catch(undefined),
-  email: z.string().optional().catch(undefined),
-  emailVerified: z.boolean().optional().catch(undefined),
-  banned: z.boolean().optional().catch(undefined),
+  id: z.string().optional().catch(undefined).meta({ example: 't053G1LLptpK0wAU3EpySpMnnkn3vRHG' }),
+  sort: z.enum(sortableFields).optional().catch(undefined).meta({ example: 'createdAt' }),
+  name: z.string().optional().catch(undefined).meta({ example: 'John Doe' }),
+  email: z.string().optional().catch(undefined).meta({ example: 'john.doe@icloud.com', }),
+  emailVerified: z.boolean().optional().catch(undefined).meta({ example: false, examples: [true, false] }),
+  banned: z.boolean().optional().catch(undefined).meta({ example: false, examples: [true, false] }),
   createdAt: dateRangeSchema.optional().catch(undefined),
   updatedAt: dateRangeSchema.optional().catch(undefined)
 });

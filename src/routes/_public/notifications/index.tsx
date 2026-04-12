@@ -9,13 +9,12 @@ import { cn } from '@/lib/utils';
 import { orpc } from '@/lib/orpc/client.ts';
 
 
-
 export const Route = createFileRoute('/_public/notifications/')({
   component: RouteComponent,
   loader: async ({ context: { queryClient } }) => {
-    await awaitIfServer(queryClient.prefetchQuery(orpc.notifications.list.queryOptions(),));
+    await awaitIfServer(queryClient.prefetchQuery(orpc.notifications.list.queryOptions()));
 
-    const crumbs: IBreadcrumb = { title: m['pages.notifications.title']() };
+    const crumbs = { title: m['pages.notifications.title']() } satisfies IBreadcrumb;
     return { crumbs: crumbs };
   }
 });

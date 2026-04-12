@@ -7,9 +7,8 @@ type TPermissionResult<T extends TPermissionConfig> = { [K in keyof T]: boolean;
 
 
 export function hasPermissionForRole(role: TRole, permissions: TPermissionsInput): boolean {
-  if (!role) {
+  if (!role)
     return false;
-  }
 
   return authClient.admin.checkRolePermission({
     permissions,

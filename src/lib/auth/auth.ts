@@ -11,7 +11,7 @@ import { tanstackStartCookies } from 'better-auth/tanstack-start';
 
 
 export const auth = betterAuth({
-  database: prismaAdapter(prisma, { provider: 'postgresql', debugLogs: true, }),
+  database: prismaAdapter(prisma, { provider: 'postgresql' }),
   trustedOrigins: [process.env.VITE_BETTER_AUTH_URL!],
   secret: process.env.VITE_BETTER_AUTH_SECRET!,
   advanced: {

@@ -57,12 +57,12 @@ export function useDataTable<TData>(props: IUseDataTableProps<TData>) {
   });
 
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>(initialState?.columnVisibility ?? {});
-
   const [rowSelection, setRowSelection] = useState<RowSelectionState>(initialState?.rowSelection ?? {});
+  const dataKey = useMemo(() => JSON.stringify(data ?? []), [data]);
 
   useEffect(() => {
     setRowSelection({});
-  }, [data]);
+  }, [dataKey]);
 
   const table = useReactTable({
     ...tableProps,

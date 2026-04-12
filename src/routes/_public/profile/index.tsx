@@ -7,7 +7,7 @@ import { SessionsCard } from '@/components/auth/sessions-card';
 export const Route = createFileRoute('/_public/profile/')({
   component: RouteComponent,
   loader: () => {
-    const breadcrumb: IBreadcrumb = { title: m['pages.profile.title']() };
+    const breadcrumb = { title: m['pages.profile.title']() } satisfies IBreadcrumb;
     return { crumbs: breadcrumb };
   }
 });

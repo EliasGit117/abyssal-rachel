@@ -30,10 +30,10 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { ColumnFilterType, DataTableColumnHeader } from '@/components/data-table';
 import { Skeleton } from '@/components/ui/skeleton';
-import { TUserBriefDto } from '@/features/auth/dtos/user-brief-dto.ts';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar.tsx';
 import { Link } from '@tanstack/react-router';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group.tsx';
+import { TUserBriefDto } from '@/features/users/dtos/user-brief-dto.ts';
 
 
 interface IOptions {
@@ -105,9 +105,9 @@ export const userColumns = (options?: IOptions) => {
         skeletonClassName: 'h-6 w-10',
         filter: {
           type: ColumnFilterType.Text,
-          placeholder: 'Search by id',
+          placeholder: 'Search by id'
         }
-      },
+      }
     }),
 
     // Avatar
@@ -214,7 +214,7 @@ export const userColumns = (options?: IOptions) => {
         />
       ),
       cell: ({ getValue }) => {
-        const roles = getValue()?.split(',');
+        const roles = getValue<string>()?.split(',');
 
         return roles ? (
           roles.map((role) => (

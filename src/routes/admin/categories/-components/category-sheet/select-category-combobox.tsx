@@ -31,13 +31,19 @@ export const SelectCategoryCombobox: FC<IProps> = ({ value, setValue, disabledId
   });
 
   const flatCategories = useMemo(() => {
-    if (!tree) return [];
+    if (!tree)
+      return [];
+
     return flattenCategories(tree, disabledIds);
   }, [tree, disabledIds]);
 
-  const selectedCategory = flatCategories.find(
-    (ctg) => ctg.id === value
-  );
+  const selectedCategory = useMemo(() => {
+    if (value == null)
+      return null;
+
+    return flatCategories.find((ctg) => ctg.id === value) ?? null;
+  }, [value, flatCategories]);
+
 
   return (
     <Combobox

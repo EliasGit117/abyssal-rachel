@@ -6,9 +6,9 @@
     "node": ">=20"
   },
   "scripts": {
-    "dev": "bun --bun vite dev --port 3000",
-    "build": "bun --bun vite build",
-    "preview": "bun run bun-server.ts",
+    "dev": "bun --bun --bun-no-env vite dev --port 3000",
+    "build": "bun --bun --bun-no-env vite build",
+    "serve": "bun --bun --bun-no-env vite preview",
     "test": "vitest run",
     "machine-translate": "inlang machine translate --project project.inlang"
   },

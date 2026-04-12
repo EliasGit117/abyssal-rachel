@@ -1,71 +1,77 @@
-import { LinkOptions } from '@tanstack/react-router';
-import {
-  type Icon,
-  IconCategory,
-  IconDashboard,
-  IconNetwork,
-  IconSettings,
-  IconUsers
-} from '@tabler/icons-react';
 import { hasPermissionsForRole } from '@/lib/auth/has-permission-for-role.ts';
 import { Permission } from '@/lib/auth/permissions.ts';
+import type { LinkOptions } from '@tanstack/router-core';
+import {
+  Icon, IconAdjustments,
+  IconCategory,
+  IconListSearch, IconLock,
+  IconNetwork,
+  IconSettings,
+  IconShoppingCart,
+  IconUsers
+} from '@tabler/icons-react';
 
-export interface INavItem {
+interface INavItem {
   title: string;
-  icon: Icon;
-  linkOptions: LinkOptions;
+  linkOptions?: LinkOptions;
+  icon?: Icon;
 }
 
-interface ILiknOptions {
-  role?: string | null;
+interface ISidebarMenuItem {
+  title: string;
+  linkOptions?: LinkOptions;
+  icon?: Icon;
+  items?: INavItem[];
 }
 
-interface NavConfig extends INavItem {
-  can?: (role?: string | null) => boolean;
-}
+type TRole = string | undefined | null;
 
-const mainLinks: NavConfig[] = [
-  {
-    title: "Dashboard",
-    icon: IconDashboard,
-    linkOptions: { to: "/admin", activeOptions: { exact: true } },
-  },
-  {
-    title: "Settings",
+export function getLinkGroups(role: TRole) {
+  const permissions = hasPermissionsForRole(role, {
+    canListCategories: { category: [Permission.List] },
+    canListUsers: { user: [Permission.List] },
+    canListSessions: { session: [Permission.List] }
+  });
+
+  const productsMenu: ISidebarMenuItem = { title: 'Products', icon: IconShoppingCart, items: [] };
+  const usersMenu: ISidebarMenuItem = { title: 'Users', icon: IconUsers, items: [] };
+  const settingsMenu: ISidebarMenuItem = {
+    title: 'Settings',
     icon: IconSettings,
-    linkOptions: { to: "/admin/settings" },
-  },
-];
+    items: [
+      {
+        title: 'Preferences',
+        icon: IconAdjustments,
+        linkOptions: { to: '/admin/settings/preferences', activeOptions: { exact: true } }
+      },
+      {
+        title: 'Security',
+        icon: IconLock,
+        linkOptions: { to: '/admin/settings/security', activeOptions: { exact: true } }
+      }
+    ]
+  };
 
-const catalogLinks: NavConfig[] = [
-  {
-    title: "Categories",
-    icon: IconCategory,
-    linkOptions: { to: "/admin/categories" },
-    can: (role) => hasPermissionsForRole(role, { canListCategory: { category: [Permission.List] } }).canListCategory,
-  },
-];
 
-const userLinks: NavConfig[] = [
-  {
-    title: "Users",
-    icon: IconUsers,
-    linkOptions: { to: "/admin/users" },
-    can: (role) => hasPermissionsForRole(role, { canListUsers: { user: [Permission.List] } }).canListUsers,
-  },
-  {
-    title: "Sessions",
-    icon: IconNetwork,
-    linkOptions: { to: "/admin/sessions" },
-    can: (role) => hasPermissionsForRole(role, { canListSessions: { session: [Permission.List] } }).canListSessions,
-  },
-];
+  if (permissions.canListCategories)
+    productsMenu.items?.push({ title: 'Categories', icon: IconCategory, linkOptions: { to: '/admin/categories' } });
 
-export const getMainLinks = ({ role }: ILiknOptions = {}): INavItem[] => mainLinks
-  .filter(({ can }) => !can || can(role));
+  if (permissions.canListUsers)
+    usersMenu.items?.push({ title: 'User list', icon: IconListSearch, linkOptions: { to: '/admin/users' } });
 
-export const getUserLinks = ({ role }: ILiknOptions = {}): INavItem[] => userLinks
-  .filter(({ can }) => !can || can(role));
+  if (permissions.canListSessions)
+    usersMenu.items?.push({
+      title: 'User sessions',
+      icon: IconNetwork,
+      linkOptions: { to: '/admin/sessions', activeOptions: { exact: false } }
+    });
 
-export const getCatalogLinks = ({ role }: ILiknOptions = {}): INavItem[] => catalogLinks
-  .filter(({ can }) => !can || can(role));
+
+  return ({
+    main: [
+      productsMenu,
+      usersMenu,
+      settingsMenu
+    ],
+  } satisfies Record<string, ISidebarMenuItem[]>);
+}

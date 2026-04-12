@@ -20,7 +20,7 @@ import { m } from '@/paraglide/messages';
 export const Route = createFileRoute('/_public/contacts')({
   component: RouteComponent,
   loader: () => {
-    const breadcrumb: IBreadcrumb = { title: m['pages.contacts.title']() };
+    const breadcrumb = { title: m['pages.contacts.title']() } satisfies IBreadcrumb;
     return { crumbs: breadcrumb }
   }
 });

@@ -9,16 +9,14 @@ import {
   throwForbiddenError,
   throwUnauthorizedError
 } from '@/lib/errors/throw-api-error.ts';
-import { getSessionServerFn } from '@/features/auth/server-functions/public/get-session.ts';
 import { useMutation, UseMutationOptions, useQueryClient } from '@tanstack/react-query';
 
 
 export const updateCategoryServerFn = createServerFn({ method: 'POST' })
   .inputValidator(serverZodValidator(updateCategorySchema))
   .middleware([authMiddleware()])
-  .handler(async ({ data }) => {
-    const session = await getSessionServerFn();
-
+  .handler(async ({ data, context: { headers } }) => {
+    const session = await auth.api.getSession({ headers });
     if (!session)
       throwUnauthorizedError({ translated: false });
 

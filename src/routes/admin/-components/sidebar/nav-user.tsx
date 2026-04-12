@@ -72,7 +72,9 @@ export const NavUser: FC<ComponentProps<typeof SidebarMenu>> = ({ ...props }) =>
                 </Avatar>
 
                 <div className="grid flex-1 text-left text-sm leading-tight">
-                  <span className="truncate font-medium">{user?.name}</span>
+                  <span className="truncate font-medium text-foreground">
+                    {user?.name}
+                  </span>
                   <span className="text-muted-foreground truncate text-xs">
                     {user?.email}
                   </span>

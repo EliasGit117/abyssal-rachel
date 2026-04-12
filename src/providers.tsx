@@ -11,8 +11,7 @@ import { BProgress } from '@bprogress/core';
 import { useRouter } from '@tanstack/react-router';
 import { ConfirmDialogProvider } from '@/components/ui/confirm-dialog.tsx';
 
-interface IProps extends PropsWithChildren {
-}
+interface IProps extends PropsWithChildren {}
 
 const PROGRESS_DELAY = 200;
 

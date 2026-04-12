@@ -13,7 +13,7 @@ import { UserBriefDtoFactory } from '@/features/users/dtos/user-brief-dto.ts';
 
 export const listUsers = usersAdminBase
   .route({
-    method: 'GET',
+    method: 'POST',
     summary: 'List users',
     description: 'Paginated user list with filters'
   })

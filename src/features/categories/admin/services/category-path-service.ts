@@ -1,5 +1,4 @@
 import { Category } from '~/prisma/generated/prisma/client.ts';
-import { throwBadRequest } from '@/lib/errors/throw-api-error.ts';
 import { TxClient } from '@/lib/db/prisma.ts';
 
 export class CategoryPathService {
@@ -13,59 +12,41 @@ export class CategoryPathService {
   }
 
   static ensureNoCircularMove(category: Category, parent: Category) {
-    if (parent.idPath.startsWith(category.idPath))
-      throwBadRequest({ message: 'Cannot move category into its own subtree', translated: false });
+    if (parent.id === category.id)
+      throw Error('Cannot move category under itself');
 
-    if (parent.slugPath.startsWith(category.slugPath))
-      throwBadRequest({ message: 'Cannot move category into its own subtree (slug path)', translated: false });
+    if (category.idPath && parent.idPath && parent.idPath.startsWith(category.idPath))
+      throw Error('Cannot move category into its own subtree');
+
+    if (category.slugPath && parent.slugPath && parent.slugPath.startsWith(category.slugPath))
+      throw Error('Cannot move category into its own subtree (slug path)');
   }
 
-
-  static async updateSubtree(
-    tx: TxClient,
-    categoryId: number,
-    newIdPath: string,
-    newSlugPath: string
-  ) {
+  static async updateSubtree(tx: TxClient, categoryId: number, newIdPath: string, newSlugPath: string) {
     const updates: Array<{ id: number; idPath: string; slugPath: string }> = [];
-
     const queue: Array<{ id: number; idPath: string; slugPath: string }> = [
       { id: categoryId, idPath: newIdPath, slugPath: newSlugPath }
     ];
 
     while (queue.length > 0) {
       const current = queue.shift()!;
-
-      const children = await tx.category.findMany({
-        where: { parentId: current.id }
-      });
+      const children = await tx.category.findMany({ where: { parentId: current.id } });
 
       for (const child of children) {
         const childNewIdPath = CategoryPathService.buildIdPath(current.idPath, child.id);
         const childNewSlugPath = CategoryPathService.buildSlugPath(current.slugPath, child.slug);
 
-        updates.push({
-          id: child.id,
-          idPath: childNewIdPath,
-          slugPath: childNewSlugPath
-        });
-
-        queue.push({
-          id: child.id,
-          idPath: childNewIdPath,
-          slugPath: childNewSlugPath
-        });
+        updates.push({ id: child.id, idPath: childNewIdPath, slugPath: childNewSlugPath });
+        queue.push({ id: child.id, idPath: childNewIdPath, slugPath: childNewSlugPath });
       }
     }
 
-    for (const update of updates) {
-      await tx.category.update({
-        where: { id: update.id },
-        data: {
-          idPath: update.idPath,
-          slugPath: update.slugPath
-        }
-      });
-    }
+    await Promise.all(updates.map(update => tx.category.update({
+      where: { id: update.id },
+      data: {
+        idPath: update.idPath,
+        slugPath: update.slugPath
+      }
+    })));
   }
 }

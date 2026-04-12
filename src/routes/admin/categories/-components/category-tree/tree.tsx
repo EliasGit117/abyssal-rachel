@@ -2,7 +2,6 @@ import { Tree, TreeItem, TreeItemLabel } from '@/components/ui/tree.tsx';
 import { ComponentProps, FC } from 'react';
 import { Button } from '@/components/ui/button.tsx';
 import {
-  IconDots,
   IconFilter,
   IconFolderMinus,
   IconFolderPlus,
@@ -12,13 +11,6 @@ import {
   IconProgressAlert,
   IconTrash, IconX
 } from '@tabler/icons-react';
-import {
-  DropdownMenu,
-  DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem,
-  DropdownMenuLabel, DropdownMenuPortal, DropdownMenuSeparator, DropdownMenuSub,
-  DropdownMenuSubContent, DropdownMenuSubTrigger,
-  DropdownMenuTrigger
-} from '@/components/ui/dropdown-menu.tsx';
 import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
 import { useCategoryTree } from '@/routes/admin/categories/-components/category-tree/provider.tsx';
@@ -39,6 +31,12 @@ import { CategoryStatus } from '~/prisma/generated/prisma/enums.ts';
 import { useHasPermissions } from '@/hooks/use-has-permission.ts';
 import { AdaptiveButton } from '@/components/ui/adaptive-button.tsx';
 import { useCategorySheet } from '@/routes/admin/categories/-components/category-sheet';
+import {
+  ContextMenu,
+  ContextMenuContent, ContextMenuGroup, ContextMenuItem,
+  ContextMenuLabel, ContextMenuSeparator, ContextMenuSub, ContextMenuSubContent, ContextMenuSubTrigger,
+  ContextMenuTrigger
+} from '@/components/ui/context-menu.tsx';
 
 
 interface ICategoryTreeProps {
@@ -87,7 +85,6 @@ export const CategoryTree: FC<ICategoryTreeProps> = ({ className }) => {
       <div className={cn('space-y-2', className)}>
         {Array.from({ length: 10 }).map((_, i) => (
           <div className="flex items-center gap-2" key={i}>
-            <Skeleton className="size-8"/>
             <Skeleton className="h-8 w-full"/>
           </div>
         ))}
@@ -155,91 +152,104 @@ export const CategoryTree: FC<ICategoryTreeProps> = ({ className }) => {
         };
 
         return (
-          <div
-            key={item.getId()}
-            className="flex items-center gap-2 not-last:pb-0.5 data-[visible=false]:hidden"
-            data-visible={isItemVisible(item, searchValue)}
-          >
-            <DropdownMenu>
-              <DropdownMenuTrigger disabled={disabled} asChild>
-                <Button size="icon-sm" variant="ghost">
-                  <IconDots className="size-4 text-muted-foreground"/>
-                </Button>
-              </DropdownMenuTrigger>
-
-              <DropdownMenuContent className="min-w-44" align="start">
-                <DropdownMenuLabel>
-                  Category actions
-                </DropdownMenuLabel>
-
-                <DropdownMenuSeparator/>
-
-                <DropdownMenuGroup>
-                  {canCreate && (
-                    <DropdownMenuItem onClick={() => openCtgSheet({ mode: 'create', parentId: Number(item.getId()) })}>
-                      <IconFolderPlus className="text-muted-foreground"/>
-                      <span>Add child</span>
-                    </DropdownMenuItem>
-                  )}
-
-                  {canEdit && (
-                    <DropdownMenuItem onClick={() => openCtgSheet({ mode: 'edit', categoryId: Number(item.getId()) })}>
-                      <IconPencil className="text-muted-foreground"/>
-                      <span>Edit</span>
-                    </DropdownMenuItem>
-                  )}
-
-                  <DropdownMenuSub>
-                    <DropdownMenuSubTrigger>
-                      <IconInfoCircle className="text-muted-foreground"/>
-                      <span>Short info</span>
-                    </DropdownMenuSubTrigger>
-                    <DropdownMenuPortal>
-                      <DropdownMenuSubContent className="p-2 min-w-48">
-                        <div className="text-xs whitespace-pre-wrap rounded-md bg-muted p-3 overflow-auto max-h-80">
-                          {JSON.stringify({
-                            ...item.getItemData(),
-                            childrenCount: item.getChildren().length,
-                            children: undefined
-                          }, null, 2)}
-                        </div>
-                      </DropdownMenuSubContent>
-                    </DropdownMenuPortal>
-                  </DropdownMenuSub>
-
-                  {canDelete && (
-                    <DropdownMenuItem
-                      variant="destructive"
-                      disabled={disabled || isPendingCategories}
-                      onClick={() => deleteWithConfirm(Number(item.getId()))}
-                    >
-                      <IconTrash/>
-                      <span>Delete</span>
-                    </DropdownMenuItem>
-                  )}
-                </DropdownMenuGroup>
-              </DropdownMenuContent>
-            </DropdownMenu>
-
-            <TreeItem className="flex-1 not-last:pb-0" item={item}>
-              <TreeItemLabel
-                className={cn(
-                  'before:-inset-y-0.5 before:-z-10 relative before:absolute before:inset-x-0 before:bg-background',
-                  data.status === CategoryStatus.INACTIVE && 'text-muted-foreground'
-                )}
+          <ContextMenu>
+            <ContextMenuTrigger asChild>
+              <div
+                key={item.getId()}
+                className="flex items-center gap-2 not-last:pb-0.5 data-[visible=false]:hidden"
+                data-visible={isItemVisible(item, searchValue)}
               >
-
-                <span className="flex items-center gap-2">
-                  {data.nameRo}
-                  {item.isFolder() && (
-                    <span className="-ms-1 text-muted-foreground">
-                      {`(${item.getChildren().length})`}
+                <TreeItem className="flex-1 not-last:pb-0" item={item}>
+                  <TreeItemLabel
+                    className={cn(
+                      'before:-inset-y-0.5 before:-z-10 relative before:absolute before:inset-x-0 before:bg-background',
+                      data.status === CategoryStatus.INACTIVE &&
+                      'text-muted-foreground'
+                    )}
+                  >
+                    <span className="flex items-center gap-2">
+                      {data.nameRo}
+                      {item.isFolder() && (
+                        <span className="-ms-1 text-muted-foreground">
+                          ({item.getChildren().length})
+                        </span>
+                      )}
                     </span>
-                  )}
-                </span>
-              </TreeItemLabel>
-            </TreeItem>
-          </div>
+                  </TreeItemLabel>
+                </TreeItem>
+              </div>
+            </ContextMenuTrigger>
+
+            <ContextMenuContent className="min-w-44">
+              <ContextMenuLabel>«{item.getItemName()}» actions</ContextMenuLabel>
+
+              <ContextMenuSeparator />
+
+              <ContextMenuGroup>
+                {canCreate && (
+                  <ContextMenuItem
+                    onClick={() =>
+                      openCtgSheet({
+                        mode: 'create',
+                        parentId: Number(item.getId())
+                      })
+                    }
+                  >
+                    <IconFolderPlus className="text-muted-foreground"/>
+                    <span>Add child</span>
+                  </ContextMenuItem>
+                )}
+
+                {canEdit && (
+                  <ContextMenuItem
+                    onClick={() =>
+                      openCtgSheet({
+                        mode: 'edit',
+                        categoryId: Number(item.getId())
+                      })
+                    }
+                  >
+                    <IconPencil className="text-muted-foreground" />
+                    <span>Edit</span>
+                  </ContextMenuItem>
+                )}
+
+                <ContextMenuSub>
+                  <ContextMenuSubTrigger className='flex gap-2'>
+                    <IconInfoCircle className="text-muted-foreground" />
+                    <span>Short info</span>
+                  </ContextMenuSubTrigger>
+
+                  <ContextMenuSubContent className="p-2 min-w-48">
+                    <div className="text-xs whitespace-pre-wrap rounded-md bg-muted p-3 overflow-auto max-h-80">
+                      {JSON.stringify(
+                        {
+                          ...item.getItemData(),
+                          childrenCount: item.getChildren().length,
+                          children: undefined
+                        },
+                        null,
+                        2
+                      )}
+                    </div>
+                  </ContextMenuSubContent>
+                </ContextMenuSub>
+
+                {canDelete && (
+                  <ContextMenuItem
+                    variant="destructive"
+                    disabled={disabled || isPendingCategories}
+                    onClick={() =>
+                      deleteWithConfirm(Number(item.getId()))
+                    }
+                  >
+                    <IconTrash />
+                    <span>Delete</span>
+                  </ContextMenuItem>
+                )}
+              </ContextMenuGroup>
+            </ContextMenuContent>
+          </ContextMenu>
         );
       })}
     </Tree>

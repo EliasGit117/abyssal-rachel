@@ -21,6 +21,7 @@ import { Route as AuthSetPasswordRouteImport } from './routes/auth/set-password'
 import { Route as AuthResetPasswordRouteImport } from './routes/auth/reset-password'
 import { Route as AuthMagicLinkRouteImport } from './routes/auth/magic-link'
 import { Route as ApiSplatRouteImport } from './routes/api/$'
+import { Route as AdminContextMenuRouteImport } from './routes/admin/context-menu'
 import { Route as PublicContactsRouteImport } from './routes/_public/contacts'
 import { Route as AdminSettingsRouteRouteImport } from './routes/admin/settings/route'
 import { Route as AdminUsersIndexRouteImport } from './routes/admin/users/index'
@@ -93,6 +94,11 @@ const ApiSplatRoute = ApiSplatRouteImport.update({
   path: '/api/$',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminContextMenuRoute = AdminContextMenuRouteImport.update({
+  id: '/context-menu',
+  path: '/context-menu',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
 const PublicContactsRoute = PublicContactsRouteImport.update({
   id: '/contacts',
   path: '/contacts',
@@ -161,6 +167,7 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRouteRouteWithChildren
   '/admin/settings': typeof AdminSettingsRouteRouteWithChildren
   '/contacts': typeof PublicContactsRoute
+  '/admin/context-menu': typeof AdminContextMenuRoute
   '/api/$': typeof ApiSplatRoute
   '/auth/magic-link': typeof AuthMagicLinkRoute
   '/auth/reset-password': typeof AuthResetPasswordRoute
@@ -183,6 +190,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/contacts': typeof PublicContactsRoute
+  '/admin/context-menu': typeof AdminContextMenuRoute
   '/api/$': typeof ApiSplatRoute
   '/auth/magic-link': typeof AuthMagicLinkRoute
   '/auth/reset-password': typeof AuthResetPasswordRoute
@@ -210,6 +218,7 @@ export interface FileRoutesById {
   '/auth': typeof AuthRouteRouteWithChildren
   '/admin/settings': typeof AdminSettingsRouteRouteWithChildren
   '/_public/contacts': typeof PublicContactsRoute
+  '/admin/context-menu': typeof AdminContextMenuRoute
   '/api/$': typeof ApiSplatRoute
   '/auth/magic-link': typeof AuthMagicLinkRoute
   '/auth/reset-password': typeof AuthResetPasswordRoute
@@ -237,6 +246,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/admin/settings'
     | '/contacts'
+    | '/admin/context-menu'
     | '/api/$'
     | '/auth/magic-link'
     | '/auth/reset-password'
@@ -259,6 +269,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/contacts'
+    | '/admin/context-menu'
     | '/api/$'
     | '/auth/magic-link'
     | '/auth/reset-password'
@@ -285,6 +296,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/admin/settings'
     | '/_public/contacts'
+    | '/admin/context-menu'
     | '/api/$'
     | '/auth/magic-link'
     | '/auth/reset-password'
@@ -400,6 +412,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/api/$'
       preLoaderRoute: typeof ApiSplatRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/admin/context-menu': {
+      id: '/admin/context-menu'
+      path: '/context-menu'
+      fullPath: '/admin/context-menu'
+      preLoaderRoute: typeof AdminContextMenuRouteImport
+      parentRoute: typeof AdminRouteRoute
     }
     '/_public/contacts': {
       id: '/_public/contacts'
@@ -523,6 +542,7 @@ const AdminSettingsRouteRouteWithChildren =
 
 interface AdminRouteRouteChildren {
   AdminSettingsRouteRoute: typeof AdminSettingsRouteRouteWithChildren
+  AdminContextMenuRoute: typeof AdminContextMenuRoute
   AdminIndexRoute: typeof AdminIndexRoute
   AdminCategoriesIndexRoute: typeof AdminCategoriesIndexRoute
   AdminSessionsIndexRoute: typeof AdminSessionsIndexRoute
@@ -531,6 +551,7 @@ interface AdminRouteRouteChildren {
 
 const AdminRouteRouteChildren: AdminRouteRouteChildren = {
   AdminSettingsRouteRoute: AdminSettingsRouteRouteWithChildren,
+  AdminContextMenuRoute: AdminContextMenuRoute,
   AdminIndexRoute: AdminIndexRoute,
   AdminCategoriesIndexRoute: AdminCategoriesIndexRoute,
   AdminSessionsIndexRoute: AdminSessionsIndexRoute,

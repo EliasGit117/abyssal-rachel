@@ -150,6 +150,7 @@ function ComboboxItem<T>({ value, selected, children, ...props }: ComboboxItemPr
   return (
     <CommandItem
       {...props}
+      value={String(value)}
       data-checked={selected}
       onSelect={() => {
         setValue(value);
